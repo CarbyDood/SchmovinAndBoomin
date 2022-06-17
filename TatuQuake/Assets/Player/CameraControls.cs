@@ -11,11 +11,17 @@ public class CameraControls : MonoBehaviour
     private InputAction mouseInputX;
     private InputAction mouseInputY;
 
-    public float mouseSensitivity = 100f;
+    public float mouseSensitivity = 0.35f;
 
     public Transform playerBody;
 
     float xRotation = 0f;
+
+    private void OnDisable()
+    {
+        mouseInputX.performed -= camUpdate;
+        mouseInputX.canceled -= camUpdate;
+    }
 
     private void Awake() 
     {
@@ -29,13 +35,18 @@ public class CameraControls : MonoBehaviour
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        
+        mouseInputX.performed += camUpdate;
+        mouseInputX.canceled += camUpdate;
+        
+        mouseInputY.performed += camUpdate;
+        mouseInputY.canceled += camUpdate;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void camUpdate(InputAction.CallbackContext context) 
     {
-        float mouseX = mouseInputX.ReadValue<float>() * mouseSensitivity * Time.deltaTime;
-        float mouseY = mouseInputY.ReadValue<float>() * mouseSensitivity * Time.deltaTime;
+        float mouseX = mouseInputX.ReadValue<float>() * mouseSensitivity;
+        float mouseY = mouseInputY.ReadValue<float>() * mouseSensitivity;
 
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
@@ -43,4 +54,6 @@ public class CameraControls : MonoBehaviour
         transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         playerBody.Rotate(Vector3.up * mouseX);
     }
+
+
 }
