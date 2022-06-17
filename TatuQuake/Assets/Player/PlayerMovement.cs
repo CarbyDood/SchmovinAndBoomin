@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
     private InputAction jumpin;
     private InputAction movin;
 
-    public float speed = 12f;
+    public float speed = 6f;
 
     //Clean up stuff to prevent memory leaks!
     private void OnDisable() 
