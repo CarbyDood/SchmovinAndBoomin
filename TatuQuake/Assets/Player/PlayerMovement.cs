@@ -3,21 +3,26 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {   
+    [SerializeField] private MomentumManager momentum;
     private CharacterController controller;
     private PlayerInput playerInput;
     
-    public Transform groundCheck;
-    public float groundDistance = 0.4f;
-    public LayerMask groundMask;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private float groundDistance = 0.4f;
+    [SerializeField] private LayerMask groundMask;
 
     //Store the actual controls
     private InputAction jumpin;
     private InputAction movin;
 
-    public float speed = 6f;
-    public float gravity = -9.81f;
-    public float jumpHeight = 9f;
-    public float slideSpeed = -3f;
+    [SerializeField] private float baseSpeed = 4f;
+    [SerializeField] private float gravity = -9.81f;
+    [SerializeField] private float baseJumpHeight = 4f;
+    [SerializeField] private float baseSlideSpeed = -3f;
+    private float speed;
+    private float jumpHeight;
+    private float slideSpeed;
+    private float momentumLossRate = 1f;
 
     //slope stuff
     private float groundRayDistance = 1;
@@ -25,6 +30,10 @@ public class PlayerMovement : MonoBehaviour
 
     Vector3 velocity;
     Vector3 move;
+    Vector2 currInputVect;
+    Vector2 smoothInputVelocity;
+    [SerializeField] private float smoothInputSpeed = .2f;
+
     bool isGrounded;
 
     private void Awake() 
@@ -34,29 +43,68 @@ public class PlayerMovement : MonoBehaviour
 
         jumpin = playerInput.actions["Jump"];
         movin = playerInput.actions["Move"];
+
+        speed = baseSpeed;
+        jumpHeight = baseJumpHeight;
+        slideSpeed = baseSlideSpeed;
     }
 
     private void Update() 
     {
+        //Check if we are touching the ground
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         if(isGrounded && velocity.y < 0)
         {
             velocity.y = -4.5f;
         }
 
-        Vector2 currInput = movin.ReadValue<Vector2>();
-        float x = currInput.x;
-        float z = currInput.y;
+        Move();
+        Jump();
 
-        move = transform.right * x + transform.forward * z;
+        //reset position if we fall off the map
+        if(transform.position.y < -50)
+        {
+            controller.enabled = false;
+            controller.transform.position = new Vector3(0, 0, 0);
+            controller.enabled = true;
+        }
+    }
+
+    private void Move()
+    {
+        Vector2 input = movin.ReadValue<Vector2>();
+        currInputVect = Vector2.SmoothDamp(currInputVect, input, ref smoothInputVelocity, smoothInputSpeed);
+
+        //if player is staying on the move, increase their momentum!
+        if(Mathf.Abs(currInputVect.x) > 0.01 || Mathf.Abs(currInputVect.y) > 0.01)
+        {
+            float absX = Mathf.Abs(currInputVect.x);
+            float absY = Mathf.Abs(currInputVect.y);
+            momentum.AddMomentum(Mathf.Max(absX, absY));
+        }
+
+        //if the player is staying still, decrease momentum
+        else
+        {
+            momentum.SubMomentum(momentumLossRate);
+        }
+
+        //move based off where we're rotated/looking
+        move = transform.right * currInputVect.x + transform.forward * currInputVect.y;
 
         if(OnSteepSlope())
         {
             SteepSlopeMove();
         }
 
+        //calculate the speed bonus given from momentum
+        speed = baseSpeed + (momentum.GetMomentum()/10);
         controller.Move(move * speed * Time.deltaTime);
+    }
 
+    private void Jump()
+    {
+        jumpHeight = baseJumpHeight + ((momentum.GetMomentum()/10)/3f);
         if(jumpin.triggered && isGrounded)
         {
             velocity.y += Mathf.Sqrt(jumpHeight * -2f * gravity);
@@ -84,9 +132,10 @@ public class PlayerMovement : MonoBehaviour
     private void SteepSlopeMove()
     {
         Vector3 slopeDirection = Vector3.up - slopeHit.normal * Vector3.Dot(Vector3.up, slopeHit.normal);
+        slideSpeed = baseSlideSpeed - (momentum.GetMomentum()/10);
         float slopeSlideSpeed = speed + slideSpeed + Time.deltaTime;
 
         move = slopeDirection * -slopeSlideSpeed;
-        velocity.y = velocity.y - slopeHit.point.y;
+        move.y = move.y - slopeHit.point.y;
     }
 }

@@ -3,23 +3,24 @@ using UnityEngine.InputSystem;
 
 public class WeaponsBaseClass : MonoBehaviour
 {
-    [SerializeField] private float damage = 10f;
-    [SerializeField] private float range = 100f;
-    [SerializeField] private float fireRate = 15f;
-    [SerializeField] private float impactForce = 50f;
+    [SerializeField] protected float damage;
+    [SerializeField] protected float range;
+    [SerializeField] protected float fireRate;
+    [SerializeField] protected float impactForce;
 
-    [SerializeField] private Camera fpsCam;
-    [SerializeField] private ParticleSystem muzzleFlash;
-    [SerializeField] private GameObject impactEffect;
+    [SerializeField] protected Camera fpsCam;
+    [SerializeField] protected ParticleSystem muzzleFlash;
+    [SerializeField] protected GameObject impactEffect;
+    [SerializeField] protected MomentumManager momentum;
 
-    [SerializeField] private PlayerInput playerInput;
-    private InputAction fire;
-    private InputAction changeFireMode;
+    [SerializeField] protected PlayerInput playerInput;
+    protected InputAction fire;
+    protected InputAction changeFireMode;
 
-    private int fireMode = 0; //0 = semi, 1 = full
-    private float nextTimeToFire = 0f;
+    protected int fireMode = 0; //0 = semi, 1 = full
+    protected float nextTimeToFire = 0f;
 
-    private void Awake() 
+    protected void Awake() 
     {
         fire = playerInput.actions["Fire"];
         changeFireMode = playerInput.actions["ChangeFireMode"];
@@ -28,30 +29,23 @@ public class WeaponsBaseClass : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        //Full Auto
+        /*//Full Auto
         if(fire.ReadValue<float>() == 1 && Time.time >= nextTimeToFire && fireMode == 1)
         {
             nextTimeToFire = Time.time + 1f/fireRate;
             Shoot();
-        }
+        }*/
 
-        //Semi Auto
-        else if(fire.triggered && Time.time >= nextTimeToFire && fireMode == 0)
-        {
-            nextTimeToFire = Time.time + 1f/fireRate;
-            Shoot();
-        }
-
-        //Change firemode
+        /*//Change firemode
         if(changeFireMode.triggered)
         {
             if(fireMode == 0){fireMode = 1;}
             else{fireMode = 0;}
             Debug.Log("Fire mode changed to "+fireMode);
-        }
+        }*/
     }
 
-    private void Shoot()
+    protected void Shoot()
     {
         muzzleFlash.Play();
         RaycastHit hit;
