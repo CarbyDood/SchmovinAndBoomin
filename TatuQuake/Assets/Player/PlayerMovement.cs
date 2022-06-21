@@ -23,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
     private float jumpHeight;
     private float slideSpeed;
     private float momentumLossRate = 1f;
+    private float velocityCoeff = 0.005f;
 
     //slope stuff
     private float groundRayDistance = 1;
@@ -55,11 +56,15 @@ public class PlayerMovement : MonoBehaviour
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         if(isGrounded && velocity.y < 0)
         {
+            velocity.x = 0f;
+            velocity.z = 0f;
             velocity.y = -4.5f;
         }
 
+        SpeedLimit();
         Move();
         Jump();
+        velocity.y += gravity * Time.deltaTime;
 
         //reset position if we fall off the map
         if(transform.position.y < -50)
@@ -98,7 +103,20 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //calculate the speed bonus given from momentum
+        //and if we're in the air
         speed = baseSpeed + (momentum.GetMomentum()/10);
+
+        //Air controls
+        if(!isGrounded)
+        {
+            //Fight against velocity forces
+            velocity += currInputVect.x * transform.right * velocityCoeff;
+            velocity += currInputVect.y * transform.forward * velocityCoeff;
+            controller.Move(velocity * Time.deltaTime);
+
+            //reduce speed
+            speed /= 5;
+        }
         controller.Move(move * speed * Time.deltaTime);
     }
 
@@ -109,8 +127,6 @@ public class PlayerMovement : MonoBehaviour
         {
             velocity.y += Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
-
-        velocity.y += gravity * Time.deltaTime;
 
         controller.Move(velocity * Time.deltaTime);
     }
@@ -137,5 +153,20 @@ public class PlayerMovement : MonoBehaviour
 
         move = slopeDirection * -slopeSlideSpeed;
         move.y = move.y - slopeHit.point.y;
+    }
+
+    public void ApplyForce(float force, Vector3 direction)
+    {
+        float height = force/100;
+        velocity += direction * 2.5f;
+        velocity.y += Mathf.Sqrt(height * -2f * gravity);
+        velocity.y += gravity * Time.deltaTime;
+        controller.Move(velocity * Time.deltaTime);
+    }
+
+    public void SpeedLimit(){
+        if(velocity.x >= 8f) {velocity.x = 8f;}
+        if(velocity.z >= 8f) {velocity.z = 8f;}
+        if(velocity.y >= 8f) {velocity.y = 8f;}
     }
 }

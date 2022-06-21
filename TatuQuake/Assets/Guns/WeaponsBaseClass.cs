@@ -29,13 +29,6 @@ public class WeaponsBaseClass : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        /*//Full Auto
-        if(fire.ReadValue<float>() == 1 && Time.time >= nextTimeToFire && fireMode == 1)
-        {
-            nextTimeToFire = Time.time + 1f/fireRate;
-            Shoot();
-        }*/
-
         /*//Change firemode
         if(changeFireMode.triggered)
         {
@@ -64,5 +57,45 @@ public class WeaponsBaseClass : MonoBehaviour
             GameObject impactGO = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
             Destroy(impactGO, 2f);
         }
+    }
+
+    public float GetDamage()
+    {
+        return damage;
+    }
+
+    public float GetRange()
+    {
+        return range;
+    }
+
+    public float GetFireRate()
+    {
+        return fireRate;
+    }
+
+    public float GetImpactForce()
+    {
+        return impactForce;
+    }
+
+    public void SetDamage(float dmg)
+    {
+        damage = dmg;
+    }
+
+    public void SetRange(float rng)
+    {
+        range = rng;
+    }
+
+    public void SetFireRate(float firrat)
+    {
+        fireRate = firrat;
+    }
+
+    public void SetImapactForce(float frc)
+    {
+        impactForce = frc;
     }
 }
