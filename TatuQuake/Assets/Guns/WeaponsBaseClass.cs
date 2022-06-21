@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,6 +12,7 @@ public class WeaponsBaseClass : MonoBehaviour
     [SerializeField] protected Camera fpsCam;
     [SerializeField] protected ParticleSystem muzzleFlash;
     [SerializeField] protected GameObject impactEffect;
+    [SerializeField] protected TrailRenderer bulletTrail;
     [SerializeField] protected MomentumManager momentum;
 
     [SerializeField] protected PlayerInput playerInput;
@@ -44,6 +46,10 @@ public class WeaponsBaseClass : MonoBehaviour
         RaycastHit hit;
         if(Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
         {
+            //spawn bullet trail
+            TrailRenderer trail = Instantiate(bulletTrail, muzzleFlash.transform.position, Quaternion.identity);
+            StartCoroutine(SpawnTrail(trail, hit));
+
             Target target = hit.transform.GetComponent<Target>();
             if(target != null)
             {
@@ -54,9 +60,25 @@ public class WeaponsBaseClass : MonoBehaviour
                 hit.rigidbody.AddForce(-hit.normal * impactForce);
             }
 
-            GameObject impactGO = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
-            Destroy(impactGO, 2f);
+            Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
         }
+    }
+
+    public IEnumerator SpawnTrail(TrailRenderer trail, RaycastHit hit)
+    {
+        float time = 0;
+        Vector3 startPos = trail.transform.position;
+
+        while (time < 1)
+        {
+            trail.transform.position = Vector3.Lerp(startPos, hit.point, time);
+            time += Time.deltaTime / trail.time;
+
+            yield return null;
+        }
+        trail.transform.position = hit.point;
+
+        Destroy(trail.gameObject, trail.time);
     }
 
     public float GetDamage()

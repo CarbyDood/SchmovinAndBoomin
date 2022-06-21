@@ -85,7 +85,6 @@ public class Rocket : MonoBehaviour
         RPG.OnFired -= MissleFired;
         Destroy(gameObject.transform.GetChild(0).gameObject, 0.5f);
         transform.DetachChildren();
-        Destroy(boom, 2f);
         Destroy(gameObject);
     }
 
