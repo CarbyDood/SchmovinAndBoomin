@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private MomentumManager momentum;
     private CharacterController controller;
     private PlayerInput playerInput;
+    [SerializeField] private Animator animator;
     
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float groundDistance = 0.4f;
@@ -14,6 +17,10 @@ public class PlayerMovement : MonoBehaviour
     //Store the actual controls
     private InputAction jumpin;
     private InputAction movin;
+    private InputAction slot1;
+    private InputAction slot2;
+    private InputAction slot3;
+    private InputAction slot4;
 
     [SerializeField] private float baseSpeed = 4f;
     [SerializeField] private float gravity = -9.81f;
@@ -24,6 +31,10 @@ public class PlayerMovement : MonoBehaviour
     private float slideSpeed;
     private float momentumLossRate = 1f;
     private float velocityCoeff = 0.005f;
+
+    [SerializeField] private List<GameObject> guns;
+    //0 = Pistol, 1 = SMG, 2 = Shotgun, 3 = LMG, 4 = Nade Launcher, 4 = Super Shotgun, 5 = Sniper, 
+    //6 = Rocket Launcher
 
     //slope stuff
     private float groundRayDistance = 1;
@@ -45,6 +56,11 @@ public class PlayerMovement : MonoBehaviour
         jumpin = playerInput.actions["Jump"];
         movin = playerInput.actions["Move"];
 
+        slot1 = playerInput.actions["WeaponSlot1"];
+        slot2 = playerInput.actions["WeaponSlot2"];
+        slot3 = playerInput.actions["WeaponSlot3"];
+        slot4 = playerInput.actions["WeaponSlot4"];
+
         speed = baseSpeed;
         jumpHeight = baseJumpHeight;
         slideSpeed = baseSlideSpeed;
@@ -64,6 +80,8 @@ public class PlayerMovement : MonoBehaviour
         SpeedLimit();
         Move();
         Jump();
+        changeWeapon();
+
         velocity.y += gravity * Time.deltaTime;
 
         //reset position if we fall off the map
@@ -83,6 +101,7 @@ public class PlayerMovement : MonoBehaviour
         //if player is staying on the move, increase their momentum!
         if(Mathf.Abs(currInputVect.x) > 0.01 || Mathf.Abs(currInputVect.y) > 0.01)
         {
+            animator.SetBool("Runnin", true);
             float absX = Mathf.Abs(currInputVect.x);
             float absY = Mathf.Abs(currInputVect.y);
             momentum.AddMomentum(Mathf.Max(absX, absY));
@@ -91,6 +110,7 @@ public class PlayerMovement : MonoBehaviour
         //if the player is staying still, decrease momentum
         else
         {
+            animator.SetBool("Runnin", false);
             momentum.SubMomentum(momentumLossRate);
         }
 
@@ -109,6 +129,7 @@ public class PlayerMovement : MonoBehaviour
         //Air controls
         if(!isGrounded)
         {
+            animator.SetBool("Jumpin", true);
             //Fight against velocity forces
             velocity += currInputVect.x * transform.right * velocityCoeff;
             velocity += currInputVect.y * transform.forward * velocityCoeff;
@@ -117,6 +138,10 @@ public class PlayerMovement : MonoBehaviour
             //reduce speed
             speed /= 5;
         }
+
+        else
+            animator.SetBool("Jumpin", false);
+        
         controller.Move(move * speed * Time.deltaTime);
     }
 
@@ -129,6 +154,50 @@ public class PlayerMovement : MonoBehaviour
         }
 
         controller.Move(velocity * Time.deltaTime);
+    }
+
+    private void changeWeapon()
+    {
+        //Change weapon as soon as player hits the button
+
+        //0 = Pistol, 1 = SMG, 2 = Shotgun, 3 = LMG, 4 = Nade Launcher, 4 = Super Shotgun, 5 = Sniper, 
+        //6 = Rocket Launcher
+        if(slot1.triggered)
+        {
+            //Disable all weapons so we can easily activate whatever weapon we want
+            disableWeapons();
+            guns[0].SetActive(true);
+        }
+
+        else if(slot2.triggered)
+        {
+            //Disable all weapons so we can easily activate whatever weapon we want
+            disableWeapons();
+            guns[1].SetActive(true);
+        }
+
+        else if(slot3.triggered)
+        {
+            //Disable all weapons so we can easily activate whatever weapon we want
+            disableWeapons();
+            guns[2].SetActive(true);
+        }
+
+        else if(slot4.triggered)
+        {
+            //Disable all weapons so we can easily activate whatever weapon we want
+            disableWeapons();
+            guns[3].SetActive(true);
+        }
+    }
+
+    private void disableWeapons()
+    {
+        //Disable all weapons
+        foreach(GameObject weapon in guns)
+        {
+            weapon.SetActive(false);
+        }
     }
 
     private bool OnSteepSlope()

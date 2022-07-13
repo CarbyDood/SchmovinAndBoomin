@@ -2,13 +2,14 @@ using UnityEngine;
 
 public class Target : MonoBehaviour
 {
-    private float health = 50f;
+    [SerializeField] private float health = 50f;
     bool isShaking = false;
 
     float shakingTime = 1f;
     float timer = 0f;
 
     [SerializeField] GameObject obj;
+    [SerializeField] GameObject parentObj;
 
     //keep track of target's original position
     Vector3 ogPos;
@@ -32,7 +33,7 @@ public class Target : MonoBehaviour
 
     private void Start()
     {
-        ogPos = obj.transform.position;
+        ogPos = parentObj.transform.position;
     }
 
     private void Update()
@@ -42,10 +43,10 @@ public class Target : MonoBehaviour
             timer += Time.deltaTime;
             if(timer < shakingTime)
             {
-                float x = obj.transform.position.x;
-                float y = obj.transform.position.y;
+                float x = parentObj.transform.position.x;
+                float y = parentObj.transform.position.y;
                 float z = ogPos.z + (Mathf.Sin(Time.time * 750f) * 0.10f);
-                obj.transform.position = new Vector3(x, y, z);
+                parentObj.transform.position = new Vector3(x, y, z);
             }
             else {
                 isShaking = false;
@@ -54,7 +55,7 @@ public class Target : MonoBehaviour
 
         else
         {
-            obj.transform.position = ogPos;
+            parentObj.transform.position = ogPos;
         }
     }
 }
