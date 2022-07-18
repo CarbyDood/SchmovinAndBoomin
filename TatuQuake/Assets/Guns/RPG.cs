@@ -19,7 +19,7 @@ public class RPG : WeaponsBaseClass
         damage = 100f;
         range = 10000f;
         fireRate = 0.8f;
-        impactForce = 640f;
+        impactForce = 440f;
     }
 
     // Update is called once per frame
@@ -48,6 +48,7 @@ public class RPG : WeaponsBaseClass
         Rocket rocketG = Instantiate(rocket, dumPos, dumRot);
         rocketG.SetDmg(damage);
         rocketG.SetFrc(impactForce);
+        rocketG.SetFrwd(fpsCam.transform.forward);//make the rocket go towards where we're looking at
         reloaded = false;
         OnFired();
     }

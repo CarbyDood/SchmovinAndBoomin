@@ -21,6 +21,11 @@ public class PlayerMovement : MonoBehaviour
     private InputAction slot2;
     private InputAction slot3;
     private InputAction slot4;
+    private InputAction slot5;
+    private InputAction slot6;
+    private InputAction slot7;
+    private InputAction slot8;
+    private InputAction scroll;
 
     [SerializeField] private float baseSpeed = 4f;
     [SerializeField] private float gravity = -9.81f;
@@ -35,6 +40,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private List<GameObject> guns;
     //0 = Pistol, 1 = SMG, 2 = Shotgun, 3 = LMG, 4 = Nade Launcher, 4 = Super Shotgun, 5 = Sniper, 
     //6 = Rocket Launcher
+    private int currGun;
 
     //slope stuff
     private float groundRayDistance = 1;
@@ -60,6 +66,18 @@ public class PlayerMovement : MonoBehaviour
         slot2 = playerInput.actions["WeaponSlot2"];
         slot3 = playerInput.actions["WeaponSlot3"];
         slot4 = playerInput.actions["WeaponSlot4"];
+        slot5 = playerInput.actions["WeaponSlot5"];
+        slot6 = playerInput.actions["WeaponSlot6"];
+        slot7 = playerInput.actions["WeaponSlot7"];
+        slot8 = playerInput.actions["WeaponSlot8"];
+        scroll = playerInput.actions["ScrollWeapon"];
+
+        int len = guns.Count;
+        for(int i = 0; i < len; i++)
+        {
+            if(guns[i].activeSelf)
+                currGun = i; //Get Default weapon
+        }
 
         speed = baseSpeed;
         jumpHeight = baseJumpHeight;
@@ -82,13 +100,17 @@ public class PlayerMovement : MonoBehaviour
         Jump();
         changeWeapon();
 
+        if(scroll.triggered){
+            ScrollWeapon();
+        }
+
         velocity.y += gravity * Time.deltaTime;
 
         //reset position if we fall off the map
         if(transform.position.y < -50)
         {
             controller.enabled = false;
-            controller.transform.position = new Vector3(0, 0, 0);
+            controller.transform.position = new Vector3(1, 2, -3);
             controller.enabled = true;
         }
     }
@@ -160,35 +182,86 @@ public class PlayerMovement : MonoBehaviour
     {
         //Change weapon as soon as player hits the button
 
-        //0 = Pistol, 1 = SMG, 2 = Shotgun, 3 = LMG, 4 = Nade Launcher, 4 = Super Shotgun, 5 = Sniper, 
-        //6 = Rocket Launcher
+        //0 = Pistol, 1 = SMG, 2 = Shotgun, 3 = LMG, 4 = Nade Launcher, 5 = Super Shotgun, 6 = Sniper, 
+        //7 = Rocket Launcher
         if(slot1.triggered)
         {
             //Disable all weapons so we can easily activate whatever weapon we want
             disableWeapons();
-            guns[0].SetActive(true);
+            currGun = 0;
+            guns[currGun].SetActive(true);
         }
 
         else if(slot2.triggered)
         {
             //Disable all weapons so we can easily activate whatever weapon we want
             disableWeapons();
-            guns[1].SetActive(true);
+            currGun = 1;
+            guns[currGun].SetActive(true);
         }
 
         else if(slot3.triggered)
         {
             //Disable all weapons so we can easily activate whatever weapon we want
             disableWeapons();
-            guns[2].SetActive(true);
+            currGun = 2;
+            guns[currGun].SetActive(true);
         }
 
         else if(slot4.triggered)
         {
             //Disable all weapons so we can easily activate whatever weapon we want
             disableWeapons();
-            guns[3].SetActive(true);
+            currGun = 3;
+            guns[currGun].SetActive(true);
         }
+
+        else if(slot5.triggered)
+        {
+            //Disable all weapons so we can easily activate whatever weapon we want
+            disableWeapons();
+            currGun = 4;
+            guns[currGun].SetActive(true);
+        }
+
+        else if(slot6.triggered)
+        {
+            //Disable all weapons so we can easily activate whatever weapon we want
+            disableWeapons();
+            currGun = 5;
+            guns[currGun].SetActive(true);
+        }
+
+        else if(slot7.triggered)
+        {
+            //Disable all weapons so we can easily activate whatever weapon we want
+            disableWeapons();
+            currGun = 6;
+            guns[currGun].SetActive(true);
+        }
+
+        else if(slot8.triggered)
+        {
+            //Disable all weapons so we can easily activate whatever weapon we want
+            disableWeapons();
+            currGun = 7;
+            guns[currGun].SetActive(true);
+        }
+    }
+
+    private void ScrollWeapon()
+    {
+        //scroll wheel value comes in as a either 120 for scroll up, or -120 for scroll down
+        int changeIndex = (int)-scroll.ReadValue<float>()/120;
+        currGun += changeIndex;
+
+        if(currGun > 7)
+            currGun = 0; //scroll back to the start of the guns list
+        if(currGun < 0)
+            currGun = 7; //scroll back to the end of the guns list
+
+        disableWeapons();
+        guns[currGun].SetActive(true);
     }
 
     private void disableWeapons()

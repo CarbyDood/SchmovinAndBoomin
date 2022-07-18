@@ -5,7 +5,7 @@ public class Pistol : WeaponsBaseClass
     // Start is called before the first frame update
     void Start()
     {
-        damage = 10f;
+        damage = 12f;
         range = 100f;
         fireRate = 8f;
         impactForce = 50f;

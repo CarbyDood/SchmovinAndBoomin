@@ -2,16 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Shotgun : WeaponsBaseClass
+public class SuperShotgun : WeaponsBaseClass
 {
-    [SerializeField] private int pelletCount = 8;
+    [SerializeField] private int pelletCount = 16;
     // Start is called before the first frame update
     void Start()
     {
-        damage = 8f; //per pellet!
-        range = 50f;
-        fireRate = 2f;
-        impactForce = 25f;
+        damage = 10f; //per pellet!
+        range = 30f;
+        fireRate = 1.2f;
+        impactForce = 35f;
     }
 
     // Update is called once per frame
@@ -34,7 +34,7 @@ public class Shotgun : WeaponsBaseClass
         {
             RaycastHit hit;
             Vector3 rando;
-            float spreadRange = 0.05f;
+            float spreadRange = 0.1f;
             if(i == 0)
             {
                 rando = new Vector3(0, 0 ,0);

@@ -1,49 +1,59 @@
 using UnityEngine;
 
-public class Rocket : MonoBehaviour
+public class Nade : MonoBehaviour
 {
     private Rigidbody rigidBody;
-    [SerializeField] private float rocketSpeed = 15f;
-    [SerializeField] private float lifeTime = 3f;
-    [SerializeField] private float blastRadius = 4f;
-    [SerializeField] private bool isDummy = false;
-    [SerializeField] protected ParticleSystem trial;
+    [SerializeField] private float nadeSpeed = 20f;
+    [SerializeField] private float fuseTime = 1f;
+    [SerializeField] private float blastRadius = 5f;
     [SerializeField] protected GameObject explosion;
 
     private float damage;
     private float impactForce;
     private Vector3 forward;
     private float timer;
-    
+    private bool isNew = true;
 
     private void Awake() 
     {
         rigidBody = GetComponent<Rigidbody>();
-        RPG.OnFired += MissleFired;
-        //layer 0 is the default layer (which is the layer is the rocket is on)
+        NadeLauncher.OnFired += NadeFired;
+        //layer 0 is the default layer (which is the layer is the nade is on)
         //layer 7 is the player
         Physics.IgnoreLayerCollision(0, 7, true);
+
     }
 
     private void Update() 
     {
         timer += Time.deltaTime;
-        if(timer >= lifeTime && !isDummy){
+        if(timer >= fuseTime){
             Explode();
         }
     }
 
     private void OnCollisionEnter(Collision other) 
     {
-        Explode();
+        //only exploding if we touch something that is *not* the world
+        //world (or ground) layer is 6
+        if(other.gameObject.layer != 6)
+            Explode();
     }
 
-    private void MissleFired() 
+    private void NadeFired() 
     {
         if(isActiveAndEnabled)
         {
-            trial.Play();
-            rigidBody.AddForce(forward * rocketSpeed, ForceMode.Impulse);
+            //Only add force to a nade that hasn't already been fired out of the
+            //launcher
+            if(isNew == true)
+            {
+                //angle the nade up a bit
+                Vector3 angle = new Vector3(0, 0.125f, 0);
+                forward += angle;
+                rigidBody.AddForce(forward * nadeSpeed, ForceMode.VelocityChange);
+                isNew = false; //once a nade has been fired, it's no longer new
+            }
         }
     }
 
@@ -58,11 +68,16 @@ public class Rocket : MonoBehaviour
 
         foreach (Collider nearbyObj in colliders)
         {
-            //Add Force
-            Rigidbody rb = nearbyObj.GetComponent<Rigidbody>();
-            if (rb != null)
+            //ignore other nades
+            Nade nade = nearbyObj.GetComponent<Nade>();
+            if(nade == null)
             {
-                rb.AddExplosionForce(impactForce, transform.position, blastRadius);
+                //Add Force
+                Rigidbody rb = nearbyObj.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    rb.AddExplosionForce(impactForce, transform.position, blastRadius);
+                }
             }
 
             //Damage
@@ -72,16 +87,17 @@ public class Rocket : MonoBehaviour
                 target.TakeDamage(damage);
             }
 
-            //Rocket Jump!!!
+            //Nade Jump!!
             PlayerMovement player = nearbyObj.GetComponent<PlayerMovement>();
             if(player != null)
             {
                 Vector3 direction = player.transform.position - (rigidBody.transform.position);
-                player.ApplyForce(impactForce, direction);
+                //NadeLauncher shouldn't be as useful for movement as the rocket launcher is
+                player.ApplyForce((impactForce * 0.7f), direction);
             }
         }
 
-        RPG.OnFired -= MissleFired;
+        NadeLauncher.OnFired -= NadeFired;
         Destroy(gameObject.transform.GetChild(0).gameObject, 0.5f);
         transform.DetachChildren();
         Destroy(gameObject);
@@ -96,12 +112,10 @@ public class Rocket : MonoBehaviour
     {
         impactForce = frc;
     }
-
     public void SetFrwd(Vector3 frwd)
     {
         forward = frwd;
     }
-
     public float GetDmg()
     {
         return damage;
@@ -111,7 +125,6 @@ public class Rocket : MonoBehaviour
     {
         return impactForce;
     }
-
     public Vector3 GetFrwd()
     {
         return forward;
