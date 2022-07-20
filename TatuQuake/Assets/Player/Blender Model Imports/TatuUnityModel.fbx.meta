@@ -198,8 +198,8 @@ ModelImporter:
       name: TatuIdle
       takeName: metarig|metarigAction
       internalID: 0
-      firstFrame: 180
-      lastFrame: 269
+      firstFrame: 181
+      lastFrame: 268
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
