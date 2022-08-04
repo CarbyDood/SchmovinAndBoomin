@@ -10,7 +10,7 @@ public class Sniper : WeaponsBaseClass
     [SerializeField] private GameObject crossHair;
     [SerializeField] private GameObject gunCam;
     [SerializeField] private float zoomFOV = 15;
-    private float ogFOV;
+    [SerializeField] private float ogFOV = 110;
     private bool zoomed = false;
 
     // Start is called before the first frame update
@@ -20,7 +20,6 @@ public class Sniper : WeaponsBaseClass
         range = 500f;
         fireRate = 2f;
         impactForce = 250f;
-        ogFOV = fpsCam.fieldOfView;
     }
 
     // Update is called once per frame
@@ -53,7 +52,6 @@ public class Sniper : WeaponsBaseClass
         scopeReticle.SetActive(true);
         gunCam.SetActive(false);
         
-        ogFOV = fpsCam.fieldOfView;
         fpsCam.fieldOfView = zoomFOV;
     }
 
@@ -68,7 +66,7 @@ public class Sniper : WeaponsBaseClass
 
     private void OnDisable() 
     {
-        zoomed = false;
         UnZoom();
+        zoomed = false;
     }
 }

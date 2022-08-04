@@ -37,7 +37,8 @@ public class PlayerMovement : MonoBehaviour
     private float momentumLossRate = 1f;
     private float velocityCoeff = 0.005f;
 
-    [SerializeField] private List<GameObject> guns;
+    [SerializeField] private List<GameObject> gunViewModels;
+    [SerializeField] private List<GameObject> gunWorldModels;
     //0 = Pistol, 1 = SMG, 2 = Shotgun, 3 = LMG, 4 = Nade Launcher, 4 = Super Shotgun, 5 = Sniper, 
     //6 = Rocket Launcher
     private int currGun;
@@ -72,12 +73,15 @@ public class PlayerMovement : MonoBehaviour
         slot8 = playerInput.actions["WeaponSlot8"];
         scroll = playerInput.actions["ScrollWeapon"];
 
-        int len = guns.Count;
+        int len = gunViewModels.Count;
         for(int i = 0; i < len; i++)
         {
-            if(guns[i].activeSelf)
+            if(gunViewModels[i].activeSelf)
                 currGun = i; //Get Default weapon
         }
+        disableWeapons();
+        gunViewModels[currGun].SetActive(true);
+        gunWorldModels[currGun].SetActive(true);
 
         speed = baseSpeed;
         jumpHeight = baseJumpHeight;
@@ -189,7 +193,8 @@ public class PlayerMovement : MonoBehaviour
             //Disable all weapons so we can easily activate whatever weapon we want
             disableWeapons();
             currGun = 0;
-            guns[currGun].SetActive(true);
+            gunViewModels[currGun].SetActive(true);
+            gunWorldModels[currGun].SetActive(true);
         }
 
         else if(slot2.triggered)
@@ -197,7 +202,8 @@ public class PlayerMovement : MonoBehaviour
             //Disable all weapons so we can easily activate whatever weapon we want
             disableWeapons();
             currGun = 1;
-            guns[currGun].SetActive(true);
+            gunViewModels[currGun].SetActive(true);
+            gunWorldModels[currGun].SetActive(true);
         }
 
         else if(slot3.triggered)
@@ -205,7 +211,8 @@ public class PlayerMovement : MonoBehaviour
             //Disable all weapons so we can easily activate whatever weapon we want
             disableWeapons();
             currGun = 2;
-            guns[currGun].SetActive(true);
+            gunViewModels[currGun].SetActive(true);
+            gunWorldModels[currGun].SetActive(true);
         }
 
         else if(slot4.triggered)
@@ -213,7 +220,8 @@ public class PlayerMovement : MonoBehaviour
             //Disable all weapons so we can easily activate whatever weapon we want
             disableWeapons();
             currGun = 3;
-            guns[currGun].SetActive(true);
+            gunViewModels[currGun].SetActive(true);
+            gunWorldModels[currGun].SetActive(true);
         }
 
         else if(slot5.triggered)
@@ -221,7 +229,8 @@ public class PlayerMovement : MonoBehaviour
             //Disable all weapons so we can easily activate whatever weapon we want
             disableWeapons();
             currGun = 4;
-            guns[currGun].SetActive(true);
+            gunViewModels[currGun].SetActive(true);
+            gunWorldModels[currGun].SetActive(true);
         }
 
         else if(slot6.triggered)
@@ -229,7 +238,8 @@ public class PlayerMovement : MonoBehaviour
             //Disable all weapons so we can easily activate whatever weapon we want
             disableWeapons();
             currGun = 5;
-            guns[currGun].SetActive(true);
+            gunViewModels[currGun].SetActive(true);
+            gunWorldModels[currGun].SetActive(true);
         }
 
         else if(slot7.triggered)
@@ -237,7 +247,8 @@ public class PlayerMovement : MonoBehaviour
             //Disable all weapons so we can easily activate whatever weapon we want
             disableWeapons();
             currGun = 6;
-            guns[currGun].SetActive(true);
+            gunViewModels[currGun].SetActive(true);
+            gunWorldModels[currGun].SetActive(true);
         }
 
         else if(slot8.triggered)
@@ -245,7 +256,8 @@ public class PlayerMovement : MonoBehaviour
             //Disable all weapons so we can easily activate whatever weapon we want
             disableWeapons();
             currGun = 7;
-            guns[currGun].SetActive(true);
+            gunViewModels[currGun].SetActive(true);
+            gunWorldModels[currGun].SetActive(true);
         }
     }
 
@@ -261,13 +273,19 @@ public class PlayerMovement : MonoBehaviour
             currGun = 7; //scroll back to the end of the guns list
 
         disableWeapons();
-        guns[currGun].SetActive(true);
+        gunViewModels[currGun].SetActive(true);
+        gunWorldModels[currGun].SetActive(true);
     }
 
     private void disableWeapons()
     {
         //Disable all weapons
-        foreach(GameObject weapon in guns)
+        foreach(GameObject weapon in gunViewModels)
+        {
+            weapon.SetActive(false);
+        }
+
+        foreach(GameObject weapon in gunWorldModels)
         {
             weapon.SetActive(false);
         }
