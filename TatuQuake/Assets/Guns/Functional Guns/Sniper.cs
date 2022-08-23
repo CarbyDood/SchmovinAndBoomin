@@ -5,7 +5,6 @@ using UnityEngine.InputSystem;
 
 public class Sniper : WeaponsBaseClass
 {
-    [SerializeField] private Animator animator;
     [SerializeField] private GameObject scopeReticle;
     [SerializeField] private GameObject crossHair;
     [SerializeField] private GameObject gunCam;

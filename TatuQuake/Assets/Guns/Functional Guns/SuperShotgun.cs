@@ -10,7 +10,7 @@ public class SuperShotgun : WeaponsBaseClass
     {
         damage = 10f; //per pellet!
         range = 30f;
-        fireRate = 1.2f;
+        fireRate = 0.8f;
         impactForce = 35f;
     }
 

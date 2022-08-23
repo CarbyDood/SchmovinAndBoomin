@@ -7,13 +7,19 @@ public class Pistol : WeaponsBaseClass
     {
         damage = 12f;
         range = 100f;
-        fireRate = 8f;
+        fireRate = 7f;
         impactForce = 50f;
     }
 
     // Update is called once per frame
     void Update()
     {
+        //Exit out of firing animation when we are able to fire
+        if(Time.time >= nextTimeToFire && animator.GetBool("Fired") == true)
+        {
+            animator.SetBool("Fired", false);
+        }
+
         //Semi Auto
         if(fire.triggered && Time.time >= nextTimeToFire)
         {

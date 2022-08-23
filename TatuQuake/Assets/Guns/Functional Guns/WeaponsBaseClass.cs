@@ -16,6 +16,7 @@ public class WeaponsBaseClass : MonoBehaviour
     [SerializeField] protected MomentumManager momentum;
 
     [SerializeField] protected PlayerInput playerInput;
+    [SerializeField] protected Animator animator;
     protected InputAction fire;
     protected InputAction changeFireMode;
     protected InputAction zoom;
@@ -30,21 +31,10 @@ public class WeaponsBaseClass : MonoBehaviour
         zoom = playerInput.actions["Zoom"];
     }
 
-    // Update is called once per frame
-    private void Update()
-    {
-        /*//Change firemode
-        if(changeFireMode.triggered)
-        {
-            if(fireMode == 0){fireMode = 1;}
-            else{fireMode = 0;}
-            Debug.Log("Fire mode changed to "+fireMode);
-        }*/
-    }
-
     protected void Shoot()
     {
         muzzleFlash.Play();
+        animator.SetBool("Fired",true);
         RaycastHit hit;
 
         //Bitshift the weapon layer (8) to get a bit mask

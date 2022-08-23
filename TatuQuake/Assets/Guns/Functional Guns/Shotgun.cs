@@ -10,13 +10,19 @@ public class Shotgun : WeaponsBaseClass
     {
         damage = 8f; //per pellet!
         range = 50f;
-        fireRate = 2f;
+        fireRate = 1.5f;
         impactForce = 25f;
     }
 
     // Update is called once per frame
     void Update()
     {
+        //Exit out of firing animation when we are able to fire
+        if(Time.time >= nextTimeToFire && animator.GetBool("Fired") == true)
+        {
+            animator.SetBool("Fired", false);
+        }
+
         //Semi Auto
         if(fire.triggered && Time.time >= nextTimeToFire)
         {
@@ -30,6 +36,7 @@ public class Shotgun : WeaponsBaseClass
         //shoot in a random spread
         //first pellet always hits dead center
         muzzleFlash.Play();
+        animator.SetBool("Fired", true);
         for(int i = 0; i < pelletCount; i++)
         {
             RaycastHit hit;
