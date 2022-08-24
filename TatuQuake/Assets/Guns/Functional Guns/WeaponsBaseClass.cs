@@ -127,4 +127,9 @@ public class WeaponsBaseClass : MonoBehaviour
     {
         impactForce = frc;
     }
+
+    void OnDisable() 
+    {
+        animator.WriteDefaultValues();
+    }
 }

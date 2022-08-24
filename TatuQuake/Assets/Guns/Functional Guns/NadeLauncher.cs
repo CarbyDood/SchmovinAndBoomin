@@ -17,13 +17,19 @@ public class NadeLauncher : WeaponsBaseClass
     {
         damage = 80f;
         range = 10000f;
-        fireRate = 1.8f;
+        fireRate = 0.8f;
         impactForce = 450f;
     }
 
     // Update is called once per frame
     void Update()
     {
+        //Exit out of firing animation when we are able to fire
+        if(Time.time >= nextTimeToFire && animator.GetBool("Fired") == true)
+        {
+            animator.SetBool("Fired", false);
+        }
+
         //Semi Auto
         if(fire.triggered && Time.time >= nextTimeToFire)
         {
@@ -34,6 +40,7 @@ public class NadeLauncher : WeaponsBaseClass
 
     private new void Shoot()
     {
+        animator.SetBool("Fired", true);
         Vector3 nadeStartPos = startPosition.transform.position;
         Quaternion nadeStartRot = startPosition.transform.rotation;
         Nade projectile = Instantiate(nade, nadeStartPos, nadeStartRot);

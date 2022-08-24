@@ -16,6 +16,12 @@ public class LMG : WeaponsBaseClass
     // Update is called once per frame
     void Update()
     {
+        //Exit out of firing animation when we let go of the fire key
+        if(fire.ReadValue<float>() != 1 && animator.GetBool("Fired") == true)
+        {
+            animator.SetBool("Fired", false);
+        }
+        
         //Full Auto
         if(fire.ReadValue<float>() == 1 && Time.time >= nextTimeToFire)
         {

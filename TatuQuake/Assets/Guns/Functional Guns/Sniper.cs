@@ -17,13 +17,19 @@ public class Sniper : WeaponsBaseClass
     {
         damage = 75f;
         range = 500f;
-        fireRate = 2f;
+        fireRate = 0.9f;
         impactForce = 250f;
     }
 
     // Update is called once per frame
     void Update()
     {
+        //Exit out of firing animation when we are able to fire
+        if(Time.time >= nextTimeToFire && animator.GetBool("Fired") == true)
+        {
+            animator.SetBool("Fired", false);
+        }
+
         //Semi Auto
         if(fire.triggered && Time.time >= nextTimeToFire)
         {
@@ -67,5 +73,6 @@ public class Sniper : WeaponsBaseClass
     {
         UnZoom();
         zoomed = false;
+        animator.WriteDefaultValues();
     }
 }

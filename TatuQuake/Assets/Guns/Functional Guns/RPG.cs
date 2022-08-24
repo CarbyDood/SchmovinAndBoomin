@@ -9,6 +9,7 @@ public class RPG : WeaponsBaseClass
 
     [SerializeField] Rocket rocket;
     [SerializeField] GameObject dummyRocket;
+    [SerializeField] GameObject reloadRocket;
 
     private Transform myTrans;
     private bool reloaded = true;
@@ -18,16 +19,23 @@ public class RPG : WeaponsBaseClass
     {
         damage = 100f;
         range = 10000f;
-        fireRate = 0.8f;
+        fireRate = 0.5f;
         impactForce = 440f;
     }
 
     // Update is called once per frame
     void Update()
     {
+        //Exit out of firing animation when we are able to fire
+        if(Time.time >= nextTimeToFire && animator.GetBool("Fired") == true)
+        {
+            animator.SetBool("Fired", false);
+        }
+
         //Reload Rocket
         if(Time.time >= nextTimeToFire && reloaded == false)
         {
+            reloadRocket.SetActive(false);
             dummyRocket.SetActive(true);
             reloaded = true;
         }
@@ -42,9 +50,11 @@ public class RPG : WeaponsBaseClass
 
     private new void Shoot()
     {
+        animator.SetBool("Fired", true);
         Vector3 dumPos = dummyRocket.transform.position;
         Quaternion dumRot = dummyRocket.transform.rotation;
         dummyRocket.SetActive(false);
+        reloadRocket.SetActive(true);
         Rocket rocketG = Instantiate(rocket, dumPos, dumRot);
         rocketG.SetDmg(damage);
         rocketG.SetFrc(impactForce);
