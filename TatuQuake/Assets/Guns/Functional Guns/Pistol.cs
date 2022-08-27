@@ -9,6 +9,11 @@ public class Pistol : WeaponsBaseClass
         range = 100f;
         fireRate = 7f;
         impactForce = 50f;
+        recoilX = -7f;
+        recoilY = 3.2f;
+        recoilZ = 0.3f;
+        smoothness = 6.5f;
+        recenterSpeed = 4f;
     }
 
     // Update is called once per frame
@@ -18,6 +23,7 @@ public class Pistol : WeaponsBaseClass
         if(Time.time >= nextTimeToFire && animator.GetBool("Fired") == true)
         {
             animator.SetBool("Fired", false);
+            worldAnimator.SetBool("Fired",false);
         }
 
         //Semi Auto

@@ -19,6 +19,11 @@ public class NadeLauncher : WeaponsBaseClass
         range = 10000f;
         fireRate = 0.8f;
         impactForce = 450f;
+        recoilX = -10f;
+        recoilY = 5f;
+        recoilZ = 1f;
+        smoothness = 8f;
+        recenterSpeed = 1f;
     }
 
     // Update is called once per frame
@@ -28,6 +33,7 @@ public class NadeLauncher : WeaponsBaseClass
         if(Time.time >= nextTimeToFire && animator.GetBool("Fired") == true)
         {
             animator.SetBool("Fired", false);
+            worldAnimator.SetBool("Fired", false);
         }
 
         //Semi Auto
@@ -41,6 +47,8 @@ public class NadeLauncher : WeaponsBaseClass
     private new void Shoot()
     {
         animator.SetBool("Fired", true);
+        worldAnimator.SetBool("Fired", true);
+        recoilScript.Recoil(recoilX, recoilY, recoilZ, smoothness, recenterSpeed);
         Vector3 nadeStartPos = startPosition.transform.position;
         Quaternion nadeStartRot = startPosition.transform.rotation;
         Nade projectile = Instantiate(nade, nadeStartPos, nadeStartRot);

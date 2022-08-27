@@ -11,6 +11,11 @@ public class LMG : WeaponsBaseClass
         range = 150f;
         fireRate = 12f;
         impactForce = 60f;
+        recoilX = -2.6f;
+        recoilY = 2.6f;
+        recoilZ = 0.7f;
+        smoothness = 6f;
+        recenterSpeed = 1.6f;
     }
 
     // Update is called once per frame
@@ -20,6 +25,7 @@ public class LMG : WeaponsBaseClass
         if(fire.ReadValue<float>() != 1 && animator.GetBool("Fired") == true)
         {
             animator.SetBool("Fired", false);
+            worldAnimator.SetBool("Fired",false);
         }
         
         //Full Auto

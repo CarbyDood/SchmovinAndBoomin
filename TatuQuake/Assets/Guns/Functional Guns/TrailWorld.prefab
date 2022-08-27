@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3357465054252875861}
   - component: {fileID: 3357465054252875860}
-  m_Layer: 8
-  m_Name: Trail
+  m_Layer: 9
+  m_Name: TrailWorld
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

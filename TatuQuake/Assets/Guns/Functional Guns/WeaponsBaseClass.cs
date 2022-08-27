@@ -8,21 +8,33 @@ public class WeaponsBaseClass : MonoBehaviour
     [SerializeField] protected float range;
     [SerializeField] protected float fireRate;
     [SerializeField] protected float impactForce;
+    
+    //Recoil vars
+    [SerializeField] protected float recoilX;
+    [SerializeField] protected float recoilY;
+    [SerializeField] protected float recoilZ;
+    [SerializeField] protected float smoothness;
+    [SerializeField] protected float recenterSpeed;
 
     [SerializeField] protected Camera fpsCam;
     [SerializeField] protected ParticleSystem muzzleFlash;
+    [SerializeField] protected ParticleSystem worldMuzzleFlash;
     [SerializeField] protected GameObject impactEffect;
     [SerializeField] protected TrailRenderer bulletTrail;
+    [SerializeField] protected TrailRenderer worldTrail;
     [SerializeField] protected MomentumManager momentum;
 
     [SerializeField] protected PlayerInput playerInput;
     [SerializeField] protected Animator animator;
+    [SerializeField] protected Animator worldAnimator;
     protected InputAction fire;
     protected InputAction changeFireMode;
     protected InputAction zoom;
 
     protected int fireMode = 0; //0 = semi, 1 = full
     protected float nextTimeToFire = 0f;
+
+    [SerializeField] protected CamRecoil recoilScript;
 
     protected void Awake() 
     {
@@ -34,7 +46,9 @@ public class WeaponsBaseClass : MonoBehaviour
     protected void Shoot()
     {
         muzzleFlash.Play();
+        worldMuzzleFlash.Play();
         animator.SetBool("Fired",true);
+        worldAnimator.SetBool("Fired",true);
         RaycastHit hit;
 
         //Bitshift the weapon layer (8) to get a bit mask
@@ -46,7 +60,9 @@ public class WeaponsBaseClass : MonoBehaviour
         if(Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range, layermask))
         {
             //spawn bullet trail
+            TrailRenderer worldViewTrail = Instantiate(worldTrail, worldMuzzleFlash.transform.position, Quaternion.identity);
             TrailRenderer trail = Instantiate(bulletTrail, muzzleFlash.transform.position, Quaternion.identity);
+            StartCoroutine(SpawnTrail(worldViewTrail, hit.point));
             StartCoroutine(SpawnTrail(trail, hit.point));
 
             Target target = hit.transform.GetComponent<Target>();
@@ -65,10 +81,14 @@ public class WeaponsBaseClass : MonoBehaviour
         //if we hit nothing, show a trail towards the camera's center at a distance of the weapon's range
         else
         {
+            TrailRenderer worldViewTrail = Instantiate(worldTrail, worldMuzzleFlash.transform.position, Quaternion.identity);
             TrailRenderer trail = Instantiate(bulletTrail, muzzleFlash.transform.position, Quaternion.identity);
             Vector3 pointTo = fpsCam.transform.position + (fpsCam.transform.forward * range);
+            StartCoroutine(SpawnTrail(worldViewTrail, pointTo));
             StartCoroutine(SpawnTrail(trail, pointTo));
         }
+
+        recoilScript.Recoil(recoilX, recoilY, recoilZ, smoothness, recenterSpeed);
     }
 
     public IEnumerator SpawnTrail(TrailRenderer trail, Vector3 dest)
@@ -131,5 +151,6 @@ public class WeaponsBaseClass : MonoBehaviour
     void OnDisable() 
     {
         animator.WriteDefaultValues();
+        worldAnimator.WriteDefaultValues();
     }
 }

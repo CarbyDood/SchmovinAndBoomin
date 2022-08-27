@@ -12,6 +12,11 @@ public class Shotgun : WeaponsBaseClass
         range = 50f;
         fireRate = 1.5f;
         impactForce = 25f;
+        recoilX = -15f;
+        recoilY = 4f;
+        recoilZ = 1f;
+        smoothness = 6.5f;
+        recenterSpeed = 2f;
     }
 
     // Update is called once per frame
@@ -21,6 +26,7 @@ public class Shotgun : WeaponsBaseClass
         if(Time.time >= nextTimeToFire && animator.GetBool("Fired") == true)
         {
             animator.SetBool("Fired", false);
+            worldAnimator.SetBool("Fired",false);
         }
 
         //Semi Auto
@@ -36,7 +42,11 @@ public class Shotgun : WeaponsBaseClass
         //shoot in a random spread
         //first pellet always hits dead center
         muzzleFlash.Play();
-        animator.SetBool("Fired", true);
+        worldMuzzleFlash.Play();
+        animator.SetBool("Fired",true);
+        worldAnimator.SetBool("Fired",true);
+
+        recoilScript.Recoil(recoilX, recoilY, recoilZ, smoothness, recenterSpeed);
         for(int i = 0; i < pelletCount; i++)
         {
             RaycastHit hit;
@@ -56,7 +66,9 @@ public class Shotgun : WeaponsBaseClass
             if(Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward + rando, out hit, range))
             {
                 //spawn bullet trail
+                TrailRenderer worldViewTrail = Instantiate(worldTrail, worldMuzzleFlash.transform.position, Quaternion.identity);
                 TrailRenderer trail = Instantiate(bulletTrail, muzzleFlash.transform.position, Quaternion.identity);
+                StartCoroutine(SpawnTrail(worldViewTrail, hit.point));
                 StartCoroutine(SpawnTrail(trail, hit.point));
 
                 Target target = hit.transform.GetComponent<Target>();
@@ -76,8 +88,10 @@ public class Shotgun : WeaponsBaseClass
             //if we hit nothing, show a trail towards the camera's center at a distance of the weapon's range
             else
             {
+                TrailRenderer worldViewTrail = Instantiate(worldTrail, worldMuzzleFlash.transform.position, Quaternion.identity);
                 TrailRenderer trail = Instantiate(bulletTrail, muzzleFlash.transform.position, Quaternion.identity);
                 Vector3 pointTo = fpsCam.transform.position + ((fpsCam.transform.forward + rando) * range);
+                StartCoroutine(SpawnTrail(worldViewTrail, pointTo));
                 StartCoroutine(SpawnTrail(trail, pointTo));
             }
         }

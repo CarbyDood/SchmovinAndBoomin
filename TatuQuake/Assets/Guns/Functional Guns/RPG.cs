@@ -10,6 +10,8 @@ public class RPG : WeaponsBaseClass
     [SerializeField] Rocket rocket;
     [SerializeField] GameObject dummyRocket;
     [SerializeField] GameObject reloadRocket;
+    [SerializeField] GameObject worldRocket;
+    
 
     private Transform myTrans;
     private bool reloaded = true;
@@ -21,6 +23,11 @@ public class RPG : WeaponsBaseClass
         range = 10000f;
         fireRate = 0.5f;
         impactForce = 440f;
+        recoilX = -15f;
+        recoilY = 7.5f;
+        recoilZ = 1.5f;
+        smoothness = 6f;
+        recenterSpeed = 0.9f;
     }
 
     // Update is called once per frame
@@ -30,6 +37,7 @@ public class RPG : WeaponsBaseClass
         if(Time.time >= nextTimeToFire && animator.GetBool("Fired") == true)
         {
             animator.SetBool("Fired", false);
+            worldAnimator.SetBool("Fired", false);
         }
 
         //Reload Rocket
@@ -37,6 +45,7 @@ public class RPG : WeaponsBaseClass
         {
             reloadRocket.SetActive(false);
             dummyRocket.SetActive(true);
+            worldRocket.SetActive(true);
             reloaded = true;
         }
 
@@ -51,10 +60,13 @@ public class RPG : WeaponsBaseClass
     private new void Shoot()
     {
         animator.SetBool("Fired", true);
+        worldAnimator.SetBool("Fired", true);
+        recoilScript.Recoil(recoilX, recoilY, recoilZ, smoothness, recenterSpeed);
         Vector3 dumPos = dummyRocket.transform.position;
         Quaternion dumRot = dummyRocket.transform.rotation;
         dummyRocket.SetActive(false);
         reloadRocket.SetActive(true);
+        worldRocket.SetActive(false);
         Rocket rocketG = Instantiate(rocket, dumPos, dumRot);
         rocketG.SetDmg(damage);
         rocketG.SetFrc(impactForce);

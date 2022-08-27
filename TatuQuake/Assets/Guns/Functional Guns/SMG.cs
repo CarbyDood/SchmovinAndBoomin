@@ -11,6 +11,11 @@ public class SMG : WeaponsBaseClass
         range = 70f;
         fireRate = 17f;
         impactForce = 30f;
+        recoilX = -4f;
+        recoilY = 3f;
+        recoilZ = 0.9f;
+        smoothness = 7f;
+        recenterSpeed = 2.8f;
     }
 
     // Update is called once per frame
@@ -20,6 +25,7 @@ public class SMG : WeaponsBaseClass
         if(fire.ReadValue<float>() != 1 && animator.GetBool("Fired") == true)
         {
             animator.SetBool("Fired", false);
+            worldAnimator.SetBool("Fired",false);
         }
 
         //Full Auto

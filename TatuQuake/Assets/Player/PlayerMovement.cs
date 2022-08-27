@@ -259,6 +259,7 @@ public class PlayerMovement : MonoBehaviour
             gunViewModels[currGun].SetActive(true);
             gunWorldModels[currGun].SetActive(true);
         }
+        animator.SetInteger("CurrWeapon", currGun);
     }
 
     private void ScrollWeapon()
@@ -275,6 +276,7 @@ public class PlayerMovement : MonoBehaviour
         disableWeapons();
         gunViewModels[currGun].SetActive(true);
         gunWorldModels[currGun].SetActive(true);
+        animator.SetInteger("CurrWeapon", currGun);
     }
 
     private void disableWeapons()

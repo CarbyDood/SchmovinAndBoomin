@@ -11,7 +11,11 @@ public class Sniper : WeaponsBaseClass
     [SerializeField] private float zoomFOV = 15;
     [SerializeField] private float ogFOV = 110;
     private bool zoomed = false;
-
+    private float zoomedRecoilX;
+    private float zoomedRecoilY;
+    private float zoomedRecoilZ;
+    private float zoomedSmoothness;
+    private float zoomedRecenterSpeed;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +23,16 @@ public class Sniper : WeaponsBaseClass
         range = 500f;
         fireRate = 0.9f;
         impactForce = 250f;
+        recoilX = -32f;
+        recoilY = 9f;
+        recoilZ = 3.2f;
+        smoothness = 12f;
+        recenterSpeed = 1f;
+        zoomedRecoilX = -20f;
+        zoomedRecoilY = 6f;
+        zoomedRecoilZ = 1.8f;
+        zoomedSmoothness = 15f;
+        zoomedRecenterSpeed = 3.5f;
     }
 
     // Update is called once per frame
@@ -28,6 +42,7 @@ public class Sniper : WeaponsBaseClass
         if(Time.time >= nextTimeToFire && animator.GetBool("Fired") == true)
         {
             animator.SetBool("Fired", false);
+            worldAnimator.SetBool("Fired",false);
         }
 
         //Semi Auto
@@ -41,11 +56,63 @@ public class Sniper : WeaponsBaseClass
         {
             zoomed = !zoomed;
             animator.SetBool("Zoomed", zoomed);
+            worldAnimator.SetBool("Zoomed", zoomed);
             if(zoomed)
                 StartCoroutine(Zoom());
             else
                 UnZoom();
         }
+    }
+
+    protected new void Shoot()
+    {
+        muzzleFlash.Play();
+        worldMuzzleFlash.Play();
+        animator.SetBool("Fired",true);
+        worldAnimator.SetBool("Fired",true);
+        RaycastHit hit;
+
+        //Bitshift the weapon layer (8) to get a bit mask
+        int layermask = 1 << 8;
+
+        //we want to note down every collision *except* layer 8, so we use ~
+        layermask = ~layermask;
+
+        if(Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range, layermask))
+        {
+            //spawn bullet trail
+            TrailRenderer worldViewTrail = Instantiate(worldTrail, worldMuzzleFlash.transform.position, Quaternion.identity);
+            TrailRenderer trail = Instantiate(bulletTrail, muzzleFlash.transform.position, Quaternion.identity);
+            StartCoroutine(SpawnTrail(worldViewTrail, hit.point));
+            StartCoroutine(SpawnTrail(trail, hit.point));
+
+            Target target = hit.transform.GetComponent<Target>();
+            if(target != null)
+            {
+                target.TakeDamage(damage);
+            }
+
+            if (hit.rigidbody != null){
+                hit.rigidbody.AddForce(-hit.normal * impactForce);
+            }
+
+            Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+        }
+
+        //if we hit nothing, show a trail towards the camera's center at a distance of the weapon's range
+        else
+        {
+            TrailRenderer worldViewTrail = Instantiate(worldTrail, worldMuzzleFlash.transform.position, Quaternion.identity);
+            TrailRenderer trail = Instantiate(bulletTrail, muzzleFlash.transform.position, Quaternion.identity);
+            Vector3 pointTo = fpsCam.transform.position + (fpsCam.transform.forward * range);
+            StartCoroutine(SpawnTrail(worldViewTrail, pointTo));
+            StartCoroutine(SpawnTrail(trail, pointTo));
+        }
+
+        if(zoomed)
+            recoilScript.Recoil(zoomedRecoilX, zoomedRecoilY, zoomedRecoilZ, zoomedSmoothness, zoomedRecenterSpeed);
+        else
+            recoilScript.Recoil(recoilX, recoilY, recoilZ, smoothness, recenterSpeed);
     }
 
     //Use or get out of scope
@@ -73,6 +140,8 @@ public class Sniper : WeaponsBaseClass
     {
         UnZoom();
         zoomed = false;
+        worldAnimator.SetBool("Zoomed", false);
         animator.WriteDefaultValues();
+        worldAnimator.WriteDefaultValues();
     }
 }
