@@ -13,9 +13,11 @@ public class CameraControls : MonoBehaviour
 
     public float mouseSensitivity = 0.35f;
 
+    public float zoomSens = 0.15f;
+    public bool isZoomed = false;
     public Transform playerBody;
 
-    float xRotation = 0f;
+    public float xRotation = 0f;
 
     private void OnDisable()
     {
@@ -45,12 +47,20 @@ public class CameraControls : MonoBehaviour
 
     private void camUpdate(InputAction.CallbackContext context) 
     {
-        float mouseX = mouseInputX.ReadValue<float>() * mouseSensitivity;
-        float mouseY = mouseInputY.ReadValue<float>() * mouseSensitivity;
+        float mouseX, mouseY;
+        if(isZoomed)
+        {
+            mouseX = mouseInputX.ReadValue<float>() * zoomSens;
+            mouseY = mouseInputY.ReadValue<float>() * zoomSens;
+        } 
+        else
+        {
+            mouseX = mouseInputX.ReadValue<float>() * mouseSensitivity;
+            mouseY = mouseInputY.ReadValue<float>() * mouseSensitivity;
+        }
 
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-
         transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         playerBody.Rotate(Vector3.up * mouseX);
     }

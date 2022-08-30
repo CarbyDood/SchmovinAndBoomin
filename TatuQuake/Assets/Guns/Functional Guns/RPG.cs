@@ -67,7 +67,7 @@ public class RPG : WeaponsBaseClass
         dummyRocket.SetActive(false);
         reloadRocket.SetActive(true);
         worldRocket.SetActive(false);
-        Rocket rocketG = Instantiate(rocket, dumPos, dumRot);
+        Rocket rocketG = Instantiate(rocket, fpsCam.transform.position, dumRot);
         rocketG.SetDmg(damage);
         rocketG.SetFrc(impactForce);
         rocketG.SetFrwd(fpsCam.transform.forward);//make the rocket go towards where we're looking at

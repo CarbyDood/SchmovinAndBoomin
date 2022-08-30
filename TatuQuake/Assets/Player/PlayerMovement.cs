@@ -9,10 +9,6 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController controller;
     private PlayerInput playerInput;
     [SerializeField] private Animator animator;
-    
-    [SerializeField] private Transform groundCheck;
-    [SerializeField] private float groundDistance = 0.4f;
-    [SerializeField] private LayerMask groundMask;
 
     //Store the actual controls
     private InputAction jumpin;
@@ -27,13 +23,18 @@ public class PlayerMovement : MonoBehaviour
     private InputAction slot8;
     private InputAction scroll;
 
-    [SerializeField] private float baseSpeed = 4f;
+    [SerializeField] private float baseSpeed = 2f;
     [SerializeField] private float gravity = -9.81f;
-    [SerializeField] private float baseJumpHeight = 4f;
-    [SerializeField] private float baseSlideSpeed = -3f;
+    [SerializeField] private float baseJumpHeight = 1.7f;
     private float speed;
     private float jumpHeight;
     private float slideSpeed;
+    [SerializeField] private GameObject groundCheck;
+    [SerializeField] private GameObject ceilingCheck;
+    private float groundDistance;
+    private float ceilingDistance;
+    public LayerMask groundMask;
+
     private float momentumLossRate = 1f;
     private float velocityCoeff = 0.005f;
 
@@ -44,7 +45,7 @@ public class PlayerMovement : MonoBehaviour
     private int currGun;
 
     //slope stuff
-    private float groundRayDistance = 1;
+    private float groundRayDistance = 0.9f;
     private RaycastHit slopeHit;
 
     Vector3 velocity;
@@ -52,8 +53,16 @@ public class PlayerMovement : MonoBehaviour
     Vector2 currInputVect;
     Vector2 smoothInputVelocity;
     [SerializeField] private float smoothInputSpeed = .2f;
+    private float jumpCoolDown = 0.5f;
+    private float nextTimeToJump = 0f;
 
-    bool isGrounded;
+    private bool isGrounded;
+    private bool isOnStair;
+    private bool headBonked;
+    private bool startedFalling = false;
+    private bool isFalling = false;
+    private bool isJumping = false;
+    private bool isAffectedByForce = false;
 
     private void Awake() 
     {
@@ -85,18 +94,43 @@ public class PlayerMovement : MonoBehaviour
 
         speed = baseSpeed;
         jumpHeight = baseJumpHeight;
-        slideSpeed = baseSlideSpeed;
+        slideSpeed = 3f;
+        groundDistance = controller.radius;
+        ceilingDistance = groundDistance/2;
     }
 
     private void Update() 
     {
-        //Check if we are touching the ground
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        if(isGrounded && velocity.y < 0)
+        //Check if we are touching the ground, the ceiling, or some stairs
+        isOnStair = Physics.CheckSphere(groundCheck.transform.position, groundDistance, groundMask);
+        isGrounded = controller.isGrounded;
+        headBonked = Physics.CheckSphere(ceilingCheck.transform.position, ceilingDistance, groundMask);
+
+        if(headBonked && velocity.y > 0)
+        {
+            velocity.y = 0f;
+            ceilingCheck.SetActive(false);
+        }
+
+        if(isGrounded)
         {
             velocity.x = 0f;
             velocity.z = 0f;
-            velocity.y = -4.5f;
+            velocity.y = -speed;
+            ceilingCheck.SetActive(true);
+            isFalling = false;
+            isJumping = false;
+            isAffectedByForce = false;
+        }
+
+        if(!isGrounded && !isOnStair && !startedFalling && !isFalling && velocity.y <= 0f){
+            startedFalling = true;
+            isFalling = true;
+        }
+
+        if(startedFalling && !isJumping && !isOnStair){
+            velocity.y = -2f;
+            startedFalling = false;
         }
 
         SpeedLimit();
@@ -143,40 +177,52 @@ public class PlayerMovement : MonoBehaviour
         //move based off where we're rotated/looking
         move = transform.right * currInputVect.x + transform.forward * currInputVect.y;
 
-        if(OnSteepSlope())
-        {
-            SteepSlopeMove();
-        }
-
         //calculate the speed bonus given from momentum
-        //and if we're in the air
-        speed = baseSpeed + (momentum.GetMomentum()/10);
+        //Cap speed bonus to 3x
+        speed = baseSpeed + (baseSpeed * 2 * (momentum.GetMomentum()/100));
 
-        //Air controls
-        if(!isGrounded)
+        //controls when affected by outside force (explosive jumping)
+        if(isAffectedByForce)
         {
+            Debug.Log("RocketMan");
             animator.SetBool("Jumpin", true);
-            //Fight against velocity forces
-            velocity += currInputVect.x * transform.right * velocityCoeff;
-            velocity += currInputVect.y * transform.forward * velocityCoeff;
-            controller.Move(velocity * Time.deltaTime);
+            velocity += (currInputVect.x * transform.right * velocityCoeff);
+            velocity += (currInputVect.y * transform.forward * velocityCoeff);
 
             //reduce speed
             speed /= 5;
         }
 
+        //Air controls
+        else if(!isGrounded && !isOnStair)
+        {
+            Debug.Log("JumpMan");
+            animator.SetBool("Jumpin", true);
+            //reduce speed
+            speed /= 1.2f;
+        }
+
         else
             animator.SetBool("Jumpin", false);
-        
+
+        if(OnSteepSlope())
+        {
+            SteepSlopeMove();
+            velocity.y = -jumpHeight - 1;
+        }
+
         controller.Move(move * speed * Time.deltaTime);
     }
 
     private void Jump()
     {
-        jumpHeight = baseJumpHeight + ((momentum.GetMomentum()/10)/3f);
-        if(jumpin.triggered && isGrounded)
+        jumpHeight = baseJumpHeight + (baseJumpHeight  * (momentum.GetMomentum()/100));
+
+        if(jumpin.triggered && isGrounded && Time.time >= nextTimeToJump)
         {
-            velocity.y += Mathf.Sqrt(jumpHeight * -2f * gravity);
+            isJumping = true;
+            velocity.y += -velocity.y + Mathf.Sqrt(jumpHeight * -2f * gravity);
+            nextTimeToJump = Time.time + jumpCoolDown;
         }
 
         controller.Move(velocity * Time.deltaTime);
@@ -295,11 +341,12 @@ public class PlayerMovement : MonoBehaviour
 
     private bool OnSteepSlope()
     {
-        if(!isGrounded) {return false;}
+        if(!isGrounded && !isOnStair) {return false;}
 
         //send a ray underneath the player that checks for any slopes. If a slope is hit that is greater than the slope angle
-        //they are able to climb, then return true, because we are on a steepslope/
-        if(Physics.Raycast(transform.position, Vector3.down, out slopeHit, (controller.height / 2) + groundRayDistance))
+        //they are able to climb, then return true, because we are on a steepslope
+        int layerMask = 1 << 6; //layer 6 is the ground, so we only care about ground colliders
+        if(Physics.Raycast(transform.position, Vector3.down, out slopeHit, (controller.height / 2) + groundRayDistance, layerMask))
         {
             float slopeAngle = Vector3.Angle(slopeHit.normal, Vector3.up);
             if(slopeAngle > controller.slopeLimit) {return true;}
@@ -310,25 +357,24 @@ public class PlayerMovement : MonoBehaviour
     private void SteepSlopeMove()
     {
         Vector3 slopeDirection = Vector3.up - slopeHit.normal * Vector3.Dot(Vector3.up, slopeHit.normal);
-        slideSpeed = baseSlideSpeed - (momentum.GetMomentum()/10);
-        float slopeSlideSpeed = speed + slideSpeed + Time.deltaTime;
-
-        move = slopeDirection * -slopeSlideSpeed;
+        move = slopeDirection * -slideSpeed;
         move.y = move.y - slopeHit.point.y;
     }
 
-    public void ApplyForce(float force, Vector3 direction)
+    public void ApplyForce(float force, Vector3 direction, float percentage)
     {
-        float height = force/100;
-        velocity += direction * 2.5f;
+        isAffectedByForce = true;
+        isJumping = true;
+        float height = (force * percentage) / 100;
+        velocity += direction * (2.5f * percentage);
         velocity.y += Mathf.Sqrt(height * -2f * gravity);
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
     }
 
     public void SpeedLimit(){
-        if(velocity.x >= 8f) {velocity.x = 8f;}
-        if(velocity.z >= 8f) {velocity.z = 8f;}
-        if(velocity.y >= 8f) {velocity.y = 8f;}
+        velocity.x = Mathf.Clamp(velocity.x, -8f, 8f);
+        velocity.y = Mathf.Clamp(velocity.y, -8f, 8f);
+        velocity.z = Mathf.Clamp(velocity.z, -8f, 8f);
     }
 }

@@ -91,9 +91,13 @@ public class Nade : MonoBehaviour
             PlayerMovement player = nearbyObj.GetComponent<PlayerMovement>();
             if(player != null)
             {
+                float distance = Vector3.Distance(transform.position, player.transform.position) - 1;
+                distance = Mathf.Clamp(distance, 0, blastRadius);
+                float percentage = 1 - (distance/blastRadius);
+                percentage = Mathf.Clamp(percentage, 0, 1);
                 Vector3 direction = player.transform.position - (rigidBody.transform.position);
                 //NadeLauncher shouldn't be as useful for movement as the rocket launcher is
-                player.ApplyForce((impactForce * 0.7f), direction);
+                player.ApplyForce((impactForce * 0.6f), direction, percentage);
             }
         }
 

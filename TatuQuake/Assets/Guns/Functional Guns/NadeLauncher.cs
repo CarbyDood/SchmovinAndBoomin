@@ -51,7 +51,7 @@ public class NadeLauncher : WeaponsBaseClass
         recoilScript.Recoil(recoilX, recoilY, recoilZ, smoothness, recenterSpeed);
         Vector3 nadeStartPos = startPosition.transform.position;
         Quaternion nadeStartRot = startPosition.transform.rotation;
-        Nade projectile = Instantiate(nade, nadeStartPos, nadeStartRot);
+        Nade projectile = Instantiate(nade, fpsCam.transform.position, nadeStartRot);
         projectile.SetDmg(damage);
         projectile.SetFrc(impactForce);
         projectile.SetFrwd(fpsCam.transform.forward);

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CamRecoil : MonoBehaviour
+public class CamRecoilTest : MonoBehaviour
 {
     //Rotations
     private Vector3 currRot;
@@ -14,7 +14,6 @@ public class CamRecoil : MonoBehaviour
     private float recenterSpeed;
     private float initialCamRotX;
     private Quaternion startMainCamRot;
-    private Vector3 startRecoilRot;
     private float startXRot;
 
     protected InputAction fire;
@@ -31,6 +30,42 @@ public class CamRecoil : MonoBehaviour
 
     void Update()
     {   
+        float mouseY = mouseInputY.ReadValue<float>() * camCon.mouseSensitivity;
+
+        if(fire.ReadValue<float>() == 1)
+        {
+            //pulling up
+            if(mouseY > 0 && mainCam.transform.rotation.x < startMainCamRot.x)
+            {
+                startMainCamRot = mainCam.transform.localRotation;
+                startXRot = camCon.xRotation;
+            }
+
+            //if we pull down futher than where we started, punish the player for overcompensating by having them look further down
+            //than their starting aimpoint
+            if(mainCam.transform.rotation.x > startMainCamRot.x)
+            {
+                startMainCamRot = mainCam.transform.localRotation;
+                startXRot = camCon.xRotation;
+            }
+        }
+
+        if(fire.GetButtonDown())
+        {
+            startMainCamRot = mainCam.transform.localRotation;
+            startXRot = camCon.xRotation;
+        }
+
+        if(fire.GetButtonUp())
+        {
+            mainCam.transform.localRotation = startMainCamRot;
+            camCon.xRotation = startXRot;
+            targRot = startMainCamRot.eulerAngles;
+
+            startMainCamRot = new Quaternion(0f, 0f, 0f, 0f);
+            startXRot = 0f;
+        }
+
         //constantly tries to recenter camera
         targRot = Vector3.Lerp(targRot, Vector3.zero, recenterSpeed * Time.deltaTime);
 

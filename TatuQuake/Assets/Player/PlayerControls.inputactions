@@ -252,7 +252,7 @@
                     "name": "",
                     "id": "e558c546-5021-4bf2-a13b-83bc04f3775c",
                     "path": "<Mouse>/leftButton",
-                    "interactions": "",
+                    "interactions": "Press(behavior=2)",
                     "processors": "",
                     "groups": "",
                     "action": "Fire",

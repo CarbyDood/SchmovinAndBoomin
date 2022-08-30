@@ -16,6 +16,7 @@ public class Sniper : WeaponsBaseClass
     private float zoomedRecoilZ;
     private float zoomedSmoothness;
     private float zoomedRecenterSpeed;
+    [SerializeField] private CameraControls camCon;
     // Start is called before the first frame update
     void Start()
     {
@@ -57,6 +58,7 @@ public class Sniper : WeaponsBaseClass
             zoomed = !zoomed;
             animator.SetBool("Zoomed", zoomed);
             worldAnimator.SetBool("Zoomed", zoomed);
+
             if(zoomed)
                 StartCoroutine(Zoom());
             else
@@ -123,8 +125,9 @@ public class Sniper : WeaponsBaseClass
         crossHair.SetActive(false);
         scopeReticle.SetActive(true);
         gunCam.SetActive(false);
-        
+
         fpsCam.fieldOfView = zoomFOV;
+        camCon.isZoomed = true;
     }
 
     private void UnZoom()
@@ -134,6 +137,7 @@ public class Sniper : WeaponsBaseClass
         gunCam.SetActive(true);
 
         fpsCam.fieldOfView = ogFOV;
+        camCon.isZoomed = false;
     }
 
     private void OnDisable() 

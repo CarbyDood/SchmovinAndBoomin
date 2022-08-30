@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c28b896d8c26af46a0acafd3e7e88b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rocketSpeed: 30
+  rocketSpeed: 20
   lifeTime: 5
   blastRadius: 3
   isDummy: 0
