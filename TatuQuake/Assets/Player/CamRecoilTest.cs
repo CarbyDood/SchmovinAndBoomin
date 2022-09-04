@@ -50,7 +50,7 @@ public class CamRecoilTest : MonoBehaviour
             }
         }
 
-        if(fire.GetButtonDown())
+        /*if(fire.GetButtonDown())
         {
             startMainCamRot = mainCam.transform.localRotation;
             startXRot = camCon.xRotation;
@@ -64,7 +64,7 @@ public class CamRecoilTest : MonoBehaviour
 
             startMainCamRot = new Quaternion(0f, 0f, 0f, 0f);
             startXRot = 0f;
-        }
+        }*/
 
         //constantly tries to recenter camera
         targRot = Vector3.Lerp(targRot, Vector3.zero, recenterSpeed * Time.deltaTime);

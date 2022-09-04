@@ -28,20 +28,25 @@ public class RPG : WeaponsBaseClass
         recoilZ = 1.5f;
         smoothness = 6f;
         recenterSpeed = 0.9f;
+        maxAmmo = gameManager.maxExplosiveAmmo;
+        currentAmmo = gameManager.currExplosiveAmmo;
+        gunType = "explosive";
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Exit out of firing animation when we are able to fire
-        if(Time.time >= nextTimeToFire && animator.GetBool("Fired") == true)
+        currentAmmo = gameManager.currExplosiveAmmo;
+        //Exit out of firing animation when we are able to fire if we still have ammo
+        if(Time.time >= nextTimeToFire && currentAmmo > 0)
         {
             animator.SetBool("Fired", false);
             worldAnimator.SetBool("Fired", false);
+            animator.SetBool("LastShot",false);
         }
 
         //Reload Rocket
-        if(Time.time >= nextTimeToFire && reloaded == false)
+        if(Time.time >= nextTimeToFire && reloaded == false && currentAmmo > 0)
         {
             reloadRocket.SetActive(false);
             dummyRocket.SetActive(true);
@@ -50,16 +55,33 @@ public class RPG : WeaponsBaseClass
         }
 
         //Semi Auto
-        if(fire.triggered && Time.time >= nextTimeToFire && reloaded == true)
+        if(fire.triggered && Time.time >= nextTimeToFire && reloaded == true && currentAmmo > 0)
         {
             nextTimeToFire = Time.time + 1f/fireRate;
             Shoot();
+        }
+
+        else if(currentAmmo <= 0)
+        {
+            animator.SetBool("LastShot", false);
+            dummyRocket.SetActive(false);
+            worldRocket.SetActive(false);
         }
     }
 
     private new void Shoot()
     {
-        animator.SetBool("Fired", true);
+        currentAmmo = DecreaseAmmo(ref gameManager.currExplosiveAmmo, 1);
+
+        if(currentAmmo > 0) 
+        {
+            animator.SetBool("Fired", true);
+        }
+
+        else if(currentAmmo <= 0)
+        {
+            animator.SetBool("LastShot",true);
+        }
         worldAnimator.SetBool("Fired", true);
         recoilScript.Recoil(recoilX, recoilY, recoilZ, smoothness, recenterSpeed);
         Vector3 dumPos = dummyRocket.transform.position;

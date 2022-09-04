@@ -24,11 +24,15 @@ public class NadeLauncher : WeaponsBaseClass
         recoilZ = 1f;
         smoothness = 8f;
         recenterSpeed = 1f;
+        maxAmmo = gameManager.maxExplosiveAmmo;
+        currentAmmo = gameManager.currExplosiveAmmo;
+        gunType = "explosive";
     }
 
     // Update is called once per frame
     void Update()
     {
+        currentAmmo = gameManager.currExplosiveAmmo;
         //Exit out of firing animation when we are able to fire
         if(Time.time >= nextTimeToFire && animator.GetBool("Fired") == true)
         {
@@ -37,7 +41,7 @@ public class NadeLauncher : WeaponsBaseClass
         }
 
         //Semi Auto
-        if(fire.triggered && Time.time >= nextTimeToFire)
+        if(fire.triggered && Time.time >= nextTimeToFire && currentAmmo > 0)
         {
             nextTimeToFire = Time.time + 1f/fireRate;
             Shoot();
@@ -55,6 +59,7 @@ public class NadeLauncher : WeaponsBaseClass
         projectile.SetDmg(damage);
         projectile.SetFrc(impactForce);
         projectile.SetFrwd(fpsCam.transform.forward);
+        currentAmmo = DecreaseAmmo(ref gameManager.currExplosiveAmmo, 1);
         OnFired();
     }
 }

@@ -17,9 +17,11 @@ public class Sniper : WeaponsBaseClass
     private float zoomedSmoothness;
     private float zoomedRecenterSpeed;
     [SerializeField] private CameraControls camCon;
-    // Start is called before the first frame update
-    void Start()
+    new void Awake()
     {
+        fire = playerInput.actions["Fire"];
+        changeFireMode = playerInput.actions["ChangeFireMode"];
+        zoom = playerInput.actions["Zoom"];
         damage = 75f;
         range = 500f;
         fireRate = 0.9f;
@@ -34,6 +36,9 @@ public class Sniper : WeaponsBaseClass
         zoomedRecoilZ = 1.8f;
         zoomedSmoothness = 15f;
         zoomedRecenterSpeed = 3.5f;
+        maxAmmo = 50;
+        currentAmmo = 5;
+        gunType = "sniper";
     }
 
     // Update is called once per frame
@@ -47,7 +52,7 @@ public class Sniper : WeaponsBaseClass
         }
 
         //Semi Auto
-        if(fire.triggered && Time.time >= nextTimeToFire)
+        if(fire.triggered && Time.time >= nextTimeToFire && currentAmmo > 0)
         {
             nextTimeToFire = Time.time + 1f/fireRate;
             Shoot();
@@ -115,6 +120,8 @@ public class Sniper : WeaponsBaseClass
             recoilScript.Recoil(zoomedRecoilX, zoomedRecoilY, zoomedRecoilZ, zoomedSmoothness, zoomedRecenterSpeed);
         else
             recoilScript.Recoil(recoilX, recoilY, recoilZ, smoothness, recenterSpeed);
+
+        DecreaseAmmo(ref currentAmmo, 1);
     }
 
     //Use or get out of scope

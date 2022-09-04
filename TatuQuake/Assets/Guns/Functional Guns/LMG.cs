@@ -16,11 +16,21 @@ public class LMG : WeaponsBaseClass
         recoilZ = 0.7f;
         smoothness = 6f;
         recenterSpeed = 1.6f;
+        maxAmmo = gameManager.maxAutoAmmo;
+        currentAmmo = gameManager.currAutoAmmo;
+        gunType = "auto";
     }
 
     // Update is called once per frame
     void Update()
     {
+        currentAmmo = gameManager.currAutoAmmo;
+        //Stop fire animations when we're out of ammo
+        if(currentAmmo <= 0) 
+        {
+            animator.SetBool("Fired",false);
+        }
+
         //Exit out of firing animation when we let go of the fire key
         if(fire.ReadValue<float>() != 1 && animator.GetBool("Fired") == true)
         {
@@ -29,7 +39,7 @@ public class LMG : WeaponsBaseClass
         }
         
         //Full Auto
-        if(fire.ReadValue<float>() == 1 && Time.time >= nextTimeToFire)
+        if(fire.ReadValue<float>() == 1 && Time.time >= nextTimeToFire && currentAmmo > 0)
         {
             nextTimeToFire = Time.time + 1f/fireRate;
             Shoot();

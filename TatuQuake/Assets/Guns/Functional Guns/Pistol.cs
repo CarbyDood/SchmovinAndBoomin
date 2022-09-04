@@ -2,9 +2,11 @@ using UnityEngine;
 
 public class Pistol : WeaponsBaseClass
 {
-    // Start is called before the first frame update
-    void Start()
+    new void Awake()
     {
+        fire = playerInput.actions["Fire"];
+        changeFireMode = playerInput.actions["ChangeFireMode"];
+        zoom = playerInput.actions["Zoom"];
         damage = 12f;
         range = 100f;
         fireRate = 7f;
@@ -14,6 +16,8 @@ public class Pistol : WeaponsBaseClass
         recoilZ = 0.3f;
         smoothness = 6.5f;
         recenterSpeed = 4f;
+        maxAmmo = 120;
+        currentAmmo = 100;
     }
 
     // Update is called once per frame
@@ -27,7 +31,7 @@ public class Pistol : WeaponsBaseClass
         }
 
         //Semi Auto
-        if(fire.triggered && Time.time >= nextTimeToFire)
+        if(fire.triggered && Time.time >= nextTimeToFire && currentAmmo > 0)
         {
             nextTimeToFire = Time.time + 1f/fireRate;
             Shoot();

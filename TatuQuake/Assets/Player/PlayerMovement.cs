@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 
 public class PlayerMovement : MonoBehaviour
 {   
     [SerializeField] private MomentumManager momentum;
     private CharacterController controller;
     private PlayerInput playerInput;
+    [SerializeField] private GameManager gameManager;
     [SerializeField] private Animator animator;
 
     //Store the actual controls
@@ -38,10 +40,10 @@ public class PlayerMovement : MonoBehaviour
     private float momentumLossRate = 1f;
     private float velocityCoeff = 0.005f;
 
-    [SerializeField] private List<GameObject> gunViewModels;
+    [SerializeField] public List<GameObject> gunViewModels;
     [SerializeField] private List<GameObject> gunWorldModels;
-    //0 = Pistol, 1 = SMG, 2 = Shotgun, 3 = LMG, 4 = Nade Launcher, 4 = Super Shotgun, 5 = Sniper, 
-    //6 = Rocket Launcher
+    //0 = Pistol, 1 = SMG, 2 = Shotgun, 3 = LMG, 4 = Nade Launcher, 5 = Super Shotgun, 6 = Sniper, 
+    //7 = Rocket Launcher
     private int currGun;
 
     //slope stuff
@@ -88,9 +90,19 @@ public class PlayerMovement : MonoBehaviour
             if(gunViewModels[i].activeSelf)
                 currGun = i; //Get Default weapon
         }
+
+        //Enable all weapons to "awake" them so we can properly keep track of their ammo counts
+        foreach(GameObject weapon in gunViewModels)
+        {
+            weapon.SetActive(true);
+        }
+
         disableWeapons();
+        gameManager.DisableGunIcons();
         gunViewModels[currGun].SetActive(true);
         gunWorldModels[currGun].SetActive(true);
+        gameManager.gunIcons[currGun].SetActive(true);
+        gameManager.AddWeapon(currGun);
 
         speed = baseSpeed;
         jumpHeight = baseJumpHeight;
@@ -184,7 +196,6 @@ public class PlayerMovement : MonoBehaviour
         //controls when affected by outside force (explosive jumping)
         if(isAffectedByForce)
         {
-            Debug.Log("RocketMan");
             animator.SetBool("Jumpin", true);
             velocity += (currInputVect.x * transform.right * velocityCoeff);
             velocity += (currInputVect.y * transform.forward * velocityCoeff);
@@ -196,7 +207,6 @@ public class PlayerMovement : MonoBehaviour
         //Air controls
         else if(!isGrounded && !isOnStair)
         {
-            Debug.Log("JumpMan");
             animator.SetBool("Jumpin", true);
             //reduce speed
             speed /= 1.2f;
@@ -234,82 +244,75 @@ public class PlayerMovement : MonoBehaviour
 
         //0 = Pistol, 1 = SMG, 2 = Shotgun, 3 = LMG, 4 = Nade Launcher, 5 = Super Shotgun, 6 = Sniper, 
         //7 = Rocket Launcher
-        if(slot1.triggered)
+        
+        if(slot1.triggered && gameManager.HasWeapon(0))
         {
             //Disable all weapons so we can easily activate whatever weapon we want
             disableWeapons();
             currGun = 0;
-            gunViewModels[currGun].SetActive(true);
-            gunWorldModels[currGun].SetActive(true);
         }
 
-        else if(slot2.triggered)
+        else if(slot2.triggered && gameManager.HasWeapon(1))
         {
             //Disable all weapons so we can easily activate whatever weapon we want
             disableWeapons();
             currGun = 1;
-            gunViewModels[currGun].SetActive(true);
-            gunWorldModels[currGun].SetActive(true);
         }
 
-        else if(slot3.triggered)
+        else if(slot3.triggered && gameManager.HasWeapon(2))
         {
             //Disable all weapons so we can easily activate whatever weapon we want
             disableWeapons();
             currGun = 2;
-            gunViewModels[currGun].SetActive(true);
-            gunWorldModels[currGun].SetActive(true);
         }
 
-        else if(slot4.triggered)
+        else if(slot4.triggered && gameManager.HasWeapon(3))
         {
             //Disable all weapons so we can easily activate whatever weapon we want
             disableWeapons();
             currGun = 3;
-            gunViewModels[currGun].SetActive(true);
-            gunWorldModels[currGun].SetActive(true);
         }
 
-        else if(slot5.triggered)
+        else if(slot5.triggered && gameManager.HasWeapon(4))
         {
             //Disable all weapons so we can easily activate whatever weapon we want
             disableWeapons();
             currGun = 4;
-            gunViewModels[currGun].SetActive(true);
-            gunWorldModels[currGun].SetActive(true);
         }
 
-        else if(slot6.triggered)
+        else if(slot6.triggered && gameManager.HasWeapon(5))
         {
             //Disable all weapons so we can easily activate whatever weapon we want
             disableWeapons();
             currGun = 5;
-            gunViewModels[currGun].SetActive(true);
-            gunWorldModels[currGun].SetActive(true);
         }
 
-        else if(slot7.triggered)
+        else if(slot7.triggered && gameManager.HasWeapon(6))
         {
             //Disable all weapons so we can easily activate whatever weapon we want
             disableWeapons();
             currGun = 6;
-            gunViewModels[currGun].SetActive(true);
-            gunWorldModels[currGun].SetActive(true);
         }
 
-        else if(slot8.triggered)
+        else if(slot8.triggered && gameManager.HasWeapon(7))
         {
             //Disable all weapons so we can easily activate whatever weapon we want
             disableWeapons();
             currGun = 7;
-            gunViewModels[currGun].SetActive(true);
-            gunWorldModels[currGun].SetActive(true);
         }
+
+        gunViewModels[currGun].SetActive(true);
+        gunWorldModels[currGun].SetActive(true);
+        gameManager.DisableGunIcons();
+        gameManager.gunIcons[currGun].SetActive(true);
+        
         animator.SetInteger("CurrWeapon", currGun);
     }
 
     private void ScrollWeapon()
     {
+        //keep track of original currGun value if we fail to find next weapon
+        int ogCurrGun = currGun;
         //scroll wheel value comes in as a either 120 for scroll up, or -120 for scroll down
         int changeIndex = (int)-scroll.ReadValue<float>()/120;
         currGun += changeIndex;
@@ -319,9 +322,35 @@ public class PlayerMovement : MonoBehaviour
         if(currGun < 0)
             currGun = 7; //scroll back to the end of the guns list
 
+        //Check to see next available weapon
+        //allow 1 loop around, any more and there are no more guns to swap to!
+        int loops = 0;
+        while(!gameManager.HasWeapon(currGun) && (currGun >= 0 && currGun < 8) && loops < 2)
+        {
+            currGun += changeIndex;
+            if(currGun < 0)
+            {
+                loops++;
+                currGun = 7;
+            }
+
+            else if(currGun > 7)
+            {
+                loops++;
+                currGun = 0;
+            }
+        }
+
+        if(currGun < 0 || currGun > 7)
+        {
+            currGun = ogCurrGun;
+        }
+
         disableWeapons();
+        gameManager.DisableGunIcons();
         gunViewModels[currGun].SetActive(true);
         gunWorldModels[currGun].SetActive(true);
+        gameManager.gunIcons[currGun].SetActive(true);
         animator.SetInteger("CurrWeapon", currGun);
     }
 
@@ -372,9 +401,20 @@ public class PlayerMovement : MonoBehaviour
         controller.Move(velocity * Time.deltaTime);
     }
 
-    public void SpeedLimit(){
+    public void SpeedLimit()
+    {
         velocity.x = Mathf.Clamp(velocity.x, -8f, 8f);
         velocity.y = Mathf.Clamp(velocity.y, -8f, 8f);
         velocity.z = Mathf.Clamp(velocity.z, -8f, 8f);
+    }
+
+    public List<GameObject> GetGuns()
+    {
+        return gunViewModels;
+    }
+
+    public int GetCurrGun()
+    {
+        return currGun;
     }
 }

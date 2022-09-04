@@ -17,11 +17,15 @@ public class SuperShotgun : WeaponsBaseClass
         recoilZ = 2f;
         smoothness = 13f;
         recenterSpeed = 1.8f;
+        maxAmmo = gameManager.maxShellAmmo;
+        currentAmmo = gameManager.currShellAmmo;
+        gunType = "shell";
     }
 
     // Update is called once per frame
     void Update()
     {
+        currentAmmo = gameManager.currShellAmmo;
         //Exit out of firing animation when we are able to fire
         if(Time.time >= nextTimeToFire && animator.GetBool("Fired") == true)
         {
@@ -30,7 +34,7 @@ public class SuperShotgun : WeaponsBaseClass
         }
 
         //Semi Auto
-        if(fire.triggered && Time.time >= nextTimeToFire)
+        if(fire.triggered && Time.time >= nextTimeToFire && currentAmmo > 0)
         {
             nextTimeToFire = Time.time + 1f/fireRate;
             Shoot();
@@ -95,5 +99,6 @@ public class SuperShotgun : WeaponsBaseClass
                 StartCoroutine(SpawnTrail(trail, pointTo));
             }
         }
+        currentAmmo = DecreaseAmmo(ref gameManager.currShellAmmo, 2);
     }
 }

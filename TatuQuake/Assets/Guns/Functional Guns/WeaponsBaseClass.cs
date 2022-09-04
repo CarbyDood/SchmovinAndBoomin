@@ -4,10 +4,14 @@ using UnityEngine.InputSystem;
 
 public class WeaponsBaseClass : MonoBehaviour
 {
+    [SerializeField] protected GameManager gameManager;
     [SerializeField] protected float damage;
     [SerializeField] protected float range;
     [SerializeField] protected float fireRate;
     [SerializeField] protected float impactForce;
+    [SerializeField] protected int maxAmmo;
+    [SerializeField] public int currentAmmo;
+    [SerializeField] protected string gunType;
     
     //Recoil vars
     [SerializeField] protected float recoilX;
@@ -89,6 +93,42 @@ public class WeaponsBaseClass : MonoBehaviour
         }
 
         recoilScript.Recoil(recoilX, recoilY, recoilZ, smoothness, recenterSpeed);
+
+        if(gunType == "auto")
+        {
+            currentAmmo = DecreaseAmmo(ref gameManager.currAutoAmmo, 1);
+        }
+
+        else if(gunType == "shell")
+        {
+            currentAmmo = DecreaseAmmo(ref gameManager.currShellAmmo, 1);
+        }
+
+        else if(gunType == "explosive")
+        {
+            currentAmmo = DecreaseAmmo(ref gameManager.currExplosiveAmmo, 1);
+        }
+
+        else
+        {
+            DecreaseAmmo(ref currentAmmo, 1);
+        }
+    }
+
+    public int DecreaseAmmo(ref int ammo, int decreaseBy)
+    {
+        ammo -= decreaseBy;
+        ammo = Mathf.Clamp(ammo, 0, maxAmmo);
+
+        return ammo;
+    }
+
+    public int IncreaseAmmo(ref int ammo, int increaseBy, int maxAmmo)
+    {
+        ammo += increaseBy;
+        ammo = Mathf.Clamp(ammo, 0, maxAmmo);
+
+        return ammo;
     }
 
     public IEnumerator SpawnTrail(TrailRenderer trail, Vector3 dest)
@@ -128,6 +168,16 @@ public class WeaponsBaseClass : MonoBehaviour
         return impactForce;
     }
 
+    public int GetCurrAmmo()
+    {
+        return currentAmmo;
+    }
+
+    public int GetMaxAmmo()
+    {
+        return maxAmmo;
+    }
+
     public void SetDamage(float dmg)
     {
         damage = dmg;
@@ -148,9 +198,21 @@ public class WeaponsBaseClass : MonoBehaviour
         impactForce = frc;
     }
 
+    public void SetCurrAmmo(int newAmmo)
+    {
+        currentAmmo = newAmmo;
+        currentAmmo = Mathf.Clamp(currentAmmo, 0, maxAmmo);
+    }
+
+    public void SetMaxAmmo(int newAmmo)
+    {
+        maxAmmo = newAmmo;
+    }
+
     void OnDisable() 
     {
         animator.WriteDefaultValues();
         worldAnimator.WriteDefaultValues();
     }
+
 }
