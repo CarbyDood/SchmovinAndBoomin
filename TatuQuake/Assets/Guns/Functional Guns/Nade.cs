@@ -38,6 +38,8 @@ public class Nade : MonoBehaviour
         //world (or ground) layer is 6
         if(other.gameObject.layer != 6)
             Explode();
+        else
+            SoundManager.instance.PlaySound(SoundManager.Sound.NadeBounce, transform.position);
     }
 
     private void NadeFired() 
@@ -62,6 +64,9 @@ public class Nade : MonoBehaviour
         Physics.IgnoreLayerCollision(0, 7, false);
         //Show the boomla
         GameObject boom = Instantiate(explosion, transform.position, transform.rotation);
+
+        //Make boom sound
+        SoundManager.instance.PlaySound(SoundManager.Sound.Explosion, transform.position);
 
         //Get nearby objects
         Collider[] colliders = Physics.OverlapSphere(transform.position, blastRadius);

@@ -5,6 +5,13 @@ using UnityEngine;
 public class Shotgun : WeaponsBaseClass
 {
     [SerializeField] private int pelletCount = 8;
+
+    void OnEnable() 
+    {
+        worldAnimator.SetInteger("CurrWeapon", 2);
+        worldAnimator.SetBool("Fired", false);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,6 +44,7 @@ public class Shotgun : WeaponsBaseClass
         if(fire.triggered && Time.time >= nextTimeToFire && currentAmmo > 0)
         {
             nextTimeToFire = Time.time + 1f/fireRate;
+            SoundManager.instance.PlaySound(SoundManager.Sound.ShotgunShot);
             Shoot();
         }
     }
@@ -100,5 +108,15 @@ public class Shotgun : WeaponsBaseClass
             }
         }
         currentAmmo = DecreaseAmmo(ref gameManager.currShellAmmo, 1);
+    }
+
+    public void PlayPumpBackAudio()
+    {
+        SoundManager.instance.PlaySound(SoundManager.Sound.ShottyPumpBack);
+    }
+
+    public void PlayPumpForwardAudio()
+    {
+        SoundManager.instance.PlaySound(SoundManager.Sound.ShottyPumpForward);
     }
 }

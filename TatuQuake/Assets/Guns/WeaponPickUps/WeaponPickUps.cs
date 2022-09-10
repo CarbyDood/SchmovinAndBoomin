@@ -41,6 +41,7 @@ public class WeaponPickUps : MonoBehaviour
     {
         if(!gameManager.HasWeapon(gunItGives))
         {
+            SoundManager.instance.PlaySound(SoundManager.Sound.WeaponPickUp);
             gameManager.AddWeapon(gunItGives);
             if(gunItGives == 0) pistolRef.IncreaseAmmo(ref pistolRef.currentAmmo, 20, pistolRef.GetMaxAmmo());
             if(gunItGives == 6) pistolRef.IncreaseAmmo(ref sniperRef.currentAmmo, 3, sniperRef.GetMaxAmmo());

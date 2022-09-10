@@ -2,6 +2,12 @@ using UnityEngine;
 
 public class Pistol : WeaponsBaseClass
 {
+    void OnEnable() 
+    {
+        worldAnimator.SetInteger("CurrWeapon", 0);
+        worldAnimator.SetBool("Fired", false);
+    }
+
     new void Awake()
     {
         fire = playerInput.actions["Fire"];
@@ -34,6 +40,7 @@ public class Pistol : WeaponsBaseClass
         if(fire.triggered && Time.time >= nextTimeToFire && currentAmmo > 0)
         {
             nextTimeToFire = Time.time + 1f/fireRate;
+            SoundManager.instance.PlaySound(SoundManager.Sound.PistolShot);
             Shoot();
         }
     }

@@ -14,7 +14,8 @@ public class Rocket : MonoBehaviour
     private float impactForce;
     private Vector3 forward;
     private float timer;
-    
+    private float timeToReplayAudio = 1.683f;
+    private float audioTime = 0f;
 
     private void Awake() 
     {
@@ -23,13 +24,20 @@ public class Rocket : MonoBehaviour
         //layer 0 is the default layer (which is the layer is the rocket is on)
         //layer 7 is the player
         Physics.IgnoreLayerCollision(0, 7, true);
+        SoundManager.instance.PlaySoundAsChild(SoundManager.Sound.Rocket, gameObject);
+        audioTime = Time.time + timeToReplayAudio;
     }
 
     private void Update() 
     {
         timer += Time.deltaTime;
-        if(timer >= lifeTime && !isDummy){
+        if(timer >= lifeTime && !isDummy)
             Explode();
+
+        if(Time.time >= audioTime)
+        {
+            SoundManager.instance.PlaySoundAsChild(SoundManager.Sound.Rocket, gameObject);
+            audioTime = Time.time + timeToReplayAudio;
         }
     }
 
@@ -52,6 +60,9 @@ public class Rocket : MonoBehaviour
         Physics.IgnoreLayerCollision(0, 7, false);
         //Show the boomla
         GameObject boom = Instantiate(explosion, transform.position, transform.rotation);
+
+        //Make boom sound
+        SoundManager.instance.PlaySound(SoundManager.Sound.Explosion, transform.position);
 
         //Get nearby objects
         Collider[] colliders = Physics.OverlapSphere(transform.position, blastRadius);

@@ -5,6 +5,13 @@ using UnityEngine;
 public class SuperShotgun : WeaponsBaseClass
 {
     [SerializeField] private int pelletCount = 16;
+
+    void OnEnable() 
+    {
+        worldAnimator.SetInteger("CurrWeapon", 5);
+        worldAnimator.SetBool("Fired", false);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,6 +44,7 @@ public class SuperShotgun : WeaponsBaseClass
         if(fire.triggered && Time.time >= nextTimeToFire && currentAmmo > 0)
         {
             nextTimeToFire = Time.time + 1f/fireRate;
+            SoundManager.instance.PlaySound(SoundManager.Sound.SuperShottyShot);
             Shoot();
         }
     }
@@ -100,5 +108,15 @@ public class SuperShotgun : WeaponsBaseClass
             }
         }
         currentAmmo = DecreaseAmmo(ref gameManager.currShellAmmo, 2);
+    }
+
+    public void PlayPumpBackAudio()
+    {
+        SoundManager.instance.PlaySound(SoundManager.Sound.SuperShottyPumpBack);
+    }
+
+    public void PlayPumpForwardAudio()
+    {
+        SoundManager.instance.PlaySound(SoundManager.Sound.SuperShottyPumpForward);
     }
 }

@@ -17,6 +17,13 @@ public class Sniper : WeaponsBaseClass
     private float zoomedSmoothness;
     private float zoomedRecenterSpeed;
     [SerializeField] private CameraControls camCon;
+
+    void OnEnable() 
+    {
+        worldAnimator.SetInteger("CurrWeapon", 6);
+        worldAnimator.SetBool("Fired", false);
+    }
+
     new void Awake()
     {
         fire = playerInput.actions["Fire"];
@@ -55,6 +62,7 @@ public class Sniper : WeaponsBaseClass
         if(fire.triggered && Time.time >= nextTimeToFire && currentAmmo > 0)
         {
             nextTimeToFire = Time.time + 1f/fireRate;
+            SoundManager.instance.PlaySound(SoundManager.Sound.SniperShot);
             Shoot();
         }
 

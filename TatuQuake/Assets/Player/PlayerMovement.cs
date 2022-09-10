@@ -65,7 +65,6 @@ public class PlayerMovement : MonoBehaviour
     private bool isFalling = false;
     private bool isJumping = false;
     private bool isAffectedByForce = false;
-
     private void Awake() 
     {
         controller = GetComponent<CharacterController>();
@@ -233,8 +232,16 @@ public class PlayerMovement : MonoBehaviour
             isJumping = true;
             velocity.y += -velocity.y + Mathf.Sqrt(jumpHeight * -2f * gravity);
             nextTimeToJump = Time.time + jumpCoolDown;
-        }
 
+            //play random jump audio
+            int rando = Random.Range(0, 4);
+            if(rando == 0) SoundManager.instance.PlaySound(SoundManager.Sound.Jump1);
+            else if(rando == 1) SoundManager.instance.PlaySound(SoundManager.Sound.Jump2);
+            else if(rando == 2) SoundManager.instance.PlaySound(SoundManager.Sound.Jump3);
+            else if(rando == 3) SoundManager.instance.PlaySound(SoundManager.Sound.Jump4);
+            else if(rando == 4) SoundManager.instance.PlaySound(SoundManager.Sound.Jump5);
+        }
+        
         controller.Move(velocity * Time.deltaTime);
     }
 

@@ -11,6 +11,12 @@ public class NadeLauncher : WeaponsBaseClass
     [SerializeField] GameObject startPosition;
 
     private Transform myTrans;
+
+    void OnEnable() 
+    {
+        worldAnimator.SetInteger("CurrWeapon", 4);
+        worldAnimator.SetBool("Fired", false);
+    }
     
     // Start is called before the first frame update
     void Start()
@@ -44,6 +50,7 @@ public class NadeLauncher : WeaponsBaseClass
         if(fire.triggered && Time.time >= nextTimeToFire && currentAmmo > 0)
         {
             nextTimeToFire = Time.time + 1f/fireRate;
+            SoundManager.instance.PlaySound(SoundManager.Sound.NLShot);
             Shoot();
         }
     }

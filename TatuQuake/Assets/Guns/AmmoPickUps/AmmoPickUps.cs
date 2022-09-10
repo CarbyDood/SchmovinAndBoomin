@@ -56,6 +56,7 @@ public class AmmoPickUps : MonoBehaviour
             {
                 if(pistolRef.currentAmmo < pistolRef.GetMaxAmmo())
                 {
+                    SoundManager.instance.PlaySound(SoundManager.Sound.AmmoPickUp);
                     pistolRef.IncreaseAmmo(ref pistolRef.currentAmmo, amount, pistolRef.GetMaxAmmo());
                     if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
                     else Destroy(gameObject);
@@ -65,6 +66,7 @@ public class AmmoPickUps : MonoBehaviour
             {
                 if(sniperRef.currentAmmo < sniperRef.GetMaxAmmo())
                 {
+                    SoundManager.instance.PlaySound(SoundManager.Sound.AmmoPickUp);
                     sniperRef.IncreaseAmmo(ref sniperRef.currentAmmo, amount, sniperRef.GetMaxAmmo());
                     if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
                     else Destroy(gameObject);
@@ -74,6 +76,7 @@ public class AmmoPickUps : MonoBehaviour
             {
                 if(gameManager.currAutoAmmo < gameManager.maxAutoAmmo)
                 {
+                    SoundManager.instance.PlaySound(SoundManager.Sound.AmmoPickUp);
                     autoRef.IncreaseAmmo(ref gameManager.currAutoAmmo, amount, gameManager.maxAutoAmmo);
                     if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
                     else Destroy(gameObject);
@@ -83,6 +86,7 @@ public class AmmoPickUps : MonoBehaviour
             {
                 if(gameManager.currShellAmmo < gameManager.maxShellAmmo)
                 {
+                    SoundManager.instance.PlaySound(SoundManager.Sound.AmmoPickUp);
                     shellRef.IncreaseAmmo(ref gameManager.currShellAmmo, amount, gameManager.maxShellAmmo);
                     if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
                     else Destroy(gameObject);
@@ -92,6 +96,7 @@ public class AmmoPickUps : MonoBehaviour
             {
                 if(gameManager.currExplosiveAmmo < gameManager.maxExplosiveAmmo)
                 {
+                    SoundManager.instance.PlaySound(SoundManager.Sound.AmmoPickUp);
                     explosiveRef.IncreaseAmmo(ref gameManager.currExplosiveAmmo, amount, gameManager.maxExplosiveAmmo);
                     if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
                     else Destroy(gameObject);
@@ -102,37 +107,45 @@ public class AmmoPickUps : MonoBehaviour
 
     private void OnTriggerStay(Collider other) 
     {
-        if(fire.ReadValue<float>() == 1)
+        if(other.name == "Player")
         {
-            if(ammoType == "pistol")
+            if(fire.ReadValue<float>() == 1)
             {
-                pistolRef.IncreaseAmmo(ref pistolRef.currentAmmo, amount, pistolRef.GetMaxAmmo());
-                if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
-                else Destroy(gameObject);
-            }
-            else if(ammoType == "sniper")
-            {
-                sniperRef.IncreaseAmmo(ref sniperRef.currentAmmo, amount, sniperRef.GetMaxAmmo());
-                if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
-                else Destroy(gameObject);
-            }
-            else if(ammoType == "auto")
-            {
-                autoRef.IncreaseAmmo(ref gameManager.currAutoAmmo, amount, gameManager.maxAutoAmmo);
-                if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
-                else Destroy(gameObject);
-            }
-            else if(ammoType == "shell")
-            {
-                shellRef.IncreaseAmmo(ref gameManager.currShellAmmo, amount, gameManager.maxShellAmmo);
-                if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
-                else Destroy(gameObject);
-            }
-            else if(ammoType == "auto")
-            {
-                explosiveRef.IncreaseAmmo(ref gameManager.currExplosiveAmmo, amount, gameManager.maxExplosiveAmmo);
-                if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
-                else Destroy(gameObject);
+                if(ammoType == "pistol")
+                {
+                    SoundManager.instance.PlaySound(SoundManager.Sound.AmmoPickUp);
+                    pistolRef.IncreaseAmmo(ref pistolRef.currentAmmo, amount, pistolRef.GetMaxAmmo());
+                    if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
+                    else Destroy(gameObject);
+                }
+                else if(ammoType == "sniper")
+                {
+                    SoundManager.instance.PlaySound(SoundManager.Sound.AmmoPickUp);
+                    sniperRef.IncreaseAmmo(ref sniperRef.currentAmmo, amount, sniperRef.GetMaxAmmo());
+                    if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
+                    else Destroy(gameObject);
+                }
+                else if(ammoType == "auto")
+                {
+                    SoundManager.instance.PlaySound(SoundManager.Sound.AmmoPickUp);
+                    autoRef.IncreaseAmmo(ref gameManager.currAutoAmmo, amount, gameManager.maxAutoAmmo);
+                    if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
+                    else Destroy(gameObject);
+                }
+                else if(ammoType == "shell")
+                {
+                    SoundManager.instance.PlaySound(SoundManager.Sound.AmmoPickUp);
+                    shellRef.IncreaseAmmo(ref gameManager.currShellAmmo, amount, gameManager.maxShellAmmo);
+                    if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
+                    else Destroy(gameObject);
+                }
+                else if(ammoType == "auto")
+                {
+                    SoundManager.instance.PlaySound(SoundManager.Sound.AmmoPickUp);
+                    explosiveRef.IncreaseAmmo(ref gameManager.currExplosiveAmmo, amount, gameManager.maxExplosiveAmmo);
+                    if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
+                    else Destroy(gameObject);
+                }
             }
         }
     }

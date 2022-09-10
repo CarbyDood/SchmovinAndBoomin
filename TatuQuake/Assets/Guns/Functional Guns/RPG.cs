@@ -16,6 +16,12 @@ public class RPG : WeaponsBaseClass
     private Transform myTrans;
     private bool reloaded = true;
     
+    void OnEnable() 
+    {
+        worldAnimator.SetInteger("CurrWeapon", 7);
+        worldAnimator.SetBool("Fired", false);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -58,6 +64,7 @@ public class RPG : WeaponsBaseClass
         if(fire.triggered && Time.time >= nextTimeToFire && reloaded == true && currentAmmo > 0)
         {
             nextTimeToFire = Time.time + 1f/fireRate;
+            SoundManager.instance.PlaySound(SoundManager.Sound.RPGShot);
             Shoot();
         }
 
@@ -66,6 +73,7 @@ public class RPG : WeaponsBaseClass
             animator.SetBool("LastShot", false);
             dummyRocket.SetActive(false);
             worldRocket.SetActive(false);
+            reloaded = false;
         }
     }
 

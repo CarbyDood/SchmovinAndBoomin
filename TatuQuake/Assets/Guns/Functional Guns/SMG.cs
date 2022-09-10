@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class SMG : WeaponsBaseClass
 {
+    void OnEnable() 
+    {
+        worldAnimator.SetInteger("CurrWeapon", 1);
+        worldAnimator.SetBool("Fired", false);
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -29,6 +34,7 @@ public class SMG : WeaponsBaseClass
         if(currentAmmo <= 0) 
         {
             animator.SetBool("Fired",false);
+            worldAnimator.SetBool("Fired",false);
         }
 
         //Exit out of firing animation when we let go of the fire key
@@ -42,6 +48,7 @@ public class SMG : WeaponsBaseClass
         if(fire.ReadValue<float>() == 1 && Time.time >= nextTimeToFire && currentAmmo > 0)
         {
             nextTimeToFire = Time.time + 1f/fireRate;
+            SoundManager.instance.PlaySound(SoundManager.Sound.SMGShot);
             Shoot();
         }
     }
