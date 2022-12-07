@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {   
@@ -24,6 +25,7 @@ public class PlayerMovement : MonoBehaviour
     private InputAction slot7;
     private InputAction slot8;
     private InputAction scroll;
+    private InputAction select;
 
     [SerializeField] private float baseSpeed = 2f;
     [SerializeField] private float gravity = -9.81f;
@@ -65,6 +67,13 @@ public class PlayerMovement : MonoBehaviour
     private bool isFalling = false;
     private bool isJumping = false;
     private bool isAffectedByForce = false;
+
+    private int health = 100;
+    private int armour = 0;
+    private int defaultGun = 0;
+
+    private bool isDed = false;
+
     private void Awake() 
     {
         controller = GetComponent<CharacterController>();
@@ -82,6 +91,8 @@ public class PlayerMovement : MonoBehaviour
         slot7 = playerInput.actions["WeaponSlot7"];
         slot8 = playerInput.actions["WeaponSlot8"];
         scroll = playerInput.actions["ScrollWeapon"];
+
+        select = playerInput.actions["Fire"];
 
         int len = gunViewModels.Count;
         for(int i = 0; i < len; i++)
@@ -102,6 +113,7 @@ public class PlayerMovement : MonoBehaviour
         gunWorldModels[currGun].SetActive(true);
         gameManager.gunIcons[currGun].SetActive(true);
         gameManager.AddWeapon(currGun);
+        defaultGun = currGun;
 
         speed = baseSpeed;
         jumpHeight = baseJumpHeight;
@@ -112,55 +124,66 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update() 
     {
-        //Check if we are touching the ground, the ceiling, or some stairs
-        isOnStair = Physics.CheckSphere(groundCheck.transform.position, groundDistance, groundMask);
-        isGrounded = controller.isGrounded;
-        headBonked = Physics.CheckSphere(ceilingCheck.transform.position, ceilingDistance, groundMask);
-
-        if(headBonked && velocity.y > 0)
+        //only run update if we are alive!
+        if(!isDed)
         {
-            velocity.y = 0f;
-            ceilingCheck.SetActive(false);
+            //Check if we are touching the ground, the ceiling, or some stairs
+            isOnStair = Physics.CheckSphere(groundCheck.transform.position, groundDistance, groundMask);
+            isGrounded = controller.isGrounded;
+            headBonked = Physics.CheckSphere(ceilingCheck.transform.position, ceilingDistance, groundMask);
+
+            if(headBonked && velocity.y > 0)
+            {
+                velocity.y = 0f;
+                ceilingCheck.SetActive(false);
+            }
+
+            if(isGrounded)
+            {
+                velocity.x = 0f;
+                velocity.z = 0f;
+                velocity.y = -speed;
+                ceilingCheck.SetActive(true);
+                isFalling = false;
+                isJumping = false;
+                isAffectedByForce = false;
+            }
+
+            if(!isGrounded && !isOnStair && !startedFalling && !isFalling && velocity.y <= 0f){
+                startedFalling = true;
+                isFalling = true;
+            }
+
+            if(startedFalling && !isJumping && !isOnStair){
+                velocity.y = -2f;
+                startedFalling = false;
+            }
+
+            SpeedLimit();
+            Move();
+            Jump();
+            changeWeapon();
+
+            if(scroll.triggered){
+                ScrollWeapon();
+            }
+
+            velocity.y += gravity * Time.deltaTime;
+
+            //reset position if we fall off the map
+            if(transform.position.y < -50)
+            {
+                controller.enabled = false;
+                controller.transform.position = new Vector3(1, 2, -3);
+                controller.enabled = true;
+            }
         }
 
-        if(isGrounded)
+        //Restart game scene when we press Left Mouse Button
+        else
         {
-            velocity.x = 0f;
-            velocity.z = 0f;
-            velocity.y = -speed;
-            ceilingCheck.SetActive(true);
-            isFalling = false;
-            isJumping = false;
-            isAffectedByForce = false;
-        }
-
-        if(!isGrounded && !isOnStair && !startedFalling && !isFalling && velocity.y <= 0f){
-            startedFalling = true;
-            isFalling = true;
-        }
-
-        if(startedFalling && !isJumping && !isOnStair){
-            velocity.y = -2f;
-            startedFalling = false;
-        }
-
-        SpeedLimit();
-        Move();
-        Jump();
-        changeWeapon();
-
-        if(scroll.triggered){
-            ScrollWeapon();
-        }
-
-        velocity.y += gravity * Time.deltaTime;
-
-        //reset position if we fall off the map
-        if(transform.position.y < -50)
-        {
-            controller.enabled = false;
-            controller.transform.position = new Vector3(1, 2, -3);
-            controller.enabled = true;
+            if(select.triggered)
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 
@@ -423,5 +446,75 @@ public class PlayerMovement : MonoBehaviour
     public int GetCurrGun()
     {
         return currGun;
+    }
+
+    public void GiveHealth(int rec)
+    {
+        health += rec;
+    }
+
+    public void GiveArmour(int arm)
+    {
+        armour += arm;
+    }
+
+    public void TakeDamage(int dmg)
+    {
+        if(armour > 0)
+        {
+            armour -= dmg;
+            Mathf.Clamp(armour, 0, 100);
+            health -= (int)(dmg * 0.25);
+        }
+
+        else
+            health -= dmg;
+
+        if(health <= 0)
+        {
+            Die();
+        }
+
+        //If we don't die, play hurt audio
+        else
+        {
+            int rando = Random.Range(0, 4);
+            if(rando == 0) SoundManager.instance.PlaySound(SoundManager.Sound.Hurt1);
+            else if(rando == 1) SoundManager.instance.PlaySound(SoundManager.Sound.Hurt2);
+            else if(rando == 2) SoundManager.instance.PlaySound(SoundManager.Sound.Hurt3);
+            else if(rando == 3) SoundManager.instance.PlaySound(SoundManager.Sound.Hurt4);
+            else if(rando == 4) SoundManager.instance.PlaySound(SoundManager.Sound.Hurt5);
+        }
+    }
+
+    public int GetHealth()
+    {
+        return health;
+    }
+
+    public int GetArmour()
+    {
+        return armour;
+    }
+
+    public void Die()
+    {
+        int rando = Random.Range(0, 2);
+        if(rando == 0) SoundManager.instance.PlaySound(SoundManager.Sound.Die1);
+        else if(rando == 1) SoundManager.instance.PlaySound(SoundManager.Sound.Die2);
+        else if(rando == 2) SoundManager.instance.PlaySound(SoundManager.Sound.Die3);
+
+        gameManager.ShowScores();
+
+        isDed = true;
+        //Destory UnityModel
+        gameObject.transform.GetChild(0).gameObject.SetActive(false);
+        //Destroy GroundChecker
+        gameObject.transform.GetChild(1).gameObject.SetActive(false);
+        //Destroy all children of main camera
+        foreach(Transform child in gameObject.transform.GetChild(2).GetChild(0).GetChild(0))
+            child.gameObject.SetActive(false);
+        //Destroy CeilingChecker
+        gameObject.transform.GetChild(3).gameObject.SetActive(false);
     }
 }

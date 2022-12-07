@@ -19,11 +19,11 @@ public class CameraControls : MonoBehaviour
 
     public float xRotation = 0f;
 
-    private void OnDisable()
-    {
-        mouseInputX.performed -= camUpdate;
-        mouseInputX.canceled -= camUpdate;
-    }
+    // private void OnDisable()
+    // {
+    //     mouseInputX.performed -= camUpdate;
+    //     mouseInputX.canceled -= camUpdate;
+    // }
 
     private void Awake() 
     {
@@ -65,5 +65,9 @@ public class CameraControls : MonoBehaviour
         playerBody.Rotate(Vector3.up * mouseX);
     }
 
-
+    private void OnDestroy() 
+    {
+        mouseInputX.performed -= camUpdate;
+        mouseInputX.canceled -= camUpdate;
+    }
 }

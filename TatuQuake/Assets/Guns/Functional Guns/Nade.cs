@@ -103,6 +103,7 @@ public class Nade : MonoBehaviour
                 Vector3 direction = player.transform.position - (rigidBody.transform.position);
                 //NadeLauncher shouldn't be as useful for movement as the rocket launcher is
                 player.ApplyForce((impactForce * 0.6f), direction, percentage);
+                player.TakeDamage((int)(damage / 1.9f));
             }
         }
 

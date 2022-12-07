@@ -50,7 +50,7 @@ public class AmmoPickUps : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) 
     {
-        if(other.name == "Player")
+        if(other.tag == "Player")
         {
             if(ammoType == "pistol")
             {
@@ -107,7 +107,7 @@ public class AmmoPickUps : MonoBehaviour
 
     private void OnTriggerStay(Collider other) 
     {
-        if(other.name == "Player")
+        if(other.tag == "Player")
         {
             if(fire.ReadValue<float>() == 1)
             {

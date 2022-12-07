@@ -211,8 +211,10 @@ public class WeaponsBaseClass : MonoBehaviour
 
     void OnDisable() 
     {
-        animator.WriteDefaultValues();
-        worldAnimator.WriteDefaultValues();
+        if(animator != null)
+            animator.WriteDefaultValues();
+        if(worldAnimator != null)
+            worldAnimator.WriteDefaultValues();
     }
 
 }

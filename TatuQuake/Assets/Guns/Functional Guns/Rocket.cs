@@ -93,6 +93,7 @@ public class Rocket : MonoBehaviour
                 percentage = Mathf.Clamp(percentage, 0, 1);
                 Vector3 direction = player.transform.position - (rigidBody.transform.position);
                 player.ApplyForce(impactForce, direction, percentage);
+                player.TakeDamage((int)(damage / 1.9f));
             }
         }
 

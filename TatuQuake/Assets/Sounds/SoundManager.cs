@@ -38,7 +38,15 @@ public class SoundManager : MonoBehaviour
         ShottyPumpBack,
         ShottyPumpForward,
         SuperShottyPumpBack,
-        SuperShottyPumpForward
+        SuperShottyPumpForward,
+        Die1,
+        Die2,
+        Die3,
+        Hurt1,
+        Hurt2,
+        Hurt3,
+        Hurt4,
+        Hurt5
     }
 
     public static SoundManager instance

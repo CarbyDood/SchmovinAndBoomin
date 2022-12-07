@@ -7,8 +7,15 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private List<bool> gunInventory;
     [SerializeField] private PlayerMovement player;
+    [SerializeField] private GameObject playerObj;
     [SerializeField] private TextMeshProUGUI ammoCount;
+    [SerializeField] private TextMeshProUGUI health;
+    [SerializeField] private TextMeshProUGUI armour;
     [SerializeField] public List<GameObject> gunIcons;
+    [SerializeField] public GameObject HUD;
+    [SerializeField] public GameObject ScoreBoard;
+    [SerializeField] private Camera playerFpCam;
+    [SerializeField] public Transform spawnPoint;
 
     //shared ammo pools
     public int maxAutoAmmo = 200;
@@ -36,17 +43,15 @@ public class GameManager : MonoBehaviour
         //Update UI elements
         int ammo;
         if(player.GetCurrGun() == 7)
-        {
             //Launcher script is on a child of rocketLauncher object
             ammo = player.GetGuns()[player.GetCurrGun()].transform.GetChild(1).GetComponent<WeaponsBaseClass>().GetCurrAmmo();
-        }
-
         else
-        {
             ammo = player.GetGuns()[player.GetCurrGun()].GetComponent<WeaponsBaseClass>().GetCurrAmmo();
-        }
 
         ammoCount.text = ("Ammo: "+ammo).ToString();
+        health.text = ("Health: "+player.GetHealth()+"%").ToString();
+        armour.text = ("Armour: "+player.GetArmour()).ToString();
+
     }
 
     private void GiveAllWeapons()
@@ -54,6 +59,14 @@ public class GameManager : MonoBehaviour
         for(int i = 0; i < gunInventory.Count; i++)
         {
             gunInventory[i] = true;
+        }
+    }
+
+    private void TakeAllWeapons()
+    {
+        for(int i = 0; i < gunInventory.Count; i++)
+        {
+            gunInventory[i] = false;
         }
     }
 
@@ -80,6 +93,24 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void DisableHud()
+    {
+        HUD.SetActive(false);
+    }
+
+    public void EnableHud()
+    {
+        HUD.SetActive(true);
+    }
+
+    public void ShowScores()
+    {
+        foreach(Transform child in HUD.transform)
+            child.gameObject.SetActive(false);
+        
+        ScoreBoard.SetActive(true);
+    }
+
     public void DisableObjectForTime(GameObject obj, float time)
     {
         StartCoroutine(DisableObject(obj, time));
@@ -91,4 +122,5 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(time);
         obj.SetActive(true);
     }
+
 }
