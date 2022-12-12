@@ -507,6 +507,8 @@ public class PlayerMovement : MonoBehaviour
         gameManager.ShowScores();
 
         isDed = true;
+        //Disable CharacterController
+        controller.enabled = false;
         //Disable UnityModel
         gameObject.transform.GetChild(0).gameObject.SetActive(false);
         //Disable GroundChecker
