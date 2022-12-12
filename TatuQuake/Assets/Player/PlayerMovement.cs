@@ -507,14 +507,15 @@ public class PlayerMovement : MonoBehaviour
         gameManager.ShowScores();
 
         isDed = true;
-        //Destory UnityModel
+        //Disable UnityModel
         gameObject.transform.GetChild(0).gameObject.SetActive(false);
-        //Destroy GroundChecker
+        //Disable GroundChecker
         gameObject.transform.GetChild(1).gameObject.SetActive(false);
-        //Destroy all children of main camera
-        foreach(Transform child in gameObject.transform.GetChild(2).GetChild(0).GetChild(0))
-            child.gameObject.SetActive(false);
-        //Destroy CeilingChecker
+        //Disable main camera
+        gameObject.transform.GetChild(2).gameObject.SetActive(false);
+        //Disable CeilingChecker
         gameObject.transform.GetChild(3).gameObject.SetActive(false);
+        //*Enable* Death Cam
+        gameObject.transform.GetChild(4).gameObject.SetActive(true);
     }
 }

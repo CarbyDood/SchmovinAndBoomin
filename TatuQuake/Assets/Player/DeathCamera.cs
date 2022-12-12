@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CameraControls : MonoBehaviour
+public class DeathCamera : MonoBehaviour
 {
     private PlayerInput playerInput;
 
@@ -30,6 +30,7 @@ public class CameraControls : MonoBehaviour
 
     private void Awake() 
     {
+        Physics.IgnoreLayerCollision(0, 7, true);
         playerInput = GetComponent<PlayerInput>();
 
         mouseInputX = playerInput.actions["LookX"];
@@ -65,7 +66,7 @@ public class CameraControls : MonoBehaviour
 
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-        transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        transform.localRotation = Quaternion.Euler(xRotation, 0f, -45f);
         playerBody.Rotate(Vector3.up * mouseX);
     }
 }
