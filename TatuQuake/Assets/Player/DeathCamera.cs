@@ -40,7 +40,6 @@ public class DeathCamera : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("Oh yeah mr. krabs!");
         Cursor.lockState = CursorLockMode.Locked;
         
         mouseInputX.performed += camUpdate;

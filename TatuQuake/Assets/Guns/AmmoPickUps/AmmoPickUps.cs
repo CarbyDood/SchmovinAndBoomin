@@ -105,6 +105,7 @@ public class AmmoPickUps : MonoBehaviour
         }    
     }
 
+    //Allow the player to stay on an ammo pick up and pick is up instantly as soon as they start shooting their weapon
     private void OnTriggerStay(Collider other) 
     {
         if(other.tag == "Player")

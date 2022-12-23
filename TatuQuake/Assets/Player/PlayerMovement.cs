@@ -69,7 +69,9 @@ public class PlayerMovement : MonoBehaviour
     private bool isAffectedByForce = false;
 
     private int health = 100;
+    private int maxHealth = 100;
     private int armour = 0;
+    private int maxArmour = 100;
     private int defaultGun = 0;
 
     private bool isDed = false;
@@ -257,7 +259,7 @@ public class PlayerMovement : MonoBehaviour
             nextTimeToJump = Time.time + jumpCoolDown;
 
             //play random jump audio
-            int rando = Random.Range(0, 4);
+            int rando = Random.Range(0, 5);
             if(rando == 0) SoundManager.instance.PlaySound(SoundManager.Sound.Jump1);
             else if(rando == 1) SoundManager.instance.PlaySound(SoundManager.Sound.Jump2);
             else if(rando == 2) SoundManager.instance.PlaySound(SoundManager.Sound.Jump3);
@@ -456,6 +458,7 @@ public class PlayerMovement : MonoBehaviour
     public void GiveArmour(int arm)
     {
         armour += arm;
+        armour = Mathf.Clamp(armour, 0, maxArmour);
     }
 
     public void TakeDamage(int dmg)
@@ -463,8 +466,8 @@ public class PlayerMovement : MonoBehaviour
         if(armour > 0)
         {
             armour -= dmg;
-            Mathf.Clamp(armour, 0, 100);
-            health -= (int)(dmg * 0.25);
+            armour = Mathf.Clamp(armour, 0, maxArmour);
+            health -= (int)(dmg * 0.50);
         }
 
         else
@@ -478,7 +481,7 @@ public class PlayerMovement : MonoBehaviour
         //If we don't die, play hurt audio
         else
         {
-            int rando = Random.Range(0, 4);
+            int rando = Random.Range(0, 5);
             if(rando == 0) SoundManager.instance.PlaySound(SoundManager.Sound.Hurt1);
             else if(rando == 1) SoundManager.instance.PlaySound(SoundManager.Sound.Hurt2);
             else if(rando == 2) SoundManager.instance.PlaySound(SoundManager.Sound.Hurt3);
@@ -497,9 +500,19 @@ public class PlayerMovement : MonoBehaviour
         return armour;
     }
 
+    public int GetMaxHealth()
+    {
+        return maxHealth;
+    }
+
+    public int GetMaxArmour()
+    {
+        return maxArmour;
+    }
+
     public void Die()
     {
-        int rando = Random.Range(0, 2);
+        int rando = Random.Range(0, 3);
         if(rando == 0) SoundManager.instance.PlaySound(SoundManager.Sound.Die1);
         else if(rando == 1) SoundManager.instance.PlaySound(SoundManager.Sound.Die2);
         else if(rando == 2) SoundManager.instance.PlaySound(SoundManager.Sound.Die3);

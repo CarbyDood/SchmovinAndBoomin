@@ -46,7 +46,8 @@ public class SoundManager : MonoBehaviour
         Hurt2,
         Hurt3,
         Hurt4,
-        Hurt5
+        Hurt5,
+        ArmorPickUp
     }
 
     public static SoundManager instance
