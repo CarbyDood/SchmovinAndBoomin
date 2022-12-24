@@ -115,16 +115,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd3fb8bf538e6144d99e5d9438ddb991, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 0}
   damage: 0
   range: 0
   fireRate: 0
   impactForce: 0
+  maxAmmo: 0
+  currentAmmo: 0
+  gunType: 
+  recoilX: 0
+  recoilY: 0
+  recoilZ: 0
+  smoothness: 0
+  recenterSpeed: 0
   fpsCam: {fileID: 0}
   muzzleFlash: {fileID: 5145988878849094972}
+  worldMuzzleFlash: {fileID: 0}
   impactEffect: {fileID: 5218493302773158320, guid: 1d66db1476986414b84815c808ab5499, type: 3}
   bulletTrail: {fileID: 3357465054252875860, guid: 8f14f743b48bef84aac0ef04a310df4c, type: 3}
+  worldTrail: {fileID: 0}
   momentum: {fileID: 0}
   playerInput: {fileID: 0}
+  animator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  recoilScript: {fileID: 0}
   pelletCount: 16
 --- !u!1 &5657034449493728730
 GameObject:
@@ -427,6 +441,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 513923865827254551}
     m_Modifications:
+    - target: {fileID: 1613702329602487801, guid: 8e2caa5612250e445a61cb6b0c801095, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: e823cd5b5d27c0f4b8256e7c12ee3e6d, type: 2}
     - target: {fileID: 5762316674565067255, guid: 8e2caa5612250e445a61cb6b0c801095, type: 3}
       propertyPath: m_RootOrder
       value: 3

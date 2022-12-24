@@ -409,15 +409,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dd657f183dbd8f4fbfe2648ffdbfab8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 0}
   damage: 0
   range: 0
   fireRate: 0
   impactForce: 0
+  maxAmmo: 0
+  currentAmmo: 0
+  gunType: 
+  recoilX: 0
+  recoilY: 0
+  recoilZ: 0
+  smoothness: 0
+  recenterSpeed: 0
   fpsCam: {fileID: 0}
   muzzleFlash: {fileID: 3980093064964558369}
+  worldMuzzleFlash: {fileID: 0}
   impactEffect: {fileID: 5218493302773158320, guid: 1d66db1476986414b84815c808ab5499, type: 3}
+  bulletTrail: {fileID: 0}
+  worldTrail: {fileID: 0}
   momentum: {fileID: 0}
   playerInput: {fileID: 0}
+  animator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  recoilScript: {fileID: 0}
 --- !u!1001 &2402991690778967001
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -412,10 +412,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8678648016487794830, guid: 73bb721cd7bcd894981ce7e3d433c1a6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
     - target: {fileID: -5707321202482470793, guid: 73bb721cd7bcd894981ce7e3d433c1a6, type: 3}
       propertyPath: m_Materials.Array.data[7]
       value: 
       objectReference: {fileID: 2100000, guid: a70f1064bf7bb7f4791411216340b0a6, type: 2}
+    - target: {fileID: -2616970339779851636, guid: 73bb721cd7bcd894981ce7e3d433c1a6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
     - target: {fileID: 919132149155446097, guid: 73bb721cd7bcd894981ce7e3d433c1a6, type: 3}
       propertyPath: m_Name
       value: TatuUnityModel
@@ -473,10 +481,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8678648016487794830, guid: 73bb721cd7bcd894981ce7e3d433c1a6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
     - target: {fileID: -5707321202482470793, guid: 73bb721cd7bcd894981ce7e3d433c1a6, type: 3}
       propertyPath: m_Materials.Array.data[7]
       value: 
       objectReference: {fileID: 2100000, guid: de9ef40dbc2a71f47b3329fa38b3269f, type: 2}
+    - target: {fileID: -2616970339779851636, guid: 73bb721cd7bcd894981ce7e3d433c1a6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
     - target: {fileID: 919132149155446097, guid: 73bb721cd7bcd894981ce7e3d433c1a6, type: 3}
       propertyPath: m_Name
       value: TatuUnityModel (1)
@@ -534,10 +550,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8678648016487794830, guid: 73bb721cd7bcd894981ce7e3d433c1a6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
     - target: {fileID: -8625725644046755650, guid: 73bb721cd7bcd894981ce7e3d433c1a6, type: 3}
       propertyPath: m_LocalScale.y
       value: 0.61328006
       objectReference: {fileID: 0}
+    - target: {fileID: -2616970339779851636, guid: 73bb721cd7bcd894981ce7e3d433c1a6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
     - target: {fileID: 919132149155446097, guid: 73bb721cd7bcd894981ce7e3d433c1a6, type: 3}
       propertyPath: m_Name
       value: TatuUnityModel (5)
@@ -1143,6 +1167,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8678648016487794830, guid: 73bb721cd7bcd894981ce7e3d433c1a6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
     - target: {fileID: -8625725644046755650, guid: 73bb721cd7bcd894981ce7e3d433c1a6, type: 3}
       propertyPath: m_LocalScale.y
       value: 0.3383891
@@ -1203,6 +1231,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 60.536003
       objectReference: {fileID: 0}
+    - target: {fileID: -2616970339779851636, guid: 73bb721cd7bcd894981ce7e3d433c1a6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
     - target: {fileID: 919132149155446097, guid: 73bb721cd7bcd894981ce7e3d433c1a6, type: 3}
       propertyPath: m_Name
       value: TatuUnityModel (6)
@@ -1904,6 +1936,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5224265145271980957, guid: b530f47ddb768c44f8168e2280967497, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: e823cd5b5d27c0f4b8256e7c12ee3e6d, type: 2}
     - target: {fileID: 8320267070265987081, guid: b530f47ddb768c44f8168e2280967497, type: 3}
       propertyPath: m_Name
       value: PropLMG
@@ -2005,6 +2041,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8678648016487794830, guid: 73bb721cd7bcd894981ce7e3d433c1a6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+    - target: {fileID: -2616970339779851636, guid: 73bb721cd7bcd894981ce7e3d433c1a6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
     - target: {fileID: 919132149155446097, guid: 73bb721cd7bcd894981ce7e3d433c1a6, type: 3}
       propertyPath: m_Name
       value: TatuUnityModel (3)
@@ -2119,6 +2163,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8678648016487794830, guid: 73bb721cd7bcd894981ce7e3d433c1a6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+    - target: {fileID: -2616970339779851636, guid: 73bb721cd7bcd894981ce7e3d433c1a6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
     - target: {fileID: 919132149155446097, guid: 73bb721cd7bcd894981ce7e3d433c1a6, type: 3}
       propertyPath: m_Name
       value: TatuUnityModel (4)
@@ -2798,10 +2850,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8678648016487794830, guid: 73bb721cd7bcd894981ce7e3d433c1a6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
     - target: {fileID: -5707321202482470793, guid: 73bb721cd7bcd894981ce7e3d433c1a6, type: 3}
       propertyPath: m_Materials.Array.data[7]
       value: 
       objectReference: {fileID: 2100000, guid: adbe011648eb0674caf5cd06b0d9bbe2, type: 2}
+    - target: {fileID: -2616970339779851636, guid: 73bb721cd7bcd894981ce7e3d433c1a6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
     - target: {fileID: 919132149155446097, guid: 73bb721cd7bcd894981ce7e3d433c1a6, type: 3}
       propertyPath: m_Name
       value: TatuUnityModel (2)
@@ -2815,6 +2875,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1404312421625032735, guid: 6f1b8d7d3cff51845ae765289b02a108, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: e823cd5b5d27c0f4b8256e7c12ee3e6d, type: 2}
     - target: {fileID: 8109037087939652654, guid: 6f1b8d7d3cff51845ae765289b02a108, type: 3}
       propertyPath: m_RootOrder
       value: 5

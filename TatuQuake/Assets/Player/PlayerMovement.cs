@@ -76,6 +76,16 @@ public class PlayerMovement : MonoBehaviour
 
     private bool isDed = false;
 
+    private float timer = 0f;
+    private float superShellEnd = 0f;
+    private bool superShellActive = false;
+
+    public enum PowerUps
+    {
+        SuperShell,
+        MaxMomentum,
+        TatuPower
+    }
     private void Awake() 
     {
         controller = GetComponent<CharacterController>();
@@ -186,6 +196,19 @@ public class PlayerMovement : MonoBehaviour
         {
             if(select.triggered)
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+        timer += Time.deltaTime;
+
+        //only check timer if power up is active
+        if(superShellActive)
+        {
+            if(timer >= superShellEnd)
+            {
+                Debug.Log("Super Shell has eneded!");
+                gameManager.UpdateStatus(GameManager.Status.Healthy);
+                superShellActive = false;
+            }
         }
     }
 
@@ -440,6 +463,15 @@ public class PlayerMovement : MonoBehaviour
         velocity.z = Mathf.Clamp(velocity.z, -8f, 8f);
     }
 
+    public void PowerUp(PowerUps pickUp, float duration)
+    {
+        if(pickUp == PowerUps.SuperShell)
+        {
+            superShellEnd = timer + duration;
+            superShellActive = true;
+        }
+    }
+
     public List<GameObject> GetGuns()
     {
         return gunViewModels;
@@ -453,6 +485,7 @@ public class PlayerMovement : MonoBehaviour
     public void GiveHealth(int rec)
     {
         health += rec;
+        health = Mathf.Clamp(health, 0, maxHealth);
     }
 
     public void GiveArmour(int arm)
@@ -461,14 +494,29 @@ public class PlayerMovement : MonoBehaviour
         armour = Mathf.Clamp(armour, 0, maxArmour);
     }
 
+    //if damage taken ends up doing less then 1 damage, round it up to 1
     public void TakeDamage(int dmg)
     {
         if(armour > 0)
         {
-            armour -= dmg;
-            armour = Mathf.Clamp(armour, 0, maxArmour);
-            health -= (int)(dmg * 0.50);
+            if(superShellActive)
+            {
+                if((dmg * 0.1) >= 1) armour -= (int)(dmg * 0.1);
+                else armour -= 1;
+                armour = Mathf.Clamp(armour, 0, maxArmour);
+                if((dmg * 0.5 * 0.1) >= 1) health -= (int)(dmg * 0.50 * 0.1);
+                else health -= 1;
+            }
+            
+            else
+            {
+                armour -= dmg;
+                armour = Mathf.Clamp(armour, 0, maxArmour);
+                if((dmg * 0.5) >= 1) health -= (int)(dmg * 0.50);
+                else health -= 1;
+            }
         }
+
 
         else
             health -= dmg;

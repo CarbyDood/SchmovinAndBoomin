@@ -46,4 +46,21 @@ public class ArmorPickUp : MonoBehaviour
             }
         }
     }
+
+    private void OnTriggerStay(Collider other) 
+    {
+        if(other.tag == "Player")
+        {
+            PlayerMovement player = other.transform.GetComponent<PlayerMovement>();
+            if(player.GetArmour() < player.GetMaxArmour())
+            {
+                player.GiveArmour(50);
+
+                SoundManager.instance.PlaySound(SoundManager.Sound.ArmorPickUp);
+
+                if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
+                else Destroy(gameObject);
+            }
+        }
+    }
 }

@@ -33,7 +33,7 @@ public class PistolDrone : MonoBehaviour
         if(timer >= interval)
         {
             timer -= interval;
-            SoundManager.instance.PlaySound(SoundManager.Sound.PistolShot);
+            SoundManager.instance.PlaySound(SoundManager.Sound.PistolShot, transform.position);
             Attack();
         }
 

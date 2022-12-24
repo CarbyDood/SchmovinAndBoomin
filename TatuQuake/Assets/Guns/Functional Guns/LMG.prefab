@@ -5211,7 +5211,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10308, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: e823cd5b5d27c0f4b8256e7c12ee3e6d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5507,16 +5507,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57a6b4d4a6e26d541983fe631da7bc9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 0}
   damage: 0
   range: 0
   fireRate: 0
   impactForce: 0
+  maxAmmo: 0
+  currentAmmo: 0
+  gunType: 
+  recoilX: 0
+  recoilY: 0
+  recoilZ: 0
+  smoothness: 0
+  recenterSpeed: 0
   fpsCam: {fileID: 0}
   muzzleFlash: {fileID: 6301775542270022682}
+  worldMuzzleFlash: {fileID: 0}
   impactEffect: {fileID: 5218493302773158320, guid: 1d66db1476986414b84815c808ab5499, type: 3}
   bulletTrail: {fileID: 3357465054252875860, guid: 8f14f743b48bef84aac0ef04a310df4c, type: 3}
+  worldTrail: {fileID: 0}
   momentum: {fileID: 0}
   playerInput: {fileID: 0}
+  animator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  recoilScript: {fileID: 0}
 --- !u!1 &8159160240121819713
 GameObject:
   m_ObjectHideFlags: 0

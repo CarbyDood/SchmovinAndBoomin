@@ -4,10 +4,16 @@ using UnityEngine;
 
 public class SuperShell : MonoBehaviour
 {
+    [SerializeField] private GameManager gameManager;
+
     private float bobHeight = 0.1f;
     private float bobSpeed = 3f;
     private float ogPosY;
     private float yRot = 0f;
+
+    private float duration = 10f;
+
+    [SerializeField] private bool canRespawn;
 
     // Start is called before the first frame update
     void Start()
@@ -30,7 +36,15 @@ public class SuperShell : MonoBehaviour
     {
         if(other.tag == "Player")
         {
-            Debug.Log("Power Up!!");
+            PlayerMovement player = other.transform.GetComponent<PlayerMovement>();
+
+            player.GiveArmour(player.GetMaxArmour());
+            SoundManager.instance.PlaySound(SoundManager.Sound.SuperShellPickUp);
+            gameManager.UpdateStatus(GameManager.Status.SuperShellActive);
+            player.PowerUp(PlayerMovement.PowerUps.SuperShell, duration);
+
+            if(canRespawn) gameManager.DisableObjectForTime(gameObject, 1);
+            else Destroy(gameObject);
         }
     }
 }

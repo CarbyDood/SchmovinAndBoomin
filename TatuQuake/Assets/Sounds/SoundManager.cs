@@ -47,7 +47,11 @@ public class SoundManager : MonoBehaviour
         Hurt3,
         Hurt4,
         Hurt5,
-        ArmorPickUp
+        ArmorPickUp,
+        SmallHPPickUp,
+        MediumHPPickUp,
+        BigHPPickUp,
+        SuperShellPickUp
     }
 
     public static SoundManager instance
@@ -77,7 +81,7 @@ public class SoundManager : MonoBehaviour
             soundGameObject.transform.position = position;
             AudioSource audioSource = soundGameObject.AddComponent<AudioSource>();
             audioSource.clip = GetAudioClip(sound);
-            audioSource.maxDistance = 100f;
+            audioSource.maxDistance = 60f;
             audioSource.spatialBlend = 1f;
             audioSource.rolloffMode = AudioRolloffMode.Linear;
             audioSource.dopplerLevel = 0f;

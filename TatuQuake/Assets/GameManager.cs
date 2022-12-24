@@ -11,11 +11,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI ammoCount;
     [SerializeField] private TextMeshProUGUI health;
     [SerializeField] private TextMeshProUGUI armour;
+    [SerializeField] private GameObject statuses;
     [SerializeField] public List<GameObject> gunIcons;
     [SerializeField] public GameObject HUD;
     [SerializeField] public GameObject ScoreBoard;
     [SerializeField] private Camera playerFpCam;
     [SerializeField] public Transform spawnPoint;
+
 
     //shared ammo pools
     public int maxAutoAmmo = 200;
@@ -24,6 +26,18 @@ public class GameManager : MonoBehaviour
     public int currAutoAmmo = 20;
     public int currShellAmmo = 5;
     public int currExplosiveAmmo = 2;
+
+    //enum for health/power up statuses
+    public enum Status
+    {
+        Healthy,
+        Hurt,
+        Wounded,
+        Critical,
+        SuperShellActive,
+        MaxMomentumActive,
+        TatuPowerActice
+    }
 
     void Awake()
     {
@@ -109,6 +123,33 @@ public class GameManager : MonoBehaviour
             child.gameObject.SetActive(false);
         
         ScoreBoard.SetActive(true);
+    }
+
+    //method to update Health/power up icon
+    public int UpdateStatus(Status stat)
+    {
+        if(stat == Status.Healthy)
+        {
+            DisableAllStatusIcon();
+            statuses.transform.GetChild(0).gameObject.SetActive(true);
+            return 0;
+        }
+
+        else if(stat == Status.SuperShellActive)
+        {
+            DisableAllStatusIcon();
+            statuses.transform.GetChild(4).gameObject.SetActive(true);
+            return 4;
+        }
+
+        return -1;
+    }
+
+    //helper method to disable all status icons
+    public void DisableAllStatusIcon()
+    {
+        foreach(Transform child in statuses.transform)
+            child.gameObject.SetActive(false);
     }
 
     public void DisableObjectForTime(GameObject obj, float time)
