@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 public class WeaponsBaseClass : MonoBehaviour
 {
     [SerializeField] protected GameManager gameManager;
+    [SerializeField] protected PlayerMovement player;
     [SerializeField] protected float damage;
     [SerializeField] protected float range;
     [SerializeField] protected float fireRate;
@@ -72,7 +73,7 @@ public class WeaponsBaseClass : MonoBehaviour
             Target target = hit.transform.GetComponent<Target>();
             if(target != null)
             {
-                target.TakeDamage(damage);
+                target.TakeDamage(damage * player.GetDamageMultiplier());
             }
 
             if (hit.rigidbody != null){

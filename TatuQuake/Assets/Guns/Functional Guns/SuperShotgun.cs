@@ -86,7 +86,7 @@ public class SuperShotgun : WeaponsBaseClass
                 Target target = hit.transform.GetComponent<Target>();
                 if(target != null)
                 {
-                    target.TakeDamage(damage);
+                    target.TakeDamage(damage * player.GetDamageMultiplier());
                 }
 
                 if (hit.rigidbody != null){

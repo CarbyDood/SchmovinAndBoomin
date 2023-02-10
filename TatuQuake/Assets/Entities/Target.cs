@@ -20,6 +20,7 @@ public class Target : MonoBehaviour
         isShaking = true;
         timer = 0f;
 
+        Debug.Log("Damage Taken: "+amount);
         if (health <= 0f)
         {
             Die();

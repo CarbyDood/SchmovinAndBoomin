@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
         Critical,
         SuperShellActive,
         MaxMomentumActive,
-        TatuPowerActice
+        TatuPowerActive
     }
 
     void Awake()
@@ -135,11 +135,39 @@ public class GameManager : MonoBehaviour
             return 0;
         }
 
+        else if(stat == Status.Hurt)
+        {
+            DisableAllStatusIcon();
+            statuses.transform.GetChild(1).gameObject.SetActive(true);
+            return 0;
+        }
+
+        else if(stat == Status.Wounded)
+        {
+            DisableAllStatusIcon();
+            statuses.transform.GetChild(2).gameObject.SetActive(true);
+            return 0;
+        }
+
+        else if(stat == Status.Critical)
+        {
+            DisableAllStatusIcon();
+            statuses.transform.GetChild(3).gameObject.SetActive(true);
+            return 0;
+        }
+
         else if(stat == Status.SuperShellActive)
         {
             DisableAllStatusIcon();
             statuses.transform.GetChild(4).gameObject.SetActive(true);
             return 4;
+        }
+
+        else if(stat == Status.TatuPowerActive)
+        {
+            DisableAllStatusIcon();
+            statuses.transform.GetChild(6).gameObject.SetActive(true);
+            return 6;
         }
 
         return -1;

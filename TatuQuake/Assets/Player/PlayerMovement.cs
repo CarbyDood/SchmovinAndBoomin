@@ -40,6 +40,9 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask groundMask;
 
     private float momentumLossRate = 1f;
+    private float momentumLossDefault = 1f;
+    private float momentumGainMultiplier = 1f;
+    private float momentumMultDefault = 1f;
     private float velocityCoeff = 0.005f;
 
     [SerializeField] public List<GameObject> gunViewModels;
@@ -73,12 +76,18 @@ public class PlayerMovement : MonoBehaviour
     private int armour = 0;
     private int maxArmour = 100;
     private int defaultGun = 0;
+    private float damageMultiplier = 1.0f;
 
     private bool isDed = false;
 
     private float timer = 0f;
     private float superShellEnd = 0f;
+    private float tatuPowerEnd = 0f;
+    //private float maxMomentumEnd = 0f;
+
     private bool superShellActive = false;
+    private bool tatuPowerActive = false;
+    //private bool maxMomentumActive = false;
 
     public enum PowerUps
     {
@@ -205,10 +214,30 @@ public class PlayerMovement : MonoBehaviour
         {
             if(timer >= superShellEnd)
             {
-                Debug.Log("Super Shell has eneded!");
-                gameManager.UpdateStatus(GameManager.Status.Healthy);
+                Debug.Log("Super Shell has ended!");
                 superShellActive = false;
             }
+        }
+
+        else if(tatuPowerActive)
+        {
+            if(timer >= tatuPowerEnd)
+            {
+                Debug.Log("Tatu Power has ended!");
+                tatuPowerActive = false;
+                SetDamageMultiplier(1.0f);
+                momentumGainMultiplier = momentumMultDefault;
+                momentumLossRate = momentumLossDefault;
+            }
+        }
+
+        //update health status otherwise
+        else
+        {
+            if(health >= 75) gameManager.UpdateStatus(GameManager.Status.Healthy);
+            else if(health >= 50 && health < 75) gameManager.UpdateStatus(GameManager.Status.Hurt);
+            else if(health >= 25 && health < 50) gameManager.UpdateStatus(GameManager.Status.Wounded);
+            else if(health < 25) gameManager.UpdateStatus(GameManager.Status.Critical);
         }
     }
 
@@ -223,7 +252,7 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("Runnin", true);
             float absX = Mathf.Abs(currInputVect.x);
             float absY = Mathf.Abs(currInputVect.y);
-            momentum.AddMomentum(Mathf.Max(absX, absY));
+            momentum.AddMomentum(Mathf.Max(absX, absY)*momentumGainMultiplier);
         }
 
         //if the player is staying still, decrease momentum
@@ -470,6 +499,15 @@ public class PlayerMovement : MonoBehaviour
             superShellEnd = timer + duration;
             superShellActive = true;
         }
+
+        if(pickUp == PowerUps.TatuPower)
+        {
+            tatuPowerEnd = timer + duration;
+            tatuPowerActive = true;
+            SetDamageMultiplier(3.0f);
+            momentumGainMultiplier = 2;
+            momentumLossRate = 0.5f;
+        }
     }
 
     public List<GameObject> GetGuns()
@@ -537,6 +575,10 @@ public class PlayerMovement : MonoBehaviour
             else if(rando == 4) SoundManager.instance.PlaySound(SoundManager.Sound.Hurt5);
         }
     }
+    public void SetDamageMultiplier(float newMult)
+    {
+        damageMultiplier = newMult;
+    }
 
     public int GetHealth()
     {
@@ -556,6 +598,11 @@ public class PlayerMovement : MonoBehaviour
     public int GetMaxArmour()
     {
         return maxArmour;
+    }
+
+    public float GetDamageMultiplier()
+    {
+        return damageMultiplier;
     }
 
     public void Die()

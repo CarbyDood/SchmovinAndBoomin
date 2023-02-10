@@ -63,7 +63,7 @@ public class NadeLauncher : WeaponsBaseClass
         Vector3 nadeStartPos = startPosition.transform.position;
         Quaternion nadeStartRot = startPosition.transform.rotation;
         Nade projectile = Instantiate(nade, fpsCam.transform.position, nadeStartRot);
-        projectile.SetDmg(damage);
+        projectile.SetDmg(damage * player.GetDamageMultiplier());
         projectile.SetFrc(impactForce);
         projectile.SetFrwd(fpsCam.transform.forward);
         currentAmmo = DecreaseAmmo(ref gameManager.currExplosiveAmmo, 1);

@@ -51,7 +51,9 @@ public class SoundManager : MonoBehaviour
         SmallHPPickUp,
         MediumHPPickUp,
         BigHPPickUp,
-        SuperShellPickUp
+        SuperShellPickUp,
+        TatuPowerPickUp,
+        MaxMomentumPickUp
     }
 
     public static SoundManager instance
