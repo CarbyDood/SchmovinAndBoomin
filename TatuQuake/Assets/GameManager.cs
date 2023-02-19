@@ -139,21 +139,21 @@ public class GameManager : MonoBehaviour
         {
             DisableAllStatusIcon();
             statuses.transform.GetChild(1).gameObject.SetActive(true);
-            return 0;
+            return 1;
         }
 
         else if(stat == Status.Wounded)
         {
             DisableAllStatusIcon();
             statuses.transform.GetChild(2).gameObject.SetActive(true);
-            return 0;
+            return 2;
         }
 
         else if(stat == Status.Critical)
         {
             DisableAllStatusIcon();
             statuses.transform.GetChild(3).gameObject.SetActive(true);
-            return 0;
+            return 3;
         }
 
         else if(stat == Status.SuperShellActive)
@@ -161,6 +161,13 @@ public class GameManager : MonoBehaviour
             DisableAllStatusIcon();
             statuses.transform.GetChild(4).gameObject.SetActive(true);
             return 4;
+        }
+
+        else if(stat == Status.MaxMomentumActive)
+        {
+            DisableAllStatusIcon();
+            statuses.transform.GetChild(5).gameObject.SetActive(true);
+            return 5;
         }
 
         else if(stat == Status.TatuPowerActive)

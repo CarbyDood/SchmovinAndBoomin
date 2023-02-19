@@ -83,11 +83,12 @@ public class PlayerMovement : MonoBehaviour
     private float timer = 0f;
     private float superShellEnd = 0f;
     private float tatuPowerEnd = 0f;
-    //private float maxMomentumEnd = 0f;
+    private float maxMomentumEnd = 0f;
 
     private bool superShellActive = false;
     private bool tatuPowerActive = false;
-    //private bool maxMomentumActive = false;
+    private bool maxMomentumActive = false;
+    private float ogMomentum = 0f;
 
     public enum PowerUps
     {
@@ -182,6 +183,13 @@ public class PlayerMovement : MonoBehaviour
 
             SpeedLimit();
             Move();
+
+            //Momentum bonus to damage is the xamount of momentum times divided by 100 and then time 0.5.
+            //so the max bonus would be +0.5x damage for a max of 1.5x damage
+            //(3.5x when under Tatu Power)
+            if(tatuPowerActive) damageMultiplier = 3 + ( (momentum.GetMomentum()/100) * 0.5f );
+            else damageMultiplier = 1 + ( (momentum.GetMomentum()/100) * 0.5f );
+
             Jump();
             changeWeapon();
 
@@ -209,21 +217,19 @@ public class PlayerMovement : MonoBehaviour
 
         timer += Time.deltaTime;
 
-        //only check timer if power up is active
+        //check timers to see if any power ups are active
         if(superShellActive)
         {
             if(timer >= superShellEnd)
             {
-                Debug.Log("Super Shell has ended!");
                 superShellActive = false;
             }
         }
 
-        else if(tatuPowerActive)
+        if(tatuPowerActive)
         {
             if(timer >= tatuPowerEnd)
             {
-                Debug.Log("Tatu Power has ended!");
                 tatuPowerActive = false;
                 SetDamageMultiplier(1.0f);
                 momentumGainMultiplier = momentumMultDefault;
@@ -231,8 +237,17 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
+        if(maxMomentumActive)
+        {
+            if(timer >= maxMomentumEnd)
+            {
+                maxMomentumActive = false;
+                momentum.SetMomentum(ogMomentum + 5);
+            }
+        }
+
         //update health status otherwise
-        else
+        if(!superShellActive && !tatuPowerActive && !maxMomentumActive)
         {
             if(health >= 75) gameManager.UpdateStatus(GameManager.Status.Healthy);
             else if(health >= 50 && health < 75) gameManager.UpdateStatus(GameManager.Status.Hurt);
@@ -255,12 +270,14 @@ public class PlayerMovement : MonoBehaviour
             momentum.AddMomentum(Mathf.Max(absX, absY)*momentumGainMultiplier);
         }
 
-        //if the player is staying still, decrease momentum
-        else
+        //if the player is staying still and maxMomentum is not active, decrease momentum
+        else if(!maxMomentumActive)
         {
-            animator.SetBool("Runnin", false);
             momentum.SubMomentum(momentumLossRate);
+            animator.SetBool("Runnin", false); 
         }
+
+        else { animator.SetBool("Runnin", false); }
 
         //move based off where we're rotated/looking
         move = transform.right * currInputVect.x + transform.forward * currInputVect.y;
@@ -507,6 +524,19 @@ public class PlayerMovement : MonoBehaviour
             SetDamageMultiplier(3.0f);
             momentumGainMultiplier = 2;
             momentumLossRate = 0.5f;
+        }
+
+        if(pickUp == PowerUps.MaxMomentum)
+        {
+            maxMomentumEnd = timer + duration;
+            //Only store OG momentum amount if we are *not* under the effects of Max Momentum
+            //already!
+            if(!maxMomentumActive) 
+            {
+                ogMomentum = momentum.GetMomentum();
+            }
+            maxMomentumActive = true;
+            momentum.SetMomentum(momentum.GetMaxMomentum());
         }
     }
 

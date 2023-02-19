@@ -30,9 +30,6 @@ public class MomentumManager : MonoBehaviour
             magnitude = magnitudeMax;
         else if(magnitude < magnitudeMax)
             magnitude += (amount * addCoeff);
-
-        //Debug stuff
-        Debug.Log("Momentum add amount = "+amount);
     }
 
     public void SubMomentum(float amount)
@@ -51,5 +48,10 @@ public class MomentumManager : MonoBehaviour
     public void SetMomentum(float amount)
     {
         magnitude = amount;
+    }
+
+    public float GetMaxMomentum()
+    {
+        return magnitudeMax;
     }
 }
