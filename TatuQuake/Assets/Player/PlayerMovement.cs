@@ -37,7 +37,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private GameObject ceilingCheck;
     private float groundDistance;
     private float ceilingDistance;
-    public LayerMask groundMask;
+    [SerializeField] private LayerMask groundMask;
 
     private float momentumLossRate = 1f;
     private float momentumLossDefault = 1f;
@@ -66,6 +66,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isGrounded;
     private bool isOnStair;
     private bool headBonked;
+    
     private bool startedFalling = false;
     private bool isFalling = false;
     private bool isJumping = false;
@@ -84,17 +85,37 @@ public class PlayerMovement : MonoBehaviour
     private float superShellEnd = 0f;
     private float tatuPowerEnd = 0f;
     private float maxMomentumEnd = 0f;
+    private float plumberShoesEnd = 0f;
+    private float overHealEnd = 0f;
 
     private bool superShellActive = false;
     private bool tatuPowerActive = false;
     private bool maxMomentumActive = false;
+    private bool plumberShoesActive = false;
+    private bool overHealActive = false;
     private float ogMomentum = 0f;
+    private float buffedStompDamage = 10;
+    private float ogJumpHeight = 0f;
+
+    //Head stomping stuff
+    private bool isStompingEnemy;
+    [SerializeField] private LayerMask entityMask;
+    private RaycastHit entityHit;
+    private float lastTimeStomped;
+    private float stompCoolDown = 0.25f;
+    [SerializeField] private GameObject entityCheck;
+    private float stompDamage = 1f;
+
+    //overheal stuff
+    private float interval = 1f;
+    private float nextTimeToDecHP = 0;
 
     public enum PowerUps
     {
         SuperShell,
         MaxMomentum,
-        TatuPower
+        TatuPower,
+        PlumberShoes
     }
     private void Awake() 
     {
@@ -142,6 +163,9 @@ public class PlayerMovement : MonoBehaviour
         slideSpeed = 3f;
         groundDistance = controller.radius;
         ceilingDistance = groundDistance/2;
+
+        //layer 11 is the entity layer, layer 7 is the player layer
+        //Physics.IgnoreLayerCollision(7, 11);
     }
 
     private void Update() 
@@ -153,6 +177,7 @@ public class PlayerMovement : MonoBehaviour
             isOnStair = Physics.CheckSphere(groundCheck.transform.position, groundDistance, groundMask);
             isGrounded = controller.isGrounded;
             headBonked = Physics.CheckSphere(ceilingCheck.transform.position, ceilingDistance, groundMask);
+            isStompingEnemy = Physics.CheckSphere(entityCheck.transform.position, groundDistance, entityMask);
 
             if(headBonked && velocity.y > 0)
             {
@@ -171,14 +196,30 @@ public class PlayerMovement : MonoBehaviour
                 isAffectedByForce = false;
             }
 
-            if(!isGrounded && !isOnStair && !startedFalling && !isFalling && velocity.y <= 0f){
+            if(!isGrounded && !isOnStair && !startedFalling && !isFalling && velocity.y <= 0f)
+            {
                 startedFalling = true;
                 isFalling = true;
             }
 
-            if(startedFalling && !isJumping && !isOnStair){
+            if(startedFalling && !isJumping && !isOnStair)
+            {
                 velocity.y = -2f;
                 startedFalling = false;
+            }
+
+            //Stomping stuff
+            if(isStompingEnemy && (lastTimeStomped + stompCoolDown) < timer)
+            {
+                velocity.y = 0f;
+                lastTimeStomped = timer;
+                int layerMask = 1 << 11; //layer 11 is the entity level
+                Collider[] colliders = Physics.OverlapSphere(entityCheck.transform.position, groundDistance, layerMask);
+                //do stomp damage
+                Target target = colliders[0].GetComponent<Target>();
+                if(target != null) target.TakeDamage(stompDamage);
+                Vector3 direction = entityCheck.transform.position - (colliders[0].transform.position);
+                ApplyForce(1.0f, direction, 1);
             }
 
             SpeedLimit();
@@ -218,6 +259,28 @@ public class PlayerMovement : MonoBehaviour
         timer += Time.deltaTime;
 
         //check timers to see if any power ups are active
+
+        //overhealth buff timer
+        if(overHealActive)
+        {
+            if(timer >= overHealEnd)
+            {
+                overHealActive = false;
+                Debug.Log("overHeal ended!");
+
+            }
+        }
+
+        else
+        {
+            Debug.Log("Timer: "+timer);
+            if(health > maxHealth && timer > nextTimeToDecHP)
+            {
+                health--;
+                nextTimeToDecHP = timer + interval;
+            }
+        }
+
         if(superShellActive)
         {
             if(timer >= superShellEnd)
@@ -243,6 +306,16 @@ public class PlayerMovement : MonoBehaviour
             {
                 maxMomentumActive = false;
                 momentum.SetMomentum(ogMomentum + 5);
+            }
+        }
+
+        if(plumberShoesActive)
+        {
+            if(timer >= plumberShoesEnd)
+            {
+                plumberShoesActive = false;
+                baseJumpHeight = ogJumpHeight;
+                stompDamage = 1;
             }
         }
 
@@ -538,6 +611,18 @@ public class PlayerMovement : MonoBehaviour
             maxMomentumActive = true;
             momentum.SetMomentum(momentum.GetMaxMomentum());
         }
+
+        if(pickUp == PowerUps.PlumberShoes)
+        {
+            plumberShoesEnd = timer + duration;
+            if(!plumberShoesActive)
+            {
+                ogJumpHeight = baseJumpHeight;
+                baseJumpHeight *= 1.6f;
+            }
+            plumberShoesActive = true;
+            stompDamage = buffedStompDamage;
+        }
     }
 
     public List<GameObject> GetGuns()
@@ -550,10 +635,21 @@ public class PlayerMovement : MonoBehaviour
         return currGun;
     }
 
-    public void GiveHealth(int rec)
+    public void GiveHealth(int rec, bool overHeal)
     {
-        health += rec;
-        health = Mathf.Clamp(health, 0, maxHealth);
+        if(overHeal)
+        {
+            health += rec;
+            health = Mathf.Clamp(health, 0, maxHealth*3);
+            overHealActive = true;
+            overHealEnd = timer + 5;
+        }
+
+        else
+        {
+            health += rec;
+            health = Mathf.Clamp(health, 0, maxHealth);
+        }
     }
 
     public void GiveArmour(int arm)

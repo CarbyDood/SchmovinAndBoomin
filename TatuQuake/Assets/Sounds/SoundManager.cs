@@ -53,7 +53,8 @@ public class SoundManager : MonoBehaviour
         BigHPPickUp,
         SuperShellPickUp,
         TatuPowerPickUp,
-        MaxMomentumPickUp
+        MaxMomentumPickUp,
+        PlumberShoesPickUp
     }
 
     public static SoundManager instance
@@ -134,7 +135,7 @@ public class SoundManager : MonoBehaviour
                 float lastTimePlayed = soundTimerDict[sound];
                 if (lastTimePlayed + clips[(int)sound].cooldownTime < Time.time)
                 {
-                    soundTimerDict[sound] = Time.time;;
+                    soundTimerDict[sound] = Time.time;
                     return true;
                 }
                 else

@@ -1,0 +1,14 @@
+==================Sounds======================
+Rocket Travel - Attribution 4.0 International (CC BY 4.0) - https://freesound.org/people/CGEffex/sounds/100772/
+Nade Bounce - Attribution 4.0 International (CC BY 4.0) - https://freesound.org/people/jorickhoofd/sounds/160045/ - edits made
+Shotty - Attribution-NonCommercial 3.0 Unported (CC BY-NC 3.0) - https://freesound.org/people/EFlexMusic/sounds/416280/
+Armor Pickup - Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0) - https://opengameart.org/content/metal-clicking-coins
+Cookie Pickup - Attribution-NonCommercial 3.0 Unported (CC BY-NC 3.0) - https://freesound.org/people/Hourofmidnight/sounds/325654/
+Donut Pickup - Attribution 3.0 Unported (CC BY 3.0) - https://freesound.org/people/AndreAngelo/sounds/246188/
+Super Shell - https://freesound.org/people/soneproject/sounds/422351/
+Tatu Power - https://freesound.org/people/pluralz/sounds/475806/
+Max Momentum - Attribution 4.0 International (CC BY 4.0) - https://freesound.org/people/InspectorJ/sounds/393874/ - edits made
+Plumber Shoes - https://freesound.org/people/Rudmer_Rotteveel/sounds/536235/
+
+====================Models======================
+Plumber Boots - Attribution 4.0 International (CC BY 4.0) - https://sketchfab.com/3d-models/dirty-boots-aa68d792189b46319157e6607182becc - edits made

@@ -41,7 +41,7 @@ public class HealthPickUp : MonoBehaviour
             PlayerMovement player = other.transform.GetComponent<PlayerMovement>();
             if(player.GetHealth() < player.GetMaxHealth())
             {
-                player.GiveHealth(recoverAmount);
+                player.GiveHealth(recoverAmount, false);
 
                 SoundManager.instance.PlaySound(soundToPlay);
 
@@ -58,7 +58,7 @@ public class HealthPickUp : MonoBehaviour
             PlayerMovement player = other.transform.GetComponent<PlayerMovement>();
             if(player.GetHealth() < player.GetMaxHealth())
             {
-                player.GiveHealth(recoverAmount);
+                player.GiveHealth(recoverAmount, false);
 
                 SoundManager.instance.PlaySound(soundToPlay);
 
