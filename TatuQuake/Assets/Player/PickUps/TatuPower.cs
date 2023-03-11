@@ -39,6 +39,8 @@ public class TatuPower : MonoBehaviour
             PlayerMovement player = other.transform.GetComponent<PlayerMovement>();
 
             SoundManager.instance.PlaySound(SoundManager.Sound.TatuPowerPickUp);
+            gameManager.ConsoleMessage("Tatu Power activated, dat boi got demaglios!");
+
             gameManager.UpdateStatus(GameManager.Status.TatuPowerActive);
             player.PowerUp(PlayerMovement.PowerUps.TatuPower, duration);
 

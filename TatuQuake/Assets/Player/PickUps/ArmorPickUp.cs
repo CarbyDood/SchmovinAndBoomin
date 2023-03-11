@@ -40,6 +40,7 @@ public class ArmorPickUp : MonoBehaviour
                 player.GiveArmour(50);
 
                 SoundManager.instance.PlaySound(SoundManager.Sound.ArmorPickUp);
+                gameManager.ConsoleMessage("Get equipped with 50 armour");
 
                 if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
                 else Destroy(gameObject);
@@ -57,6 +58,7 @@ public class ArmorPickUp : MonoBehaviour
                 player.GiveArmour(50);
 
                 SoundManager.instance.PlaySound(SoundManager.Sound.ArmorPickUp);
+                gameManager.ConsoleMessage("Get equipped with 50 armour");
 
                 if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
                 else Destroy(gameObject);

@@ -273,7 +273,6 @@ public class PlayerMovement : MonoBehaviour
 
         else
         {
-            Debug.Log("Timer: "+timer);
             if(health > maxHealth && timer > nextTimeToDecHP)
             {
                 health--;

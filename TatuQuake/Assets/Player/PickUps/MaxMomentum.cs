@@ -39,6 +39,7 @@ public class MaxMomentum : MonoBehaviour
             PlayerMovement player = other.transform.GetComponent<PlayerMovement>();
 
             SoundManager.instance.PlaySound(SoundManager.Sound.MaxMomentumPickUp);
+            gameManager.ConsoleMessage("Imbue with the dew... Max Momentum activated!");
             gameManager.UpdateStatus(GameManager.Status.MaxMomentumActive);
             player.PowerUp(PlayerMovement.PowerUps.MaxMomentum, duration);
 

@@ -39,6 +39,7 @@ public class PlumberShoes : MonoBehaviour
             PlayerMovement player = other.transform.GetComponent<PlayerMovement>();
 
             SoundManager.instance.PlaySound(SoundManager.Sound.PlumberShoesPickUp);
+            gameManager.ConsoleMessage("Plumber Shoes activated, go jump on some heads!");
             player.PowerUp(PlayerMovement.PowerUps.PlumberShoes, duration);
 
             if(canRespawn) gameManager.DisableObjectForTime(gameObject, 1);

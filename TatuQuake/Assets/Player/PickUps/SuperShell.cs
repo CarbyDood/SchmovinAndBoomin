@@ -40,6 +40,7 @@ public class SuperShell : MonoBehaviour
 
             player.GiveArmour(player.GetMaxArmour());
             SoundManager.instance.PlaySound(SoundManager.Sound.SuperShellPickUp);
+            gameManager.ConsoleMessage("Super Shell activated, tanky af!");
             gameManager.UpdateStatus(GameManager.Status.SuperShellActive);
             player.PowerUp(PlayerMovement.PowerUps.SuperShell, duration);
 

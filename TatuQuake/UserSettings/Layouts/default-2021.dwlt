@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 997
   m_ShowMode: 4
-  m_Title: Scene
+  m_Title: Game
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 421}
   m_MaxSize: {x: 10000, y: 10000}
@@ -118,7 +118,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 1
-  controlID: 123
+  controlID: 56
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -143,7 +143,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 124
+  controlID: 57
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -168,7 +168,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 21
+  controlID: 95
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -193,7 +193,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 22
+  controlID: 96
 --- !u!114 &9
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -428,9 +428,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
-      m_LastClickedID: 0
-      m_ExpandedIDs: 10fbffff8e760000
+      m_SelectedIDs: 80780000
+      m_LastClickedID: 30848
+      m_ExpandedIDs: 10fbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -690,9 +690,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 3.1888037, y: 2.1143048, z: 6.5577855}
+    m_Target: {x: 0.30872083, y: -2.2141643, z: 23.222082}
     speed: 2
-    m_Value: {x: 3.1888037, y: 2.1143048, z: 6.5577855}
+    m_Value: {x: 0.30872083, y: -2.2141643, z: 23.222082}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -739,13 +739,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.119557634, y: 0.6448622, z: -0.101398334, w: 0.74728644}
+    m_Target: {x: -0.15653774, y: 0.044372205, z: -0.008425556, w: -0.98604244}
     speed: 2
-    m_Value: {x: 0.1241143, y: 0.6446106, z: -0.105320655, w: 0.74698085}
+    m_Value: {x: -0.15662989, y: 0.044398326, z: -0.008430516, w: -0.9866229}
   m_Size:
-    m_Target: 3.1177092
+    m_Target: 10
     speed: 2
-    m_Value: 3.1177092
+    m_Value: 10
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -822,9 +822,9 @@ MonoBehaviour:
     m_SearchString: 
   m_ActionsTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: c25d5e4e
-    m_LastClickedID: 1314807234
-    m_ExpandedIDs: 0a3c03b316a7f9d774f0e5ea58bf58371242f352bfd62c62
+    m_SelectedIDs: 2310e8b3
+    m_LastClickedID: -1276637149
+    m_ExpandedIDs: 6003a6be16a7f9d7a4809ee174f0e5ea58bf5837
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -984,6 +984,10 @@ MonoBehaviour:
       \"type\": \"Value\",\n                    \"id\": \"86663419-5485-406d-8b78-04a9055afc3d\",\n                   
       \"expectedControlType\": \"Axis\",\n                    \"processors\": \"\",\n                   
       \"interactions\": \"\",\n                    \"initialStateCheck\": true\n               
+      },\n                {\n                    \"name\": \"Console\",\n                   
+      \"type\": \"Button\",\n                    \"id\": \"a6547ec6-c96e-4d1f-a672-a595aa45709f\",\n                   
+      \"expectedControlType\": \"Button\",\n                    \"processors\": \"\",\n                   
+      \"interactions\": \"\",\n                    \"initialStateCheck\": false\n               
       }\n            ],\n            \"bindings\": [\n                {\n                   
       \"name\": \"\",\n                    \"id\": \"87eec594-7580-4eac-a226-335a6ee6f082\",\n                   
       \"path\": \"<Keyboard>/space\",\n                    \"interactions\": \"\",\n                   
@@ -1089,8 +1093,13 @@ MonoBehaviour:
       \"path\": \"<Mouse>/delta/y\",\n                    \"interactions\": \"\",\n                   
       \"processors\": \"\",\n                    \"groups\": \"\",\n                   
       \"action\": \"LookYNormalize\",\n                    \"isComposite\": false,\n                   
-      \"isPartOfComposite\": false\n                }\n            ]\n        }\n   
-      ],\n    \"controlSchemes\": []\n}"
+      \"isPartOfComposite\": false\n                },\n                {\n                   
+      \"name\": \"\",\n                    \"id\": \"f2fe5a14-a46e-4bec-9e46-9ba0c7a861aa\",\n                   
+      \"path\": \"<Keyboard>/backquote\",\n                    \"interactions\":
+      \"\",\n                    \"processors\": \"\",\n                    \"groups\":
+      \"\",\n                    \"action\": \"Console\",\n                    \"isComposite\":
+      false,\n                    \"isPartOfComposite\": false\n                }\n           
+      ]\n        }\n    ],\n    \"controlSchemes\": []\n}"
     m_IsDirty: 0
   m_Toolbar:
     m_IsDirty: 0
@@ -1555,7 +1564,7 @@ MonoBehaviour:
     m_SaveData: []
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: -5332
+  m_LastSelectedObjectID: 30848
 --- !u!114 &21
 MonoBehaviour:
   m_ObjectHideFlags: 52

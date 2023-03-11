@@ -43,6 +43,17 @@ public class WeaponPickUps : MonoBehaviour
         {
             SoundManager.instance.PlaySound(SoundManager.Sound.WeaponPickUp);
             gameManager.AddWeapon(gunItGives);
+            
+            //console messages
+            if(gunItGives == 0) gameManager.ConsoleMessage("You picked up the Pistol");
+            if(gunItGives == 1) gameManager.ConsoleMessage("You picked up the SMG");
+            if(gunItGives == 2) gameManager.ConsoleMessage("You picked up the Shotty");
+            if(gunItGives == 3) gameManager.ConsoleMessage("You picked up the LMG");
+            if(gunItGives == 4) gameManager.ConsoleMessage("You picked up the Nade Launcher");
+            if(gunItGives == 5) gameManager.ConsoleMessage("You picked up the Super Shotty");
+            if(gunItGives == 6) gameManager.ConsoleMessage("You picked up the Sniper");
+            if(gunItGives == 7) gameManager.ConsoleMessage("You picked up the Rocket Launcher!");
+
             if(gunItGives == 0) pistolRef.IncreaseAmmo(ref pistolRef.currentAmmo, 20, pistolRef.GetMaxAmmo());
             if(gunItGives == 6) pistolRef.IncreaseAmmo(ref sniperRef.currentAmmo, 3, sniperRef.GetMaxAmmo());
             if(gunItGives == 1 || gunItGives == 3) pistolRef.IncreaseAmmo(ref gameManager.currAutoAmmo, 20, gameManager.maxAutoAmmo);

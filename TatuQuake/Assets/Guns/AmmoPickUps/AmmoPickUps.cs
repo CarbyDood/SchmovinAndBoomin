@@ -58,6 +58,7 @@ public class AmmoPickUps : MonoBehaviour
                 {
                     SoundManager.instance.PlaySound(SoundManager.Sound.AmmoPickUp);
                     pistolRef.IncreaseAmmo(ref pistolRef.currentAmmo, amount, pistolRef.GetMaxAmmo());
+                    gameManager.ConsoleMessage("You found "+amount+ " pistol bullets");
                     if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
                     else Destroy(gameObject);
                 }
@@ -68,6 +69,7 @@ public class AmmoPickUps : MonoBehaviour
                 {
                     SoundManager.instance.PlaySound(SoundManager.Sound.AmmoPickUp);
                     sniperRef.IncreaseAmmo(ref sniperRef.currentAmmo, amount, sniperRef.GetMaxAmmo());
+                    gameManager.ConsoleMessage("You found "+amount+ " sniper bullets");
                     if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
                     else Destroy(gameObject);
                 }
@@ -78,6 +80,7 @@ public class AmmoPickUps : MonoBehaviour
                 {
                     SoundManager.instance.PlaySound(SoundManager.Sound.AmmoPickUp);
                     autoRef.IncreaseAmmo(ref gameManager.currAutoAmmo, amount, gameManager.maxAutoAmmo);
+                    gameManager.ConsoleMessage("You found "+amount+ " auto slugs");
                     if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
                     else Destroy(gameObject);
                 }
@@ -88,6 +91,7 @@ public class AmmoPickUps : MonoBehaviour
                 {
                     SoundManager.instance.PlaySound(SoundManager.Sound.AmmoPickUp);
                     shellRef.IncreaseAmmo(ref gameManager.currShellAmmo, amount, gameManager.maxShellAmmo);
+                    gameManager.ConsoleMessage("You found a pocket full of shells! ("+amount+")");
                     if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
                     else Destroy(gameObject);
                 }
@@ -98,6 +102,7 @@ public class AmmoPickUps : MonoBehaviour
                 {
                     SoundManager.instance.PlaySound(SoundManager.Sound.AmmoPickUp);
                     explosiveRef.IncreaseAmmo(ref gameManager.currExplosiveAmmo, amount, gameManager.maxExplosiveAmmo);
+                    gameManager.ConsoleMessage("You found "+amount+" boomlas!");
                     if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
                     else Destroy(gameObject);
                 }
@@ -116,6 +121,7 @@ public class AmmoPickUps : MonoBehaviour
                 {
                     SoundManager.instance.PlaySound(SoundManager.Sound.AmmoPickUp);
                     pistolRef.IncreaseAmmo(ref pistolRef.currentAmmo, amount, pistolRef.GetMaxAmmo());
+                    gameManager.ConsoleMessage("You found "+amount+" pistol bullets");
                     if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
                     else Destroy(gameObject);
                 }
@@ -123,6 +129,7 @@ public class AmmoPickUps : MonoBehaviour
                 {
                     SoundManager.instance.PlaySound(SoundManager.Sound.AmmoPickUp);
                     sniperRef.IncreaseAmmo(ref sniperRef.currentAmmo, amount, sniperRef.GetMaxAmmo());
+                    gameManager.ConsoleMessage("You found "+amount+" sniper bullets");
                     if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
                     else Destroy(gameObject);
                 }
@@ -130,6 +137,7 @@ public class AmmoPickUps : MonoBehaviour
                 {
                     SoundManager.instance.PlaySound(SoundManager.Sound.AmmoPickUp);
                     autoRef.IncreaseAmmo(ref gameManager.currAutoAmmo, amount, gameManager.maxAutoAmmo);
+                    gameManager.ConsoleMessage("You found "+amount+" auto slugs");
                     if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
                     else Destroy(gameObject);
                 }
@@ -137,13 +145,15 @@ public class AmmoPickUps : MonoBehaviour
                 {
                     SoundManager.instance.PlaySound(SoundManager.Sound.AmmoPickUp);
                     shellRef.IncreaseAmmo(ref gameManager.currShellAmmo, amount, gameManager.maxShellAmmo);
+                    gameManager.ConsoleMessage("You found a pocket full of shells! ("+amount+")");
                     if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
                     else Destroy(gameObject);
                 }
-                else if(ammoType == "auto")
+                else if(ammoType == "explosive")
                 {
                     SoundManager.instance.PlaySound(SoundManager.Sound.AmmoPickUp);
                     explosiveRef.IncreaseAmmo(ref gameManager.currExplosiveAmmo, amount, gameManager.maxExplosiveAmmo);
+                    gameManager.ConsoleMessage("You found "+amount+" boomlas!");
                     if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
                     else Destroy(gameObject);
                 }

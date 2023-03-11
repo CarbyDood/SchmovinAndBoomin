@@ -42,6 +42,7 @@ public class MegaHealthPickUp : MonoBehaviour
             player.GiveHealth(recoverAmount, true);
 
             SoundManager.instance.PlaySound(soundToPlay);
+            gameManager.ConsoleMessage("Candy, chocolately goodness! Charged with 100 health!");
 
             if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
             else Destroy(gameObject);
@@ -56,6 +57,7 @@ public class MegaHealthPickUp : MonoBehaviour
             player.GiveHealth(recoverAmount, true);
 
             SoundManager.instance.PlaySound(soundToPlay);
+            gameManager.ConsoleMessage("Candy, chocolately goodness! Charged with 100 health!");
 
             if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
             else Destroy(gameObject);

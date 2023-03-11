@@ -44,6 +44,7 @@ public class HealthPickUp : MonoBehaviour
                 player.GiveHealth(recoverAmount, false);
 
                 SoundManager.instance.PlaySound(soundToPlay);
+                gameManager.ConsoleMessage("Recovered "+recoverAmount+" health, DELICIOUS!");
 
                 if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
                 else Destroy(gameObject);
@@ -61,6 +62,7 @@ public class HealthPickUp : MonoBehaviour
                 player.GiveHealth(recoverAmount, false);
 
                 SoundManager.instance.PlaySound(soundToPlay);
+                gameManager.ConsoleMessage("Recovered "+recoverAmount+" health, DELICIOUS!");
 
                 if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
                 else Destroy(gameObject);

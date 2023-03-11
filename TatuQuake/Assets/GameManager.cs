@@ -1,11 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private List<bool> gunInventory;
+    [SerializeField] private List<Message> msgList = new List<Message>();
+    private int maxMsgs = 8;
+    [SerializeField] GameObject consolePanel, textObj;
     [SerializeField] private PlayerMovement player;
     [SerializeField] private GameObject playerObj;
     [SerializeField] private TextMeshProUGUI ammoCount;
@@ -17,7 +22,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] public GameObject ScoreBoard;
     [SerializeField] private Camera playerFpCam;
     [SerializeField] public Transform spawnPoint;
-
 
     //shared ammo pools
     public int maxAutoAmmo = 200;
@@ -66,6 +70,12 @@ public class GameManager : MonoBehaviour
         health.text = ("Health: "+player.GetHealth()+"%").ToString();
         armour.text = ("Armour: "+player.GetArmour()).ToString();
 
+        //Make sure msgList is empty
+        if(msgList.Count > 0)
+        {
+            if(msgList[0].textObj == null)
+                msgList.Remove(msgList[0]);
+        }
     }
 
     private void GiveAllWeapons()
@@ -87,7 +97,9 @@ public class GameManager : MonoBehaviour
     public void AddWeapon(int index)
     {
         if(index < gunInventory.Count && index >= 0)
+        {
             gunInventory[index] = true;
+        }
     }
     
     public bool HasWeapon(int index)
@@ -180,6 +192,27 @@ public class GameManager : MonoBehaviour
         return -1;
     }
 
+    //Console Messages to alert the player of things like what pick up they picked up
+    public void ConsoleMessage(string msg)
+    {
+        //List should not hold more than 8 messages at any time
+        if(msgList.Count >= maxMsgs)
+        {
+            Destroy(msgList[0].textObj.gameObject);
+            msgList.Remove(msgList[0]);
+        }
+
+        //Pop up a text box in the top right that stays for 5 seconds
+        Message daMsg = new Message();
+        daMsg.text = msg;
+        GameObject newText = Instantiate(textObj, consolePanel.transform);
+        daMsg.textObj = newText.GetComponent<TextMeshProUGUI>();
+        daMsg.textObj.text = daMsg.text;
+        msgList.Add(daMsg);
+
+        Destroy(msgList.Last().textObj.gameObject, 3);
+    }
+
     //helper method to disable all status icons
     public void DisableAllStatusIcon()
     {
@@ -198,5 +231,12 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(time);
         obj.SetActive(true);
     }
+}
 
+[System.Serializable]
+public class Message
+{
+    public TextMeshProUGUI textObj;
+    public string text;
+    public float timeAdded;
 }
