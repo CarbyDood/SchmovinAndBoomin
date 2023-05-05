@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PistolDrone : MonoBehaviour
+public class PracticeDrone : MonoBehaviour
 {
     private float zRot = 0f;
     private float maxRot = 15f;

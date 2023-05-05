@@ -77,6 +77,12 @@ public class Rocket : MonoBehaviour
             }
 
             //Damage
+            EnemyBase enemy = nearbyObj.GetComponent<EnemyBase>();
+            if(enemy != null)
+            {
+                enemy.TakeDamage(damage);
+            }
+
             Target target = nearbyObj.GetComponent<Target>();
             if(target != null)
             {

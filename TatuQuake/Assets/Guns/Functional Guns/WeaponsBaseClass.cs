@@ -70,6 +70,12 @@ public class WeaponsBaseClass : MonoBehaviour
             StartCoroutine(SpawnTrail(worldViewTrail, hit.point));
             StartCoroutine(SpawnTrail(trail, hit.point));
 
+            EnemyBase enemy = hit.transform.GetComponent<EnemyBase>();
+            if(enemy != null)
+            {
+                enemy.TakeDamage(damage);
+            }
+
             Target target = hit.transform.GetComponent<Target>();
             if(target != null)
             {

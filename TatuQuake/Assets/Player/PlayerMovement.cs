@@ -7,8 +7,10 @@ using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {   
+    [SerializeField] private bool isInvinc = false;
     [SerializeField] private MomentumManager momentum;
     private CharacterController controller;
+    private CapsuleCollider capCollider;
     private PlayerInput playerInput;
     [SerializeField] private GameManager gameManager;
     [SerializeField] private Animator animator;
@@ -72,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isJumping = false;
     private bool isAffectedByForce = false;
 
-    private int health = 100;
+    [SerializeField] private int health = 100;
     private int maxHealth = 100;
     private int armour = 0;
     private int maxArmour = 100;
@@ -120,6 +122,7 @@ public class PlayerMovement : MonoBehaviour
     private void Awake() 
     {
         controller = GetComponent<CharacterController>();
+        capCollider = GetComponent<CapsuleCollider>();
         playerInput = GetComponent<PlayerInput>();
 
         jumpin = playerInput.actions["Jump"];
@@ -218,6 +221,9 @@ public class PlayerMovement : MonoBehaviour
                 //do stomp damage
                 Target target = colliders[0].GetComponent<Target>();
                 if(target != null) target.TakeDamage(stompDamage);
+                EnemyBase enemy = colliders[0].GetComponent<EnemyBase>();
+                if(enemy != null) enemy.TakeDamage(stompDamage);
+
                 Vector3 direction = entityCheck.transform.position - (colliders[0].transform.position);
                 ApplyForce(1.0f, direction, 1);
             }
@@ -660,6 +666,12 @@ public class PlayerMovement : MonoBehaviour
     //if damage taken ends up doing less then 1 damage, round it up to 1
     public void TakeDamage(int dmg)
     {
+        if(isInvinc)
+        {
+            health += 0;
+            return;
+        }
+
         if(armour > 0)
         {
             if(superShellActive)
@@ -742,6 +754,8 @@ public class PlayerMovement : MonoBehaviour
         isDed = true;
         //Disable CharacterController
         controller.enabled = false;
+        //Disable Collider
+        capCollider.enabled = false;
         //Disable UnityModel
         gameObject.transform.GetChild(0).gameObject.SetActive(false);
         //Disable GroundChecker
@@ -751,6 +765,8 @@ public class PlayerMovement : MonoBehaviour
         //Disable CeilingChecker
         gameObject.transform.GetChild(3).gameObject.SetActive(false);
         //*Enable* Death Cam
+        gameObject.transform.GetChild(4).gameObject.SetActive(true);
+        //Disable Capsule Collider
         gameObject.transform.GetChild(4).gameObject.SetActive(true);
     }
 }
