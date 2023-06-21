@@ -85,7 +85,7 @@ public class PistolDrone : EnemyBase
         }
     }
 
-    private new void Attack()
+    protected override void Attack()
     {
         SoundManager.instance.PlaySound(SoundManager.Sound.PistolShot);
         RaycastHit hit;

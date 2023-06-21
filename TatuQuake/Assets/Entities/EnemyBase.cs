@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyBase : MonoBehaviour
+public abstract class EnemyBase : MonoBehaviour
 {
     public NavMeshAgent agent;
 
@@ -96,11 +96,9 @@ public class EnemyBase : MonoBehaviour
         }
     }
 
-    protected void Attack()
-    {
-        //Default fall through method!! doesn't do anything, make an attack() method override for every enemy!
-    }
-
+    //abstract method!! doesn't do anything, make an attack() method override for every enemy!
+    protected abstract void Attack();
+        
     protected void ResetAttack()
     {
         alreadyAttacked = false;

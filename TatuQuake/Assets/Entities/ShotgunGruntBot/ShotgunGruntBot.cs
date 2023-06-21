@@ -33,6 +33,7 @@ public class ShotgunGruntBot : EnemyBase
 
     private new void Killin()
     {
+        //look at player but not on the y axis
         agent.SetDestination(transform.position);
         Vector3 lookPos = player.position - transform.position;
         lookPos.y = 0;
@@ -47,7 +48,7 @@ public class ShotgunGruntBot : EnemyBase
         }
     }
 
-    private new void Attack()
+    protected override void Attack()
     {
         SoundManager.instance.PlaySound(SoundManager.Sound.ShotgunShot);
         int pelletCount = 8;
