@@ -6,6 +6,7 @@ public class RoboDog : EnemyBase
 {
     //[SerializeField] float impactForce = 30f;
     [SerializeField] private GameObject attackSphere;
+    [SerializeField] private Animator animator;
     [SerializeField] private float attackArea = 1f;
     private float timePassed = 0f;
     private bool jumped = false;
@@ -61,6 +62,7 @@ public class RoboDog : EnemyBase
                 jumpPos = player.position;
                 jumpPos.y = startPos.y;
                 timePassed = 0f;
+                animator.SetBool("Jumping",true);
             }
         }
 
@@ -75,6 +77,7 @@ public class RoboDog : EnemyBase
             jumped = true;
             agent.enabled = true;
             jumping = false;
+            animator.SetBool("Jumping",false);
             agent.SetDestination(player.position);
         }
 

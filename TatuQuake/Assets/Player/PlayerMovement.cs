@@ -221,7 +221,7 @@ public class PlayerMovement : MonoBehaviour
                 //do stomp damage
                 Target target = colliders[0].GetComponent<Target>();
                 if(target != null) target.TakeDamage(stompDamage);
-                EnemyBase enemy = colliders[0].GetComponent<EnemyBase>();
+                EnemyBase enemy = colliders[0].GetComponentInParent<EnemyBase>();
                 if(enemy != null) enemy.TakeDamage(stompDamage);
 
                 Vector3 direction = entityCheck.transform.position - (colliders[0].transform.position);
@@ -574,7 +574,7 @@ public class PlayerMovement : MonoBehaviour
         isAffectedByForce = true;
         isJumping = true;
         float height = (force * percentage) / 100;
-        velocity += direction * (2.5f * percentage);
+        velocity += direction * percentage;
         velocity.y += Mathf.Sqrt(height * -2f * gravity);
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);

@@ -35,9 +35,15 @@ public class Nade : MonoBehaviour
     private void OnCollisionEnter(Collision other) 
     {
         //only exploding if we touch something that is *not* the world
-        //world (or ground) layer is 6
+        //world (or ground) layer is 6, 12 is NavMeshGround
         if(other.gameObject.layer != 6)
-            Explode();
+        {
+            if(other.gameObject.layer != 12)
+                Explode();
+            else
+                SoundManager.instance.PlaySound(SoundManager.Sound.NadeBounce, transform.position);
+        }
+
         else
             SoundManager.instance.PlaySound(SoundManager.Sound.NadeBounce, transform.position);
     }
@@ -86,7 +92,7 @@ public class Nade : MonoBehaviour
             }
 
             //Damage
-            EnemyBase enemy = nearbyObj.GetComponent<EnemyBase>();
+            EnemyBase enemy = nearbyObj.GetComponentInParent<EnemyBase>();
             if(enemy != null)
             {
                 enemy.TakeDamage(damage);

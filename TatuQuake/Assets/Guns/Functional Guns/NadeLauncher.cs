@@ -24,7 +24,7 @@ public class NadeLauncher : WeaponsBaseClass
         damage = 80f;
         range = 10000f;
         fireRate = 0.8f;
-        impactForce = 450f;
+        impactForce = 400f;
         recoilX = -10f;
         recoilY = 5f;
         recoilZ = 1f;

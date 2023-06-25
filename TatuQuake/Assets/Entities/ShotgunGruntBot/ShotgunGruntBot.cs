@@ -74,7 +74,7 @@ public class ShotgunGruntBot : EnemyBase
                 TrailRenderer entityViewTrail = Instantiate(entityTrail, transform.position, Quaternion.identity);
                 StartCoroutine(SpawnTrail(entityViewTrail, hit.point));
 
-                EnemyBase enemy = hit.transform.GetComponent<EnemyBase>();
+                EnemyBase enemy = hit.transform.GetComponentInParent<EnemyBase>();
                 if(enemy != null)
                 {
                     enemy.TakeDamage(damage);

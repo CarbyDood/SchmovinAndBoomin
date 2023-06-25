@@ -101,7 +101,7 @@ public class Sniper : WeaponsBaseClass
             StartCoroutine(SpawnTrail(worldViewTrail, hit.point));
             StartCoroutine(SpawnTrail(trail, hit.point));
 
-            EnemyBase enemy = hit.transform.GetComponent<EnemyBase>();
+            EnemyBase enemy = hit.transform.GetComponentInParent<EnemyBase>();
             if(enemy != null)
             {
                 enemy.TakeDamage(damage);
