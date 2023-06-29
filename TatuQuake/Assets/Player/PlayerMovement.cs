@@ -10,7 +10,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private bool isInvinc = false;
     [SerializeField] private MomentumManager momentum;
     private CharacterController controller;
-    private CapsuleCollider capCollider;
     private PlayerInput playerInput;
     [SerializeField] private GameManager gameManager;
     [SerializeField] private Animator animator;
@@ -119,10 +118,13 @@ public class PlayerMovement : MonoBehaviour
         TatuPower,
         PlumberShoes
     }
+
+    //object to properly set direction for other object to aim at the player
+    [SerializeField] private GameObject playerTarget;
+
     private void Awake() 
     {
         controller = GetComponent<CharacterController>();
-        capCollider = GetComponent<CapsuleCollider>();
         playerInput = GetComponent<PlayerInput>();
 
         jumpin = playerInput.actions["Jump"];
@@ -742,6 +744,11 @@ public class PlayerMovement : MonoBehaviour
         return damageMultiplier;
     }
 
+    public Vector3 GetAimLocation()
+    {
+        return playerTarget.transform.position;
+    }
+
     public void Die()
     {
         int rando = Random.Range(0, 3);
@@ -754,8 +761,6 @@ public class PlayerMovement : MonoBehaviour
         isDed = true;
         //Disable CharacterController
         controller.enabled = false;
-        //Disable Collider
-        capCollider.enabled = false;
         //Disable UnityModel
         gameObject.transform.GetChild(0).gameObject.SetActive(false);
         //Disable GroundChecker

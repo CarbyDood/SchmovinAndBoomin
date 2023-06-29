@@ -31,6 +31,7 @@ public class PistolDrone : EnemyBase
 
     private new void Update() 
     {
+        playerPos = player.GetComponent<PlayerMovement>().GetAimLocation();
         //hover up and down
         Vector3 pos = transform.position;
         float newY = Mathf.Sin(Time.time * bobSpeed) * bobHeight;
@@ -74,7 +75,7 @@ public class PistolDrone : EnemyBase
             agent.baseOffset = maxOffset;
         }
 
-        transform.LookAt(player.position);
+        transform.LookAt(playerPos);
         
         if(!alreadyAttacked)
         {

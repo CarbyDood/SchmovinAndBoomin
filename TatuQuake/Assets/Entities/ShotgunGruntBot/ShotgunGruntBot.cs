@@ -11,6 +11,7 @@ public class ShotgunGruntBot : EnemyBase
 
     private new void Update() 
     {
+        playerPos = player.GetComponent<PlayerMovement>().GetAimLocation();
         //Check for sight and attack ranges
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, playerMask);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerMask);
@@ -35,7 +36,7 @@ public class ShotgunGruntBot : EnemyBase
     {
         //look at player but not on the y axis
         agent.SetDestination(transform.position);
-        Vector3 lookPos = player.position - transform.position;
+        Vector3 lookPos = playerPos - transform.position;
         lookPos.y = 0;
         transform.rotation = Quaternion.LookRotation(lookPos);
         

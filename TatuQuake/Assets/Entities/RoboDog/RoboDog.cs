@@ -14,12 +14,15 @@ public class RoboDog : EnemyBase
     private float jumpTime = 0.8f;
     private Vector3 startPos;
     private Vector3 jumpPos;
+    private bool playerInBiteRange;
 
     private new void Update() 
     {
+        playerPos = player.GetComponent<PlayerMovement>().GetAimLocation();
         //Check for sight and attack ranges
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, playerMask);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerMask);
+        playerInBiteRange = Physics.CheckSphere(attackSphere.transform.position, attackArea, playerMask);
 
         if(jumping == false)
         {
@@ -50,7 +53,7 @@ public class RoboDog : EnemyBase
         if(jumped == false && jumping == false)
         {
             //look at player but not on the y axis, and only when not jumping!
-            Vector3 lookPos = player.position - transform.position;
+            Vector3 lookPos = playerPos - transform.position;
             lookPos.y = 0;
             transform.rotation = Quaternion.LookRotation(lookPos);
 
@@ -59,7 +62,7 @@ public class RoboDog : EnemyBase
             {
                 jumping = true;
                 startPos = transform.position;
-                jumpPos = player.position;
+                jumpPos = playerPos;
                 jumpPos.y = startPos.y;
                 timePassed = 0f;
                 animator.SetBool("Jumping",true);
@@ -78,13 +81,14 @@ public class RoboDog : EnemyBase
             agent.enabled = true;
             jumping = false;
             animator.SetBool("Jumping",false);
-            agent.SetDestination(player.position);
+            agent.SetDestination(playerPos);
         }
 
         timePassed += Time.deltaTime;
 
-        if(!alreadyAttacked)
+        if(!alreadyAttacked && playerInBiteRange)
         {
+            Debug.Log("Attack!!!");
             Attack();
 
             alreadyAttacked = true;

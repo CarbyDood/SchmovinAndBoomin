@@ -8,6 +8,7 @@ public abstract class EnemyBase : MonoBehaviour
     public NavMeshAgent agent;
 
     public Transform player;
+    protected Vector3 playerPos;
 
     public LayerMask groundMask, playerMask;
 
@@ -36,6 +37,8 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected void Update() 
     {
+        playerPos = player.GetComponent<PlayerMovement>().GetAimLocation();
+        
         //Check for sight and attack ranges
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, playerMask);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerMask);
@@ -77,7 +80,7 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected void Huntin()
     {
-        agent.SetDestination(player.position);
+        agent.SetDestination(playerPos);
     }
 
     protected void Killin()

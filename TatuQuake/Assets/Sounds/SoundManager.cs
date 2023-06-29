@@ -54,7 +54,9 @@ public class SoundManager : MonoBehaviour
         SuperShellPickUp,
         TatuPowerPickUp,
         MaxMomentumPickUp,
-        PlumberShoesPickUp
+        PlumberShoesPickUp,
+        SawAttack,
+        LightingAttack
     }
 
     public static SoundManager instance
@@ -88,6 +90,7 @@ public class SoundManager : MonoBehaviour
             audioSource.spatialBlend = 1f;
             audioSource.rolloffMode = AudioRolloffMode.Linear;
             audioSource.dopplerLevel = 0f;
+            audioSource.volume = clips[(int)sound].volume;
             audioSource.Play();
 
             Object.Destroy(soundGameObject, audioSource.clip.length);
@@ -102,7 +105,7 @@ public class SoundManager : MonoBehaviour
                 oneShotGO = new GameObject("Sound");
                 oneShotSrc = oneShotGO.AddComponent<AudioSource>();
             }
-            oneShotSrc.PlayOneShot(GetAudioClip(sound));
+            oneShotSrc.PlayOneShot(GetAudioClip(sound), clips[(int)sound].volume);
         }
     }
 
@@ -119,6 +122,7 @@ public class SoundManager : MonoBehaviour
             audioSource.spatialBlend = 1f;
             audioSource.rolloffMode = AudioRolloffMode.Linear;
             audioSource.dopplerLevel = 0f;
+            audioSource.volume = clips[(int)sound].volume;
             audioSource.Play();
 
             Object.Destroy(soundGameObject, audioSource.clip.length);

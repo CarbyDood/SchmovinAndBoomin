@@ -28,6 +28,7 @@ public class NadeSawBot : EnemyBase
     // Update is called once per frame
     private new void Update() 
     {
+        playerPos = player.GetComponent<PlayerMovement>().GetAimLocation();
         //Check for sight and attack ranges
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, playerMask);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerMask);
@@ -63,7 +64,7 @@ public class NadeSawBot : EnemyBase
     private new void Killin()
     {
         //look at player but not on the y axis
-        Vector3 lookPos = player.position - transform.position;
+        Vector3 lookPos = playerPos - transform.position;
         lookPos.y = 0;
         transform.rotation = Quaternion.LookRotation(lookPos);
         
@@ -80,7 +81,7 @@ public class NadeSawBot : EnemyBase
 
         else if (timePassed >= standTime)
         {
-            agent.SetDestination(player.position);
+            agent.SetDestination(playerPos);
         }
         timePassed += Time.deltaTime;
     }
@@ -94,7 +95,7 @@ public class NadeSawBot : EnemyBase
         }
 
         //look at player but not on the y axis
-        Vector3 lookPos = player.position - transform.position;
+        Vector3 lookPos = playerPos - transform.position;
         lookPos.y = 0;
         transform.rotation = Quaternion.LookRotation(lookPos);
 
@@ -103,6 +104,7 @@ public class NadeSawBot : EnemyBase
             //attack should hit 3 times in intervals of 0.4 seconds
             if(timePassed > (hits * (0.33f)) + standTime && hits < 3)
             {
+                if(hits == 0) SoundManager.instance.PlaySound(SoundManager.Sound.SawAttack);
                 MeleeAttack();
                 hits++;
             }
