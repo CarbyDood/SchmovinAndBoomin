@@ -88,7 +88,6 @@ public class RoboDog : EnemyBase
 
         if(!alreadyAttacked && playerInBiteRange)
         {
-            Debug.Log("Attack!!!");
             Attack();
 
             alreadyAttacked = true;

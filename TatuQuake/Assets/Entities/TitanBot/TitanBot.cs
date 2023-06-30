@@ -9,9 +9,8 @@ public class TitanBot : EnemyBase
     [SerializeField] protected ParticleSystem lightingAttackEffect;
     [SerializeField] protected GameObject impactEffect;
     [SerializeField] protected float attackDelay = 1f;
-    [SerializeField] protected float hitInterval = 0.3f;
     private float timePassed = 0f;
-
+    private bool justAttacked = false;
 
     private new void Update() 
     {
@@ -24,19 +23,22 @@ public class TitanBot : EnemyBase
         {
             Vibin();
             lightingAttackEffect.Stop();
+            timePassed = 0f;
+            justAttacked = false;
         }
 
         if(playerInSightRange && !playerInAttackRange)
         {
             Huntin();
             lightingAttackEffect.Stop();
+            timePassed = 0f;
+            justAttacked = false;
         }
 
         if(playerInSightRange && playerInAttackRange)
         {
             Killin();
         }
-        timePassed += Time.deltaTime;
     }
 
     private new void Killin()
@@ -53,13 +55,18 @@ public class TitanBot : EnemyBase
 
             alreadyAttacked = true;
             Invoke(nameof(ResetAttack), timeBetweenAttacks);
-            timePassed = 0f;
         }
+        timePassed += Time.deltaTime;
     }
 
     protected override void Attack()
     {
-        SoundManager.instance.PlaySound(SoundManager.Sound.LightingAttack);
+        if(justAttacked == false)
+        {
+            SoundManager.instance.PlaySound(SoundManager.Sound.LightingAttack);
+            justAttacked = true;
+        }
+        
         RaycastHit hit;
         Vector3 direction = playerPos - transform.position;
         if(Physics.Raycast(transform.position, direction, out hit, range))
@@ -94,5 +101,17 @@ public class TitanBot : EnemyBase
 
             Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
         }
+    }
+
+    protected override void Die()
+    {
+        lightingAttackEffect.Stop();
+        Debug.Log("Enemy "+gameObject.name+" died!");
+        agent.enabled = false;
+        Rigidbody rb = gameObject.GetComponent<Rigidbody>();
+        if(rb == null)
+            rb = gameObject.AddComponent(typeof(Rigidbody)) as Rigidbody;
+        Destroy(gameObject, 5f);
+        this.enabled = false;
     }
 }

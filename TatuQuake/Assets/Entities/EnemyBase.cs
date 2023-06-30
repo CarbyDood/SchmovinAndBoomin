@@ -117,7 +117,7 @@ public abstract class EnemyBase : MonoBehaviour
         }
     }
 
-    protected void Die()
+    protected virtual void Die()
     {
         Debug.Log("Enemy "+gameObject.name+" died!");
         agent.enabled = false;
