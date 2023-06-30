@@ -53,6 +53,7 @@ public class ShotgunGruntBot : EnemyBase
     {
         SoundManager.instance.PlaySound(SoundManager.Sound.ShotgunShot);
         int pelletCount = 8;
+        Vector3 direction = playerPos - transform.position;
         for(int i = 0; i < pelletCount; i++)
         {
             RaycastHit hit;
@@ -69,7 +70,7 @@ public class ShotgunGruntBot : EnemyBase
                 rando.z = Random.Range(-spreadRange, spreadRange);
             }
 
-            if(Physics.Raycast(transform.position, transform.forward + rando, out hit, range))
+            if(Physics.Raycast(transform.position, direction + rando, out hit, range))
             {
                 //spawn bullet trail
                 TrailRenderer entityViewTrail = Instantiate(entityTrail, transform.position, Quaternion.identity);

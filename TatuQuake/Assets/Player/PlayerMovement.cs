@@ -119,6 +119,9 @@ public class PlayerMovement : MonoBehaviour
         PlumberShoes
     }
 
+    [SerializeField] private float hurtSoundCooldownTime = 0f;
+    private float hurtSoundLastTimePlayed = 0f;
+
     //object to properly set direction for other object to aim at the player
     [SerializeField] private GameObject playerTarget;
 
@@ -698,14 +701,16 @@ public class PlayerMovement : MonoBehaviour
         else
             health -= dmg;
 
+        Debug.Log(hurtSoundLastTimePlayed + hurtSoundCooldownTime <= Time.time);
         if(health <= 0)
         {
             Die();
         }
 
-        //If we don't die, play hurt audio
-        else
+        //If we don't die, play hurt audio, but only with a cooldown!
+        else if(hurtSoundLastTimePlayed + hurtSoundCooldownTime <= Time.time)
         {
+            hurtSoundLastTimePlayed = Time.time;
             int rando = Random.Range(0, 5);
             if(rando == 0) SoundManager.instance.PlaySound(SoundManager.Sound.Hurt1);
             else if(rando == 1) SoundManager.instance.PlaySound(SoundManager.Sound.Hurt2);

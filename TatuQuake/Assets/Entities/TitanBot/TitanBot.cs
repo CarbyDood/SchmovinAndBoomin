@@ -71,8 +71,7 @@ public class TitanBot : EnemyBase
         Vector3 direction = playerPos - transform.position;
         if(Physics.Raycast(transform.position, direction, out hit, range))
         {
-            Debug.DrawRay(transform.position, (direction*10), Color.red, 10);
-
+            Debug.DrawRay(transform.position, (transform.forward*10), Color.red, 10);
             //spawn attack particles
             lightingAttackEffect.transform.LookAt(playerPos);
             lightingAttackEffect.Play();
