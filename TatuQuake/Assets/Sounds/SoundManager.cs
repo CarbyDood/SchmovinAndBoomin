@@ -56,7 +56,8 @@ public class SoundManager : MonoBehaviour
         MaxMomentumPickUp,
         PlumberShoesPickUp,
         SawAttack,
-        LightingAttack
+        LightingAttack,
+        SwordBeamAttack
     }
 
     public static SoundManager instance

@@ -696,12 +696,10 @@ public class PlayerMovement : MonoBehaviour
                 else health -= 1;
             }
         }
-
-
+        
         else
             health -= dmg;
 
-        Debug.Log(hurtSoundLastTimePlayed + hurtSoundCooldownTime <= Time.time);
         if(health <= 0)
         {
             Die();
