@@ -105,7 +105,7 @@ public class KnightBot : EnemyBase
         float adjust = Mathf.Abs(xOffSet);
         for(int i = 0; i < 3; i++)
         {
-            KnightProjectile beam = Instantiate(projectile, startPosition.transform.position, projStartRot);
+            KnightProjectile beam = Instantiate(projectile, projStartPos, projStartRot);
             beam.SetDmg(damage);
             beam.SetFrc(impactForce);
             Vector3 direction = playerPos - startPosition.transform.position;
