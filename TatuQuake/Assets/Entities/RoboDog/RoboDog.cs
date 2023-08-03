@@ -6,7 +6,6 @@ public class RoboDog : EnemyBase
 {
     //[SerializeField] float impactForce = 30f;
     [SerializeField] private GameObject attackSphere;
-    [SerializeField] private Animator animator;
     [SerializeField] private float attackArea = 1f;
     private float timePassed = 0f;
     private bool jumped = false;
@@ -17,7 +16,7 @@ public class RoboDog : EnemyBase
     private bool playerInBiteRange;
 
     private new void Update() 
-    {
+    { 
         playerPos = player.GetComponent<PlayerMovement>().GetAimLocation();
         //Check for sight and attack ranges
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, playerMask);
@@ -28,6 +27,9 @@ public class RoboDog : EnemyBase
         {
             if(!playerInSightRange && !playerInAttackRange)
             {
+                animator.SetBool("WindingUp",false);
+                animator.SetBool("IsRunning",false);
+                animator.SetBool("IsWalking",true);
                 jumped = false;
                 timePassed = 0f;
                 Vibin();
@@ -35,6 +37,9 @@ public class RoboDog : EnemyBase
 
             if(playerInSightRange && !playerInAttackRange)
             {
+                animator.SetBool("WindingUp",false);
+                animator.SetBool("IsWalking",false);
+                animator.SetBool("IsRunning",true);
                 jumped = false;
                 timePassed = 0f;
                 Huntin();
@@ -52,6 +57,9 @@ public class RoboDog : EnemyBase
         //Dog should do a small "charge up" and then jump at the players position
         if(jumped == false && jumping == false)
         {
+            animator.SetBool("IsWalking",false);
+            animator.SetBool("IsRunning",false);
+            animator.SetBool("WindingUp",true);
             //look at player but not on the y axis, and only when not jumping!
             Vector3 lookPos = playerPos - transform.position;
             lookPos.y = 0;
@@ -60,6 +68,7 @@ public class RoboDog : EnemyBase
             agent.SetDestination(transform.position);
             if(timePassed > 0.8f)
             {
+                animator.SetBool("WindingUp",false);
                 jumping = true;
                 startPos = transform.position;
                 jumpPos = playerPos;
@@ -81,13 +90,28 @@ public class RoboDog : EnemyBase
             agent.enabled = true;
             jumping = false;
             animator.SetBool("Jumping",false);
-            agent.SetDestination(playerPos);
+
+            //Should stay still to attack player, otherwise if outside of bite range, chase the player
+            if(playerInBiteRange)
+            {
+                Debug.Log("TurnOff");
+                agent.SetDestination(transform.position);
+                animator.SetBool("IsRunning",false);
+            }
+            else
+            {
+                Debug.Log("wat");
+                agent.SetDestination(playerPos);
+                animator.SetBool("IsRunning",true);
+            }
         }
 
         timePassed += Time.deltaTime;
 
         if(!alreadyAttacked && playerInBiteRange)
         {
+            animator.SetBool("IsRunning", false);
+            animator.SetBool("Attacked", true);
             Attack();
 
             alreadyAttacked = true;
@@ -97,6 +121,7 @@ public class RoboDog : EnemyBase
 
     protected override void Attack()
     {
+
         Collider[] colliders = Physics.OverlapSphere(attackSphere.transform.position, attackArea);
         foreach (Collider nearbyObj in colliders)
         {
@@ -106,6 +131,12 @@ public class RoboDog : EnemyBase
                 player.TakeDamage(damage);
             }
         }
+    }
+
+    protected new void ResetAttack()
+    {
+        animator.SetBool("Attacked", false);
+        alreadyAttacked = false;
     }
 
     private IEnumerator WaitFor(float secs)

@@ -11,6 +11,9 @@ public abstract class EnemyBase : MonoBehaviour
     protected Vector3 playerPos;
 
     public LayerMask groundMask, playerMask;
+    [SerializeField] protected Animator animator;
+    [SerializeField] private Collider hitBox;//Collider that will react to environment and bullets from player
+    public List<Collider> ragdollParts = new List<Collider>();
 
     //Stats
     public int damage;
@@ -33,6 +36,7 @@ public abstract class EnemyBase : MonoBehaviour
     {
         player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
+        SetRagdollParts();
     }
 
     protected void Update() 
@@ -117,13 +121,41 @@ public abstract class EnemyBase : MonoBehaviour
         }
     }
 
+    protected void SetRagdollParts()
+    {
+        //Also disables ragdoll stuff
+        Collider[] collider = this.gameObject.GetComponentsInChildren<Collider>();
+
+        foreach(Collider c in collider)
+        {
+            if(c.gameObject != hitBox.gameObject)
+            {
+                c.isTrigger = true;
+                c.attachedRigidbody.isKinematic = true;
+                ragdollParts.Add(c);
+            }
+        }
+    }
+
+    protected void TurnOnRagdoll()
+    {
+        hitBox.enabled = false;
+        animator.avatar = null;
+        animator.enabled = false;
+        foreach(Collider c in ragdollParts)
+        {
+            c.isTrigger = false;
+            c.attachedRigidbody.isKinematic = false;
+            c.attachedRigidbody.velocity = Vector3.zero;
+        }
+    }
+
     protected virtual void Die()
     {
+        animator.SetBool("IsDead", true);
         Debug.Log("Enemy "+gameObject.name+" died!");
         agent.enabled = false;
-        Rigidbody rb = gameObject.GetComponent<Rigidbody>();
-        if(rb == null)
-            rb = gameObject.AddComponent(typeof(Rigidbody)) as Rigidbody;
+        TurnOnRagdoll();
         Destroy(gameObject, 5f);
         this.enabled = false;
     }

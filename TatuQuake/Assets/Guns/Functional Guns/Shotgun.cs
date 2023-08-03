@@ -95,6 +95,12 @@ public class Shotgun : WeaponsBaseClass
                     target.TakeDamage(damage * player.GetDamageMultiplier());
                 }
 
+                TargetDummy targetDummy = hit.transform.GetComponent<TargetDummy>();
+                if(targetDummy != null)
+                {
+                    targetDummy.TurnOnRagdoll();
+                }
+
                 if (hit.rigidbody != null){
                     hit.rigidbody.AddForce(-hit.normal * impactForce);
                 }

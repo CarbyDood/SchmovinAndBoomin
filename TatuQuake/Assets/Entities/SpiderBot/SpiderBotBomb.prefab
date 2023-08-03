@@ -294,5 +294,5 @@ MonoBehaviour:
   agent: {fileID: 0}
   player: {fileID: 0}
   lifeTime: 5
-  explosion: {fileID: 5837282334719226681, guid: 577df1ac70a3c7349a14578de4feab85, type: 3}
+  explosion: {fileID: 1286663827157576457, guid: 577df1ac70a3c7349a14578de4feab85, type: 3}
   blastRadius: 1

@@ -8,9 +8,17 @@ public class ShotgunGruntBot : EnemyBase
     private float range = 40f;
     [SerializeField] protected TrailRenderer entityTrail;
     [SerializeField] protected GameObject impactEffect;
+    [SerializeField] private Transform shotOriginL, shotOriginR;
+    private bool altShot = false;
 
     private new void Update() 
     {
+        //Animation stuff
+        if(agent.velocity.magnitude >= 0.1f)
+            animator.SetBool("IsMoving",true);
+        else
+            animator.SetBool("IsMoving",false);
+
         playerPos = player.GetComponent<PlayerMovement>().GetAimLocation();
         //Check for sight and attack ranges
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, playerMask);
@@ -18,11 +26,13 @@ public class ShotgunGruntBot : EnemyBase
 
         if(!playerInSightRange && !playerInAttackRange)
         {
+            animator.SetBool("IsAttacking", false);
             Vibin();
         }
 
         if(playerInSightRange && !playerInAttackRange)
         {
+            animator.SetBool("IsAttacking", false);
             Huntin();
         }
 
@@ -34,6 +44,7 @@ public class ShotgunGruntBot : EnemyBase
 
     private new void Killin()
     {
+        animator.SetBool("IsAttacking", true);
         //look at player but not on the y axis
         agent.SetDestination(transform.position);
         Vector3 lookPos = playerPos - transform.position;
@@ -51,9 +62,13 @@ public class ShotgunGruntBot : EnemyBase
 
     protected override void Attack()
     {
+        Transform shotOrigin;
+        if(altShot){shotOrigin = shotOriginL;}
+        else{shotOrigin = shotOriginR;}
+
         SoundManager.instance.PlaySound(SoundManager.Sound.ShotgunShot);
         int pelletCount = 8;
-        Vector3 direction = playerPos - transform.position;
+        Vector3 direction = playerPos - shotOrigin.position;
         for(int i = 0; i < pelletCount; i++)
         {
             RaycastHit hit;
@@ -70,10 +85,10 @@ public class ShotgunGruntBot : EnemyBase
                 rando.z = Random.Range(-spreadRange, spreadRange);
             }
 
-            if(Physics.Raycast(transform.position, direction + rando, out hit, range))
+            if(Physics.Raycast(shotOrigin.position, direction + rando, out hit, range))
             {
                 //spawn bullet trail
-                TrailRenderer entityViewTrail = Instantiate(entityTrail, transform.position, Quaternion.identity);
+                TrailRenderer entityViewTrail = Instantiate(entityTrail, shotOrigin.position, Quaternion.identity);
                 StartCoroutine(SpawnTrail(entityViewTrail, hit.point));
 
                 EnemyBase enemy = hit.transform.GetComponentInParent<EnemyBase>();
@@ -105,11 +120,13 @@ public class ShotgunGruntBot : EnemyBase
             //if we hit nothing, show a trail towards the camera's center at a distance of the weapon's range
             else
             {
-                TrailRenderer entityViewTrail = Instantiate(entityTrail, transform.position, Quaternion.identity);
-                Vector3 pointTo = transform.position + (transform.forward * range);
+                TrailRenderer entityViewTrail = Instantiate(entityTrail, shotOrigin.position, Quaternion.identity);
+                Vector3 pointTo = shotOrigin.position + (shotOrigin.forward * range);
                 StartCoroutine(SpawnTrail(entityViewTrail, pointTo));
             }
         }
+
+        altShot = !altShot;
     }
 
     public IEnumerator SpawnTrail(TrailRenderer trail, Vector3 dest)
