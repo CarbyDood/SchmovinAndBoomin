@@ -36,6 +36,10 @@ public class NadeSawBot : EnemyBase
 
         if(!playerInSightRange && !playerInAttackRange && !playerInMeleeRange)
         {
+            animator.SetBool("IsAttacking", false);
+            animator.SetBool("IsSawing", false);
+            animator.SetBool("IsWalking", true);
+            animator.SetBool("IsRunning", false);
             justEnteredMeleeRange = true;
             Vibin();
             hits = 0;
@@ -43,6 +47,10 @@ public class NadeSawBot : EnemyBase
 
         if(playerInSightRange && !playerInAttackRange && !playerInMeleeRange)
         {
+            animator.SetBool("IsAttacking", false);
+            animator.SetBool("IsSawing", false);
+            animator.SetBool("IsWalking", false);
+            animator.SetBool("IsRunning", true);
             justEnteredMeleeRange = true;
             Huntin();
             hits = 0;
@@ -50,6 +58,8 @@ public class NadeSawBot : EnemyBase
 
         if(playerInSightRange && playerInAttackRange && !playerInMeleeRange)
         {
+            animator.SetBool("IsSawing", false);
+            animator.SetBool("IsWalking", false);
             justEnteredMeleeRange = true;
             Killin();
             hits = 0;
@@ -57,6 +67,9 @@ public class NadeSawBot : EnemyBase
 
         if(playerInSightRange && playerInAttackRange && playerInMeleeRange)
         {
+            animator.SetBool("IsAttacking", false);
+            animator.SetBool("IsWalking", false);
+            animator.SetBool("IsRunning", false);
             Sawin();
         }
     }
@@ -70,6 +83,8 @@ public class NadeSawBot : EnemyBase
         
         if(!alreadyAttacked)
         {
+            animator.SetBool("IsRunning", false);
+            animator.SetBool("IsAttacking",true);
             agent.SetDestination(transform.position);
             Attack();
 
@@ -81,6 +96,8 @@ public class NadeSawBot : EnemyBase
 
         else if (timePassed >= standTime)
         {
+            animator.SetBool("IsRunning", true);
+            animator.SetBool("IsAttacking",false);
             agent.SetDestination(playerPos);
         }
         timePassed += Time.deltaTime;
@@ -104,14 +121,17 @@ public class NadeSawBot : EnemyBase
             //attack should hit 3 times in intervals of 0.4 seconds
             if(timePassed > (hits * (0.33f)) + standTime && hits < 3)
             {
+                animator.SetBool("IsSawing", true);
                 if(hits == 0) SoundManager.instance.PlaySound(SoundManager.Sound.SawAttack);
                 MeleeAttack();
                 hits++;
             }
+
         }
 
         else
         {
+            animator.SetBool("IsSawing", false);
             timePassed = 0.8f;
             hits = 0;
         }
@@ -129,6 +149,12 @@ public class NadeSawBot : EnemyBase
         projectile.SetFrc(impactForce);
         projectile.SetFrwd(player.transform.position - nadeStartPos);
         OnFired();
+    }
+
+    protected new void ResetAttack()
+    {
+        alreadyAttacked = false;
+        animator.SetBool("IsAttacking",false);
     }
 
     private void MeleeAttack()

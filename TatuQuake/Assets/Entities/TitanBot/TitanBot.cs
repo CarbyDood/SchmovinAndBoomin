@@ -21,6 +21,9 @@ public class TitanBot : EnemyBase
 
         if(!playerInSightRange && !playerInAttackRange)
         {
+            animator.SetBool("IsAttacking", false);
+            animator.SetBool("IsWalking", true);
+            animator.SetBool("IsRunning", false);
             Vibin();
             lightingAttackEffect.Stop();
             timePassed = 0f;
@@ -29,6 +32,9 @@ public class TitanBot : EnemyBase
 
         if(playerInSightRange && !playerInAttackRange)
         {
+            animator.SetBool("IsAttacking", false);
+            animator.SetBool("IsWalking", false);
+            animator.SetBool("IsRunning", true);
             Huntin();
             lightingAttackEffect.Stop();
             timePassed = 0f;
@@ -44,6 +50,8 @@ public class TitanBot : EnemyBase
     private new void Killin()
     {
         //look at player but not on the y axis
+        animator.SetBool("IsRunning", false);
+        animator.SetBool("IsAttacking", true);
         agent.SetDestination(transform.position);
         Vector3 lookPos = playerPos - transform.position;
         lookPos.y = 0;
@@ -104,12 +112,11 @@ public class TitanBot : EnemyBase
 
     protected override void Die()
     {
+        animator.SetBool("IsDead", true);
         lightingAttackEffect.Stop();
         Debug.Log("Enemy "+gameObject.name+" died!");
         agent.enabled = false;
-        Rigidbody rb = gameObject.GetComponent<Rigidbody>();
-        if(rb == null)
-            rb = gameObject.AddComponent(typeof(Rigidbody)) as Rigidbody;
+        TurnOnRagdoll();
         Destroy(gameObject, 5f);
         this.enabled = false;
     }

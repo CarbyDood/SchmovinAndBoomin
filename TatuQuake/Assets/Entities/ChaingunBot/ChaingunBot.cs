@@ -13,6 +13,12 @@ public class ChaingunBot : EnemyBase
 
     private new void Update() 
     {
+        //Animation stuff
+        if(agent.velocity.magnitude >= 0.1f)
+            animator.SetBool("IsMoving",true);
+        else
+            animator.SetBool("IsMoving",false);
+        
         playerPos = player.GetComponent<PlayerMovement>().GetAimLocation();
         //Check for sight and attack ranges
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, playerMask);
@@ -20,11 +26,15 @@ public class ChaingunBot : EnemyBase
 
         if(!playerInSightRange && !playerInAttackRange)
         {
+            animator.SetBool("IsAttackingL", false);
+            animator.SetBool("IsAttackingR", false);
             Vibin();
         }
 
         if(playerInSightRange && !playerInAttackRange)
         {
+            animator.SetBool("IsAttackingL", false);
+            animator.SetBool("IsAttackingR", false);
             Huntin();
         }
 
@@ -56,8 +66,18 @@ public class ChaingunBot : EnemyBase
         SoundManager.instance.PlaySound(SoundManager.Sound.LMGShot);
 
         Transform shotOrigin;
-        if(altShot){shotOrigin = shotOriginL;}
-        else{shotOrigin = shotOriginR;}
+        if(altShot)
+        {
+            animator.SetBool("IsAttackingL", true);
+            animator.SetBool("IsAttackingR", false);
+            shotOrigin = shotOriginL;
+        }
+        else
+        {
+            animator.SetBool("IsAttackingL", false);
+            animator.SetBool("IsAttackingR", true);
+            shotOrigin = shotOriginR;
+        }
 
         Vector3 direction = playerPos - shotOrigin.position;
         RaycastHit hit;
@@ -101,6 +121,11 @@ public class ChaingunBot : EnemyBase
             StartCoroutine(SpawnTrail(entityViewTrail, pointTo));
         }
         altShot = !altShot;
+    }
+
+    protected new void ResetAttack()
+    {
+        alreadyAttacked = false;
     }
 
     public IEnumerator SpawnTrail(TrailRenderer trail, Vector3 dest)
