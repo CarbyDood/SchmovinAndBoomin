@@ -21,10 +21,17 @@ public class SniperBot : EnemyBase
         agent = GetComponent<NavMeshAgent>();
         laserSight.enabled = false;
         laserSight.SetPosition(0, shotOrigin.position);
+        SetRagdollParts();
     }
 
     private new void Update() 
     {
+        //Animation stuff
+        if(agent.velocity.magnitude >= 0.1f)
+            animator.SetBool("IsMoving",true);
+        else
+            animator.SetBool("IsMoving",false);
+
         if(trackPlayer)
             playerPos = player.GetComponent<PlayerMovement>().GetAimLocation();
         laserSight.SetPosition(0, shotOrigin.position);
@@ -35,6 +42,8 @@ public class SniperBot : EnemyBase
 
         if(!playerInSightRange && !playerInAttackRange)
         {
+            animator.SetBool("IsAiming", false);
+            animator.SetBool("IsAttacking", false);
             laserSight.enabled = false;
             trackPlayer = true;
             timePassed = 0f;
@@ -43,6 +52,8 @@ public class SniperBot : EnemyBase
 
         if(playerInSightRange && !playerInAttackRange)
         {
+            animator.SetBool("IsAiming", false);
+            animator.SetBool("IsAttacking", false);
             laserSight.enabled = false;
             trackPlayer = true;
             timePassed = 0f;
@@ -58,6 +69,11 @@ public class SniperBot : EnemyBase
 
     private new void Killin()
     {
+        if(timePassed < attackDelay)
+        {
+            animator.SetBool("IsAiming", true);
+        }
+
         laserSight.SetPosition(1, playerPos);
         laserSight.enabled = true;
         //look at player but not on the y axis
@@ -74,6 +90,8 @@ public class SniperBot : EnemyBase
 
         if(!alreadyAttacked && timePassed >= attackDelay)
         {
+            animator.SetBool("IsAiming", false);
+            animator.SetBool("IsAttacking", true);
             Attack();
 
             alreadyAttacked = true;
@@ -132,7 +150,19 @@ public class SniperBot : EnemyBase
 
     private void ResetTimer()
     {
+        animator.SetBool("IsAttacking", false);
         timePassed = 0f;
+    }
+
+    protected override void Die()
+    {
+        animator.SetBool("IsDead", true);
+        laserSight.enabled = false;
+        Debug.Log("Enemy "+gameObject.name+" died!");
+        agent.enabled = false;
+        TurnOnRagdoll();
+        Destroy(gameObject, 5f);
+        this.enabled = false;
     }
 
     public IEnumerator SpawnTrail(TrailRenderer trail, Vector3 dest)

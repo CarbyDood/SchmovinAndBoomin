@@ -32,23 +32,36 @@ public class KnightBot : EnemyBase
 
         if(!playerInSightRange && !playerInAttackRange && !playerInMeleeRange)
         {
+            animator.SetBool("IsShooting", false);
+            animator.SetBool("IsSlashing", false);
+            animator.SetBool("IsWalking", true);
+            animator.SetBool("IsRunning", false);
             Vibin();
             timePassed = 0f;
         }
 
         if(playerInSightRange && !playerInAttackRange && !playerInMeleeRange)
         {
+            animator.SetBool("IsShooting", false);
+            animator.SetBool("IsSlashing", false);
+            animator.SetBool("IsWalking", false);
+            animator.SetBool("IsRunning", true);
             Huntin();
             timePassed = 0f;
         }
 
         if(playerInSightRange && playerInAttackRange && !playerInMeleeRange)
         {
+            animator.SetBool("IsSlashing", false);
+            animator.SetBool("IsWalking", false);
             Killin();
         }
 
         if(playerInSightRange && playerInAttackRange && playerInMeleeRange)
         {
+            animator.SetBool("IsShooting", false);
+            animator.SetBool("IsWalking", false);
+            animator.SetBool("IsRunning", false);
             Slicin();
             timePassed = 0f;
         }
@@ -56,6 +69,10 @@ public class KnightBot : EnemyBase
 
     private new void Killin()
     {
+        if(timePassed < standTime + attackDelay)
+        {
+            animator.SetBool("IsRunning", false);
+        }
         agent.SetDestination(transform.position);
         //look at player but not on the y axis
         Vector3 lookPos = playerPos - transform.position;
@@ -64,6 +81,7 @@ public class KnightBot : EnemyBase
         
         if(!alreadyAttacked && timePassed > attackDelay)
         {
+            animator.SetBool("IsShooting", true);
             Attack();
 
             alreadyAttacked = true;
@@ -73,6 +91,8 @@ public class KnightBot : EnemyBase
 
         else if (timePassed >= standTime + attackDelay)
         {
+            animator.SetBool("IsShooting", false);
+            animator.SetBool("IsRunning", true);
             agent.SetDestination(playerPos);
         }
         timePassed += Time.deltaTime;
@@ -87,6 +107,7 @@ public class KnightBot : EnemyBase
 
         if(!alreadyMeleeAttacked)
         {
+            animator.SetBool("IsSlashing",true);
             MeleeAttack();
             
             alreadyMeleeAttacked = true;
@@ -115,6 +136,12 @@ public class KnightBot : EnemyBase
         }
     }
 
+    protected new void ResetAttack()
+    {
+        alreadyAttacked = false;
+        animator.SetBool("IsShooting",false);
+    }
+
     private void MeleeAttack()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, meleeRange);
@@ -131,6 +158,7 @@ public class KnightBot : EnemyBase
     private void ResetMeleeAttack()
     {
         alreadyMeleeAttacked = false;
+        animator.SetBool("IsSlashing",false);
     }
 
     private void ResetTimer()

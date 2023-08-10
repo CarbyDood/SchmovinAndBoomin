@@ -39,8 +39,8 @@ public class SpiderProjectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        //Layer 7 is the player
-        if(other.gameObject.layer == 7)
+        //Layer 7 is the player, 8 is the viewmodel weapon, 9 is the worldmodel weapon
+        if(other.gameObject.layer >= 7 && other.gameObject.layer <= 9)
         {
             Explode();
         }

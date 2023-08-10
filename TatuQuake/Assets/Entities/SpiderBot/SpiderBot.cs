@@ -13,6 +13,12 @@ public class SpiderBot : EnemyBase
     // Update is called once per frame
     new void Update()
     {
+        //Animation stuff
+        if(agent.velocity.magnitude >= 0.1f)
+            animator.SetBool("IsMoving",true);
+        else
+            animator.SetBool("IsMoving",false);
+        
         playerPos = player.GetComponent<PlayerMovement>().GetAimLocation();
         //Check for sight and attack ranges
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, playerMask);
@@ -20,11 +26,13 @@ public class SpiderBot : EnemyBase
 
         if(!playerInSightRange && !playerInAttackRange)
         {
+            animator.SetBool("IsAttacking",false);
             Vibin();
         }
 
         if(playerInSightRange && !playerInAttackRange)
         {
+            animator.SetBool("IsAttacking",false);
             Huntin();
         }
 
@@ -44,11 +52,14 @@ public class SpiderBot : EnemyBase
         
         if(!alreadyAttacked)
         {
+            animator.SetBool("IsAttacking",true);
             Attack();
 
             alreadyAttacked = true;
             Invoke(nameof(ResetAttack), timeBetweenAttacks);
         }
+
+        else{animator.SetBool("IsAttacking",false);}
 
         timePassed += Time.deltaTime;
     }
