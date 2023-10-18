@@ -3646,6 +3646,37 @@ SkinnedMeshRenderer:
     m_Center: {x: -31.982391, y: 2.5145874, z: 0.0000019073486}
     m_Extent: {x: 51.12609, y: 46.604404, z: 27.749142}
   m_DirtyAABB: 0
+--- !u!1 &4090894064948178283
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2920087760133450383}
+  m_Layer: 0
+  m_Name: SightOrigin
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2920087760133450383
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4090894064948178283}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.01, y: 1.759, z: 0.224}
+  m_LocalScale: {x: 1.1111112, y: 1.1111112, z: 1.1111112}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6171033686920442285}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6171033685653904818
 GameObject:
   m_ObjectHideFlags: 0
@@ -3739,6 +3770,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4000801851034356494}
+  - {fileID: 2920087760133450383}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3784,18 +3816,28 @@ MonoBehaviour:
   playerMask:
     serializedVersion: 2
     m_Bits: 128
+  entityMask:
+    serializedVersion: 2
+    m_Bits: 2048
   animator: {fileID: 4000801851027367084}
   hitBox: {fileID: 4000801851027367085}
   ragdollParts: []
   damage: 30
   health: 225
   timeBetweenAttacks: 5
+  hasDied: 0
+  patrolAreaCenter: {fileID: 0}
   walkPoint: {x: 0, y: 0, z: 0}
-  walkPointRange: 4
+  patrolRange: 3
+  sightOrigin: {fileID: 2920087760133450383}
   sightRange: 6
   attackRange: 5
   playerInSightRange: 0
   playerInAttackRange: 0
+  playerInLineOfSight: 0
+  isAggroed: 0
+  aggroTime: 0
+  chaseTime: 5
   attackSphere: {fileID: 6171033685653904818}
   attackArea: 1.8
   impactForce: 0.1

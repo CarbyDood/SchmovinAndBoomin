@@ -80,7 +80,7 @@ public class PlayerMovement : MonoBehaviour
     private int defaultGun = 0;
     private float damageMultiplier = 1.0f;
 
-    private bool isDed = false;
+    public bool isDed = false;
 
     private float timer = 0f;
     private float superShellEnd = 0f;
@@ -149,7 +149,9 @@ public class PlayerMovement : MonoBehaviour
         for(int i = 0; i < len; i++)
         {
             if(gunViewModels[i].activeSelf)
+            {
                 currGun = i; //Get Default weapon
+            }
         }
 
         //Enable all weapons to "awake" them so we can properly keep track of their ammo counts
@@ -162,8 +164,6 @@ public class PlayerMovement : MonoBehaviour
         gameManager.DisableGunIcons();
         gunViewModels[currGun].SetActive(true);
         gunWorldModels[currGun].SetActive(true);
-        gameManager.gunIcons[currGun].SetActive(true);
-        gameManager.AddWeapon(currGun);
         defaultGun = currGun;
 
         speed = baseSpeed;
@@ -174,6 +174,12 @@ public class PlayerMovement : MonoBehaviour
 
         //layer 11 is the entity layer, layer 7 is the player layer
         //Physics.IgnoreLayerCollision(7, 11);
+    }
+
+    private void Start() 
+    {
+        gameManager.gunIcons[currGun].SetActive(true);
+        gameManager.AddWeapon(currGun);
     }
 
     private void Update() 
@@ -255,7 +261,7 @@ public class PlayerMovement : MonoBehaviour
             if(transform.position.y < -50)
             {
                 controller.enabled = false;
-                controller.transform.position = new Vector3(1, 2, -3);
+                controller.transform.position = gameManager.spawnPoint.position;
                 controller.enabled = true;
             }
         }
@@ -277,8 +283,6 @@ public class PlayerMovement : MonoBehaviour
             if(timer >= overHealEnd)
             {
                 overHealActive = false;
-                Debug.Log("overHeal ended!");
-
             }
         }
 

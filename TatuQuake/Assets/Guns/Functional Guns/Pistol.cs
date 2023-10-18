@@ -23,7 +23,7 @@ public class Pistol : WeaponsBaseClass
         smoothness = 6.5f;
         recenterSpeed = 4f;
         maxAmmo = 120;
-        currentAmmo = 100;
+        currentAmmo = 32;
     }
 
     // Update is called once per frame

@@ -5,8 +5,8 @@ using UnityEngine.InputSystem;
 
 public class AmmoPickUps : MonoBehaviour
 {
-    [SerializeField] private PlayerMovement player;
-    [SerializeField] private GameManager gameManager;
+    private PlayerMovement player;
+    private GameManager gameManager;
 
     private PlayerInput playerInput;
     protected InputAction fire;
@@ -24,9 +24,13 @@ public class AmmoPickUps : MonoBehaviour
     [SerializeField] private int amount;
     [SerializeField] private bool canRespawn;
 
+    private bool isTouchingPlayer = false;
+
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
+        player = GameObject.FindWithTag("Player").GetComponent<PlayerMovement>();
         playerInput = player.GetComponent<PlayerInput>();
         fire = playerInput.actions["Fire"];
         pistolRef = player.gunViewModels[0].GetComponent<Pistol>();
@@ -46,11 +50,9 @@ public class AmmoPickUps : MonoBehaviour
         transform.position = new Vector3(pos.x, ogPosY + newY, pos.z);
         yRot += 0.3f;
         transform.rotation = Quaternion.Euler(0, yRot, 0);
-    }
 
-    private void OnTriggerEnter(Collider other) 
-    {
-        if(other.tag == "Player")
+        //Allow the player to stay on an ammo pick up and pick is up instantly as soon as they start shooting their weapon
+        if(isTouchingPlayer)
         {
             if(ammoType == "pistol")
             {
@@ -107,57 +109,22 @@ public class AmmoPickUps : MonoBehaviour
                     else Destroy(gameObject);
                 }
             }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other) 
+    {
+        if(other.CompareTag("Player"))
+        {
+            isTouchingPlayer = true;
         }    
     }
 
-    //Allow the player to stay on an ammo pick up and pick is up instantly as soon as they start shooting their weapon
-    private void OnTriggerStay(Collider other) 
+    private void OnTriggerExit(Collider other) 
     {
-        if(other.tag == "Player")
+        if(other.CompareTag("Player"))
         {
-            if(fire.ReadValue<float>() == 1)
-            {
-                if(ammoType == "pistol")
-                {
-                    SoundManager.instance.PlaySound(SoundManager.Sound.AmmoPickUp);
-                    pistolRef.IncreaseAmmo(ref pistolRef.currentAmmo, amount, pistolRef.GetMaxAmmo());
-                    gameManager.ConsoleMessage("You found "+amount+" pistol bullets");
-                    if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
-                    else Destroy(gameObject);
-                }
-                else if(ammoType == "sniper")
-                {
-                    SoundManager.instance.PlaySound(SoundManager.Sound.AmmoPickUp);
-                    sniperRef.IncreaseAmmo(ref sniperRef.currentAmmo, amount, sniperRef.GetMaxAmmo());
-                    gameManager.ConsoleMessage("You found "+amount+" sniper bullets");
-                    if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
-                    else Destroy(gameObject);
-                }
-                else if(ammoType == "auto")
-                {
-                    SoundManager.instance.PlaySound(SoundManager.Sound.AmmoPickUp);
-                    autoRef.IncreaseAmmo(ref gameManager.currAutoAmmo, amount, gameManager.maxAutoAmmo);
-                    gameManager.ConsoleMessage("You found "+amount+" auto slugs");
-                    if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
-                    else Destroy(gameObject);
-                }
-                else if(ammoType == "shell")
-                {
-                    SoundManager.instance.PlaySound(SoundManager.Sound.AmmoPickUp);
-                    shellRef.IncreaseAmmo(ref gameManager.currShellAmmo, amount, gameManager.maxShellAmmo);
-                    gameManager.ConsoleMessage("You found a pocket full of shells! ("+amount+")");
-                    if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
-                    else Destroy(gameObject);
-                }
-                else if(ammoType == "explosive")
-                {
-                    SoundManager.instance.PlaySound(SoundManager.Sound.AmmoPickUp);
-                    explosiveRef.IncreaseAmmo(ref gameManager.currExplosiveAmmo, amount, gameManager.maxExplosiveAmmo);
-                    gameManager.ConsoleMessage("You found "+amount+" boomlas!");
-                    if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
-                    else Destroy(gameObject);
-                }
-            }
-        }
+            isTouchingPlayer = false;
+        }    
     }
 }

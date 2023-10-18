@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HealthPickUp : MonoBehaviour
 {
-    [SerializeField] private GameManager gameManager;
+    private GameManager gameManager;
 
     [SerializeField] private int recoverAmount = 15;
     [SerializeField] private SoundManager.Sound soundToPlay;
@@ -13,12 +13,16 @@ public class HealthPickUp : MonoBehaviour
     private float bobSpeed = 3f;
     private float ogPosY;
     private float yRot = 0f;
+    
+    private bool isTouchingPlayer = false;
+    private PlayerMovement player;
 
     [SerializeField] private bool canRespawn;
 
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         ogPosY = transform.position.y;
     }
 
@@ -32,13 +36,9 @@ public class HealthPickUp : MonoBehaviour
         transform.position = new Vector3(pos.x, ogPosY + newY, pos.z);
         yRot += 0.3f;
         transform.rotation = Quaternion.Euler(rot.x, yRot, rot.z);
-    }
 
-    private void OnTriggerEnter(Collider other) 
-    {
-        if(other.tag == "Player")
+        if(isTouchingPlayer)
         {
-            PlayerMovement player = other.transform.GetComponent<PlayerMovement>();
             if(player.GetHealth() < player.GetMaxHealth())
             {
                 player.GiveHealth(recoverAmount, false);
@@ -52,21 +52,19 @@ public class HealthPickUp : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay(Collider other) 
+    private void OnTriggerEnter(Collider other) 
     {
-        if(other.tag == "Player")
+        if(other.TryGetComponent(out player))
         {
-            PlayerMovement player = other.transform.GetComponent<PlayerMovement>();
-            if(player.GetHealth() < player.GetMaxHealth())
-            {
-                player.GiveHealth(recoverAmount, false);
+            isTouchingPlayer = true;
+        }
+    }
 
-                SoundManager.instance.PlaySound(soundToPlay);
-                gameManager.ConsoleMessage("Recovered "+recoverAmount+" health, DELICIOUS!");
-
-                if(canRespawn) gameManager.DisableObjectForTime(gameObject, 5);
-                else Destroy(gameObject);
-            }
+    private void OnTriggerExit(Collider other) 
+    {
+        if(other.CompareTag("Player"))
+        {
+            isTouchingPlayer = false;
         }
     }
 }

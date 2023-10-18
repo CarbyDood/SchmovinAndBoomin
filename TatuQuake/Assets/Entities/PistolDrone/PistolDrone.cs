@@ -20,8 +20,10 @@ public class PistolDrone : EnemyBase
     [SerializeField] protected TrailRenderer entityTrail;
     [SerializeField] protected GameObject impactEffect;
 
-    private void Start() 
+    private new void Start() 
     {
+        gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
+
         ogPosY = transform.position.y;
         ogHeight = agent.height;
         ogOffset = agent.baseOffset;

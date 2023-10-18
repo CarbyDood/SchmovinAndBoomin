@@ -13,33 +13,56 @@ public class ChaingunBot : EnemyBase
 
     private new void Update() 
     {
+        aggroTime += Time.deltaTime;
+
+        playerPos = player.GetComponent<PlayerMovement>().GetAimLocation();
+
+        //Line of sight
+        if(playerInSightRange)
+        {
+            Debug.DrawRay(sightOrigin.position, (playerPos - sightOrigin.position) * 10, Color.cyan);
+            RaycastHit hit;
+
+            if(Physics.Raycast(sightOrigin.position, playerPos - sightOrigin.position, out hit,  Mathf.Infinity, ~entityMask))
+            {
+                playerInLineOfSight = hit.collider.CompareTag("Player");
+            }
+        }
+
         //Animation stuff
         if(agent.velocity.magnitude >= 0.1f)
             animator.SetBool("IsMoving",true);
         else
             animator.SetBool("IsMoving",false);
         
-        playerPos = player.GetComponent<PlayerMovement>().GetAimLocation();
         //Check for sight and attack ranges
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, playerMask);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerMask);
 
-        if(!playerInSightRange && !playerInAttackRange)
+        if(((!playerInSightRange && !playerInAttackRange) || !playerInLineOfSight) && aggroTime >= chaseTime)
         {
             animator.SetBool("IsAttackingL", false);
             animator.SetBool("IsAttackingR", false);
             Vibin();
         }
 
-        if(playerInSightRange && !playerInAttackRange)
+        if((playerInSightRange && !playerInAttackRange && playerInLineOfSight) || aggroTime <= chaseTime && !playerInAttackRange)
         {
             animator.SetBool("IsAttackingL", false);
             animator.SetBool("IsAttackingR", false);
+            if(playerInSightRange)
+            {
+                aggroTime = 0f;
+            }
             Huntin();
         }
 
-        if(playerInSightRange && playerInAttackRange)
+        if(playerInSightRange && playerInAttackRange && playerInLineOfSight)
         {
+            if(playerInSightRange)
+            {
+                aggroTime = 0f;
+            }
             Killin();
         }
     }

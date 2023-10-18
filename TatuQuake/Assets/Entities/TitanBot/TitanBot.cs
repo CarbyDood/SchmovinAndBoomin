@@ -118,6 +118,7 @@ public class TitanBot : EnemyBase
         agent.enabled = false;
         TurnOnRagdoll();
         Destroy(gameObject, 5f);
+        gameManager.EnemyKilled();
         this.enabled = false;
     }
 }

@@ -1,16 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
 public abstract class EnemyBase : MonoBehaviour
 {
+    protected GameManager gameManager;
     public NavMeshAgent agent;
 
     public Transform player;
     protected Vector3 playerPos;
 
-    public LayerMask groundMask, playerMask;
+    public LayerMask groundMask, playerMask, entityMask;
     [SerializeField] protected Animator animator;
     [SerializeField] private Collider hitBox;//Collider that will react to environment and bullets from player
     public List<Collider> ragdollParts = new List<Collider>();
@@ -19,24 +21,35 @@ public abstract class EnemyBase : MonoBehaviour
     public int damage;
     public float health;
     public float timeBetweenAttacks;
+    public bool hasDied = false;
 
     //Patrolling stuff
+    public Transform patrolAreaCenter;
     public Vector3 walkPoint;
     bool walkPointSet;
-    public float walkPointRange;
+    public float patrolRange;
 
     //Attacking stuff
     protected bool alreadyAttacked;
 
     //States
+    public Transform sightOrigin;
     public float sightRange, attackRange;
-    public bool playerInSightRange, playerInAttackRange;
+    public bool playerInSightRange, playerInAttackRange, playerInLineOfSight, isAggroed;
+    public float aggroTime;
+    public float chaseTime;
 
     protected void Awake() 
     {
-        player = GameObject.Find("Player").transform;
+        aggroTime = chaseTime;
+        player = GameObject.FindWithTag("Player").transform;
         agent = GetComponent<NavMeshAgent>();
         SetRagdollParts();
+    }
+
+    protected void Start()
+    {
+        gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
     }
 
     protected void Update() 
@@ -73,13 +86,13 @@ public abstract class EnemyBase : MonoBehaviour
     protected void SearchWalkPoint()
     {
         //Set Random points in range
-        float randomZ = Random.Range(-walkPointRange, walkPointRange);
-        float randomX = Random.Range(-walkPointRange, walkPointRange);
-
-        walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
+        Vector2 point = Random.insideUnitCircle * patrolRange;
+        walkPoint = new Vector3(point.x, 0, point.y) + patrolAreaCenter.position;
 
         if(Physics.Raycast(walkPoint, -transform.up, 1f, groundMask))
+        {
             walkPointSet = true;
+        }
     }
 
     protected void Huntin()
@@ -114,9 +127,12 @@ public abstract class EnemyBase : MonoBehaviour
     public void TakeDamage(float dmg)
     {
         health -= dmg;
+        //make enemy chase player for some time when shot at
+        aggroTime = -Mathf.Pow(chaseTime,2);
 
-        if (health <= 0f)
+        if (health <= 0f && !hasDied)
         {
+            hasDied = true;
             Die();
         }
     }
@@ -157,6 +173,7 @@ public abstract class EnemyBase : MonoBehaviour
         agent.enabled = false;
         TurnOnRagdoll();
         Destroy(gameObject, 5f);
+        gameManager.EnemyKilled();
         this.enabled = false;
     }
 
@@ -166,5 +183,8 @@ public abstract class EnemyBase : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, attackRange);
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, sightRange);
+        Gizmos.color = Color.cyan;
+        if(patrolAreaCenter != null)
+            Gizmos.DrawWireSphere(patrolAreaCenter.position, patrolRange);
     }
 }

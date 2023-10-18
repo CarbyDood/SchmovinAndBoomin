@@ -17,15 +17,29 @@ public class RoboDog : EnemyBase
 
     private new void Update() 
     { 
+        aggroTime += Time.deltaTime;
+
         playerPos = player.GetComponent<PlayerMovement>().GetAimLocation();
+
         //Check for sight and attack ranges
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, playerMask);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerMask);
         playerInBiteRange = Physics.CheckSphere(attackSphere.transform.position, attackArea, playerMask);
 
+        //Line of sight
+        if(playerInSightRange)
+        {
+            RaycastHit hit;
+
+            if(Physics.Raycast(sightOrigin.position, playerPos - sightOrigin.position, out hit,  Mathf.Infinity, ~entityMask))
+            {
+                playerInLineOfSight = hit.collider.CompareTag("Player");
+            }
+        }
+
         if(jumping == false)
         {
-            if(!playerInSightRange && !playerInAttackRange)
+            if(((!playerInSightRange && !playerInAttackRange) || !playerInLineOfSight) && aggroTime >= chaseTime)
             {
                 animator.SetBool("WindingUp",false);
                 animator.SetBool("IsRunning",false);
@@ -35,19 +49,27 @@ public class RoboDog : EnemyBase
                 Vibin();
             }
 
-            if(playerInSightRange && !playerInAttackRange)
+            if((playerInSightRange && !playerInAttackRange && playerInLineOfSight) || aggroTime <= chaseTime && !playerInAttackRange)
             {
                 animator.SetBool("WindingUp",false);
                 animator.SetBool("IsWalking",false);
                 animator.SetBool("IsRunning",true);
                 jumped = false;
                 timePassed = 0f;
+                if(playerInSightRange)
+                {
+                    aggroTime = 0f;
+                }
                 Huntin();
             }
         }
 
-        if(playerInSightRange && playerInAttackRange)
+        if(playerInSightRange && playerInAttackRange && playerInLineOfSight)
         {
+            if(playerInSightRange)
+            {
+                aggroTime = 0f;
+            }
             Killin();
         }
     }
@@ -72,7 +94,7 @@ public class RoboDog : EnemyBase
                 jumping = true;
                 startPos = transform.position;
                 jumpPos = playerPos;
-                jumpPos.y = startPos.y;
+                jumpPos.y -= 0.1f;
                 timePassed = 0f;
                 animator.SetBool("Jumping",true);
             }
@@ -94,13 +116,11 @@ public class RoboDog : EnemyBase
             //Should stay still to attack player, otherwise if outside of bite range, chase the player
             if(playerInBiteRange)
             {
-                Debug.Log("TurnOff");
                 agent.SetDestination(transform.position);
                 animator.SetBool("IsRunning",false);
             }
             else
             {
-                Debug.Log("wat");
                 agent.SetDestination(playerPos);
                 animator.SetBool("IsRunning",true);
             }
@@ -141,7 +161,6 @@ public class RoboDog : EnemyBase
 
     private IEnumerator WaitFor(float secs)
     {
-        Debug.Log("Waitin");
         yield return new WaitForSeconds(secs);
     }
 
@@ -153,5 +172,8 @@ public class RoboDog : EnemyBase
         Gizmos.DrawWireSphere(transform.position, sightRange);
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(attackSphere.transform.position, attackArea);
+        Gizmos.color = Color.cyan;
+        if(patrolAreaCenter != null)
+            Gizmos.DrawWireSphere(patrolAreaCenter.position, patrolRange);
     }
 }

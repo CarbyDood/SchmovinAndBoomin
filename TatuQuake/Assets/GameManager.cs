@@ -1,16 +1,22 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    private PlayerInput playerInput;
     [SerializeField] private List<bool> gunInventory;
     [SerializeField] private List<Message> msgList = new List<Message>();
     private int maxMsgs = 8;
-    [SerializeField] GameObject consolePanel, textObj;
+    private Message currHintMsg; 
+    [SerializeField] private LevelData currLevelStats;
+    [SerializeField] GameObject consolePanel, hintPanel, textObj, hintTextObj;
     [SerializeField] private PlayerMovement player;
     [SerializeField] private GameObject playerObj;
     [SerializeField] private TextMeshProUGUI ammoCount;
@@ -20,6 +26,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] public List<GameObject> gunIcons;
     [SerializeField] public GameObject HUD;
     [SerializeField] public GameObject ScoreBoard;
+    [SerializeField] public GameObject DeathMessage;
+    private InputAction showScoreboard;
     [SerializeField] private Camera playerFpCam;
     [SerializeField] public Transform spawnPoint;
 
@@ -51,6 +59,9 @@ public class GameManager : MonoBehaviour
             gunInventory.Add(false);
         }
 
+        playerInput = GetComponent<PlayerInput>();
+        showScoreboard = playerInput.actions["ScoreBoard"]; 
+
         //debug stuff, take out when shipping!!!
         //GiveAllWeapons();
     }
@@ -58,6 +69,9 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Keep track of time
+        currLevelStats.time = Time.time;
+
         //Update UI elements
         int ammo;
         if(player.GetCurrGun() == 7)
@@ -70,6 +84,25 @@ public class GameManager : MonoBehaviour
         health.text = ("Health: "+player.GetHealth()+"%").ToString();
         armour.text = ("Armour: "+player.GetArmour()).ToString();
 
+        ScoreBoard.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = currLevelStats.levelName;
+        ScoreBoard.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = $"Time: \t{(int)TimeSpan.FromSeconds(currLevelStats.time).TotalMinutes}:{TimeSpan.FromSeconds(currLevelStats.time).Seconds:00}";
+        ScoreBoard.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "Enemies:\t"+currLevelStats.enemiesKilled.ToString()+"/"+currLevelStats.enemies.ToString();
+        ScoreBoard.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = "Secrets:\t"+currLevelStats.secretsFound.ToString()+"/"+currLevelStats.secrets.ToString();
+
+        //See if player is hitting button to make showboard show up
+        if(showScoreboard.triggered && !player.isDed)
+        {
+            ShowScores();
+        }
+        else if(showScoreboard.WasReleasedThisFrame() && !player.isDed)
+        {
+            HideScores();
+        }
+
+        if(player.isDed)
+        {
+            ShowDeathMessage();
+        }
         //Make sure msgList is empty
         if(msgList.Count > 0)
         {
@@ -132,9 +165,29 @@ public class GameManager : MonoBehaviour
     public void ShowScores()
     {
         foreach(Transform child in HUD.transform)
-            child.gameObject.SetActive(false);
-        
+        {
+            if(child.gameObject.name != "ScopeReticle")
+                child.gameObject.SetActive(false);
+        }
+
         ScoreBoard.SetActive(true);
+    }
+
+    public void HideScores()
+    {
+        foreach(Transform child in HUD.transform)
+        {
+            if(child.gameObject.name != "ScopeReticle" && child.gameObject.name != "Respawn Text")
+            {
+                child.gameObject.SetActive(true);
+            }
+        }
+        ScoreBoard.SetActive(false);
+    }
+
+    public void ShowDeathMessage()
+    {
+        DeathMessage.SetActive(true);
     }
 
     //method to update Health/power up icon
@@ -210,7 +263,36 @@ public class GameManager : MonoBehaviour
         daMsg.textObj.text = daMsg.text;
         msgList.Add(daMsg);
 
-        Destroy(msgList.Last().textObj.gameObject, 3);
+        Destroy(msgList.Last().textObj.gameObject, 4);
+    }
+
+    //Hint Message to guide player on various game mechanics
+    public void HintMessage(string hint_msg, float secToDelete)
+    {
+        if(currHintMsg != null && currHintMsg.textObj != null)
+        {
+            Destroy(currHintMsg.textObj.gameObject);
+        }
+        //Pop up a text box in the top right that stays for 5 seconds
+        Message daMsg = new Message();
+        daMsg.text = hint_msg;
+        GameObject newText = Instantiate(hintTextObj, hintPanel.transform);
+        daMsg.textObj = newText.GetComponent<TextMeshProUGUI>();
+        daMsg.textObj.text = daMsg.text;
+        daMsg.textObj.fontSize = 32f;
+        currHintMsg = daMsg;
+
+        Destroy(currHintMsg.textObj.gameObject, secToDelete);
+    }
+
+    public void SecretFound()
+    {
+        currLevelStats.secretsFound += 1;
+    }
+
+    public void EnemyKilled()
+    {
+        currLevelStats.enemiesKilled += 1;
     }
 
     //helper method to disable all status icons

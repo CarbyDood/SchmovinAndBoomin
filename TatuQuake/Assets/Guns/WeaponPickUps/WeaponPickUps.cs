@@ -21,6 +21,7 @@ public class WeaponPickUps : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         ogPosY = transform.position.y;
         pistolRef = player.gunViewModels[0].GetComponent<Pistol>();
         sniperRef = player.gunViewModels[6].GetComponent<Sniper>();

@@ -57,7 +57,14 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'Hips'\n\tTransform 'LeftUpLeg'\n\tTransform
+    'RightLeg'\n\tTransform 'RightArm'\n\tTransform 'Spine2'\n\tTransform 'RightUpLeg'\n\tTransform
+    'LeftArm'\n\tTransform 'Hips'\n\tTransform 'RightForeArm'\n\tTransform 'LeftForeArm'\n\tand
+    more ...\n\tFrom animation clip 'Idle'\n\tFrom animation clip 'Still'\n\tFrom
+    animation clip 'Attack'\n\tFrom animation clip 'Move'\n\tFrom animation clip
+    'Aiming'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
@@ -2861,6 +2868,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2283598620538455356}
+  - {fileID: 8250260666467665727}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2997,7 +3005,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dccfdaba11ece004cab776c91c0f378e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 0}
+  agent: {fileID: 2287574352099508641}
   player: {fileID: 0}
   groundMask:
     serializedVersion: 2
@@ -3005,15 +3013,28 @@ MonoBehaviour:
   playerMask:
     serializedVersion: 2
     m_Bits: 128
+  entityMask:
+    serializedVersion: 2
+    m_Bits: 2048
+  animator: {fileID: 2228010985386933324}
+  hitBox: {fileID: 2228010985386933327}
+  ragdollParts: []
   damage: 10
   health: 200
   timeBetweenAttacks: 3
+  hasDied: 0
+  patrolAreaCenter: {fileID: 0}
   walkPoint: {x: 0, y: 0, z: 0}
-  walkPointRange: 5
+  patrolRange: 3
+  sightOrigin: {fileID: 8250260666467665727}
   sightRange: 17
   attackRange: 16
   playerInSightRange: 0
   playerInAttackRange: 0
+  playerInLineOfSight: 0
+  isAggroed: 0
+  aggroTime: 0
+  chaseTime: 5
   impactForce: 15
   entityTrail: {fileID: 3357465054252875860, guid: c12b8ccfac10d7e4a864211ba1ccb2a7, type: 3}
   impactEffect: {fileID: 5218493302773158320, guid: 3a0da5fb200542e4286cc6472d31e07e, type: 3}
@@ -3050,4 +3071,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2283361531109716518}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5981001964090976867
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8250260666467665727}
+  m_Layer: 11
+  m_Name: SightOrigin
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8250260666467665727
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5981001964090976867}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.695, z: 0.091}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2287574352099508655}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

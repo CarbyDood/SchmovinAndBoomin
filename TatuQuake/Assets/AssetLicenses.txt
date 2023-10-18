@@ -11,8 +11,19 @@ Tatu Power - https://freesound.org/people/pluralz/sounds/475806/
 Max Momentum - Attribution 4.0 International (CC BY 4.0) - https://freesound.org/people/InspectorJ/sounds/393874/ - edits made
 Plumber Shoes - https://freesound.org/people/Rudmer_Rotteveel/sounds/536235/
 NadeSawBot Saw Attack - https://freesound.org/people/5ound5murf23/sounds/523434/
+Hint Beep - https://freesound.org/people/thisusernameis/sounds/426888/
+Secret Found - Attribution 4.0 International - https://freesound.org/people/InspectorJ/sounds/411460/
 
 ====================Models======================
 Plumber Boots - Attribution 4.0 International (CC BY 4.0) - https://sketchfab.com/3d-models/dirty-boots-aa68d792189b46319157e6607182becc - edits made
 Robo Dog - Attribution 4.0 International (CC BY 4.0) - https://sketchfab.com/3d-models/spot-mini-rigged-boston-dynamics-low-poly-22a0941a83bf4adeaa8ab44050d3c58e
 Saw Blade - Attribution 4.0 International (CC BY 4.0) - https://sketchfab.com/3d-models/saw-blade-63aa3e3326984b86a919313ee6fc0bd5
+
+===================Other========================
+Brick Texture 1 - Public Domain - https://opengameart.org/content/brick-1
+Brick Ground Textures 1 - Public Domain - https://opengameart.org/content/tileable-bricks-ground-textures-set-1
+Brick Ground Textures 2 - Public Domain - https://opengameart.org/content/tileable-brick-ground-textures-set-2
+Grass Textures 1 - public domain - https://opengameart.org/content/tileable-grass-textures-set-1
+Stone Brick texture - Attribution 3.0 Unported (CC BY 3.0) - https://opengameart.org/content/grey-stone-brick-floor-256px
+Books texture - Attribution 3.0 Unported (CC BY 3.0) - https://opengameart.org/content/books-on-a-shelf-seamless-texture-with-normalmap-4
+Wooden Crate texture - Public Domain - https://opengameart.org/content/3-crate-textures-w-bump-normal

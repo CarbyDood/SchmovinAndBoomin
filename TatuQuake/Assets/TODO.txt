@@ -1,0 +1,6 @@
+TODO:
+=========ENEMIES===========
+Line of Sight system[x]
+Setup Patrol Area [x]
+Aggro on engage [x]
+Aggro enemy on taking damage [x]

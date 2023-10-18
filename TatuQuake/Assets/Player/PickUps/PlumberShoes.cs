@@ -18,6 +18,7 @@ public class PlumberShoes : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         ogPosY = transform.position.y;
     }
 

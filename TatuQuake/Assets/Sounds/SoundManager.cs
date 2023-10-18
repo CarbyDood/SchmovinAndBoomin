@@ -57,7 +57,9 @@ public class SoundManager : MonoBehaviour
         PlumberShoesPickUp,
         SawAttack,
         LightingAttack,
-        SwordBeamAttack
+        SwordBeamAttack,
+        HintNotif,
+        SecretFound
     }
 
     public static SoundManager instance

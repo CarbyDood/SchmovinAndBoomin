@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3029074723854489610
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5862780988116445329}
+  m_Layer: 11
+  m_Name: SightOrigin
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5862780988116445329
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3029074723854489610}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.0693, z: 0.0453}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9182727379012792546}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9180755232365247662
 GameObject:
   m_ObjectHideFlags: 0
@@ -4811,6 +4842,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 9178379927027018456}
+  - {fileID: 5862780988116445329}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4856,18 +4888,28 @@ MonoBehaviour:
   playerMask:
     serializedVersion: 2
     m_Bits: 128
+  entityMask:
+    serializedVersion: 2
+    m_Bits: 2048
   animator: {fileID: 9096493558950671250}
   hitBox: {fileID: 9182727379020279291}
   ragdollParts: []
   damage: 10
   health: 200
   timeBetweenAttacks: 7
+  hasDied: 0
+  patrolAreaCenter: {fileID: 0}
   walkPoint: {x: 0, y: 0, z: 0}
-  walkPointRange: 4
+  patrolRange: 3
+  sightOrigin: {fileID: 5862780988116445329}
   sightRange: 6
   attackRange: 5
   playerInSightRange: 0
   playerInAttackRange: 0
+  playerInLineOfSight: 0
+  isAggroed: 0
+  aggroTime: 0
+  chaseTime: 5
   projectile: {fileID: 7707961770218313160, guid: 7d945af1942957d4a8c5ab6832ae86c4, type: 3}
   impactForce: 1
   startPosition: {fileID: 9182727378974228078}

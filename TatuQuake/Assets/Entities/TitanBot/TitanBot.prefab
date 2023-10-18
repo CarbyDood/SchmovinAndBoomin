@@ -77,18 +77,28 @@ MonoBehaviour:
   playerMask:
     serializedVersion: 2
     m_Bits: 128
+  entityMask:
+    serializedVersion: 2
+    m_Bits: 2048
   animator: {fileID: 8656230349130001313}
   hitBox: {fileID: 8656230349120477634}
   ragdollParts: []
   damage: 1
   health: 500
   timeBetweenAttacks: 0.3
+  hasDied: 0
+  patrolAreaCenter: {fileID: 0}
   walkPoint: {x: 0, y: 0, z: 0}
-  walkPointRange: 4
+  patrolRange: 3
+  sightOrigin: {fileID: 273462944571247505}
   sightRange: 6
   attackRange: 3.7
   playerInSightRange: 0
   playerInAttackRange: 0
+  playerInLineOfSight: 0
+  isAggroed: 0
+  aggroTime: 0
+  chaseTime: 5
   impactForce: 10
   lightingAttackEffect: {fileID: 273462944571247598}
   impactEffect: {fileID: 5218493302773158320, guid: 3a0da5fb200542e4286cc6472d31e07e, type: 3}
