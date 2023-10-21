@@ -319,8 +319,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 211619928}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.3317046, y: 24.0934, z: 0.51816314}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2.331705, y: 24.0934, z: 0.5181637}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1179,7 +1179,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7995800647449037955, guid: 02df77f955d98e549b766969025094d0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -22.149
+      value: -21.393
       objectReference: {fileID: 0}
     - target: {fileID: 7995800647449037955, guid: 02df77f955d98e549b766969025094d0, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1187,7 +1187,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7995800647449037955, guid: 02df77f955d98e549b766969025094d0, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -27.088
+      value: -31.24
       objectReference: {fileID: 0}
     - target: {fileID: 7995800647449037955, guid: 02df77f955d98e549b766969025094d0, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2950,6 +2950,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1156440762}
+  - {fileID: 1315167119}
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3620,7 +3621,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1156440761}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -24.28, y: 19.201, z: -13.17}
+  m_LocalPosition: {x: -25.89, y: 19.201, z: -13.17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3760,8 +3761,12 @@ PrefabInstance:
       objectReference: {fileID: 1637833825}
     - target: {fileID: 1733192470025624372, guid: 59bfc93623af9c3439f07264166b3560, type: 3}
       propertyPath: patrolRange
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 1733192470025624372, guid: 59bfc93623af9c3439f07264166b3560, type: 3}
+      propertyPath: patrolAreaCenter
+      value: 
+      objectReference: {fileID: 1315167119}
     - target: {fileID: 2271837464484068562, guid: 59bfc93623af9c3439f07264166b3560, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -3776,7 +3781,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2271837464484068562, guid: 59bfc93623af9c3439f07264166b3560, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -43.407906
+      value: -42.31
       objectReference: {fileID: 0}
     - target: {fileID: 2271837464484068562, guid: 59bfc93623af9c3439f07264166b3560, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3813,6 +3818,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2271837464484068562, guid: 59bfc93623af9c3439f07264166b3560, type: 3}
   m_PrefabInstance: {fileID: 1312734705}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1315167118
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1315167119}
+  m_Layer: 0
+  m_Name: PatrolPoint2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1315167119
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1315167118}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -24.08, y: 19.25, z: -24.54}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 701952720}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &1323741230
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -3834,6 +3870,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 829603923}
     m_Modifications:
+    - target: {fileID: 2764053874966650438, guid: adb6432efaaa84444901d568136bd870, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6063204969964165456, guid: adb6432efaaa84444901d568136bd870, type: 3}
       propertyPath: player
       value: 

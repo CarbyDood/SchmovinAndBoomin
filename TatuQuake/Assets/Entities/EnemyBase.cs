@@ -14,7 +14,7 @@ public abstract class EnemyBase : MonoBehaviour
 
     public LayerMask groundMask, playerMask, entityMask;
     [SerializeField] protected Animator animator;
-    [SerializeField] private Collider hitBox;//Collider that will react to environment and bullets from player
+    [SerializeField] protected Collider hitBox;//Collider that will react to environment and bullets from player
     public List<Collider> ragdollParts = new List<Collider>();
 
     //Stats

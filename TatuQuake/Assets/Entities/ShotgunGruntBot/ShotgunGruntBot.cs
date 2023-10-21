@@ -19,25 +19,47 @@ public class ShotgunGruntBot : EnemyBase
         else
             animator.SetBool("IsMoving",false);
 
+        aggroTime += Time.deltaTime;
+
         playerPos = player.GetComponent<PlayerMovement>().GetAimLocation();
+
         //Check for sight and attack ranges
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, playerMask);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerMask);
+        
+        //Line of sight
+        if(playerInSightRange)
+        {
+            RaycastHit hit;
 
-        if(!playerInSightRange && !playerInAttackRange)
+            if(Physics.Raycast(sightOrigin.position, playerPos - sightOrigin.position, out hit,  Mathf.Infinity, ~entityMask))
+            {
+                playerInLineOfSight = hit.collider.CompareTag("Player");
+            }
+        }
+
+        if(((!playerInSightRange && !playerInAttackRange) || !playerInLineOfSight) && aggroTime >= chaseTime)
         {
             animator.SetBool("IsAttacking", false);
             Vibin();
         }
 
-        if(playerInSightRange && !playerInAttackRange)
+        if((playerInSightRange && !playerInAttackRange && playerInLineOfSight) || aggroTime <= chaseTime && (!playerInAttackRange || !playerInLineOfSight))
         {
             animator.SetBool("IsAttacking", false);
+            if(playerInSightRange && playerInLineOfSight)
+            {
+                aggroTime = 0f;
+            }
             Huntin();
         }
 
-        if(playerInSightRange && playerInAttackRange)
+        if(playerInSightRange && playerInAttackRange && playerInLineOfSight)
         {
+            if(playerInSightRange && playerInLineOfSight)
+            {
+                aggroTime = 0f;
+            }
             Killin();
         }
     }

@@ -46,11 +46,11 @@ public class ChaingunBot : EnemyBase
             Vibin();
         }
 
-        if((playerInSightRange && !playerInAttackRange && playerInLineOfSight) || aggroTime <= chaseTime && !playerInAttackRange)
+        if((playerInSightRange && !playerInAttackRange && playerInLineOfSight) || aggroTime <= chaseTime && (!playerInAttackRange || !playerInLineOfSight))
         {
             animator.SetBool("IsAttackingL", false);
             animator.SetBool("IsAttackingR", false);
-            if(playerInSightRange)
+            if(playerInSightRange && playerInLineOfSight)
             {
                 aggroTime = 0f;
             }
@@ -59,7 +59,7 @@ public class ChaingunBot : EnemyBase
 
         if(playerInSightRange && playerInAttackRange && playerInLineOfSight)
         {
-            if(playerInSightRange)
+            if(playerInSightRange && playerInLineOfSight)
             {
                 aggroTime = 0f;
             }

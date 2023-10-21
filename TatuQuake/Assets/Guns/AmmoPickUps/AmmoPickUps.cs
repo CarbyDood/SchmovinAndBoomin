@@ -7,10 +7,6 @@ public class AmmoPickUps : MonoBehaviour
 {
     private PlayerMovement player;
     private GameManager gameManager;
-
-    private PlayerInput playerInput;
-    protected InputAction fire;
-
     private Pistol pistolRef;
     private Sniper sniperRef;
     private SMG autoRef;
@@ -31,8 +27,6 @@ public class AmmoPickUps : MonoBehaviour
     {
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         player = GameObject.FindWithTag("Player").GetComponent<PlayerMovement>();
-        playerInput = player.GetComponent<PlayerInput>();
-        fire = playerInput.actions["Fire"];
         pistolRef = player.gunViewModels[0].GetComponent<Pistol>();
         sniperRef = player.gunViewModels[6].GetComponent<Sniper>();
         autoRef = player.gunViewModels[1].GetComponent<SMG>();

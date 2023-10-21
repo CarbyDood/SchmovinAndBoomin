@@ -49,14 +49,14 @@ public class RoboDog : EnemyBase
                 Vibin();
             }
 
-            if((playerInSightRange && !playerInAttackRange && playerInLineOfSight) || aggroTime <= chaseTime && !playerInAttackRange)
+            if((playerInSightRange && !playerInAttackRange && playerInLineOfSight) || aggroTime <= chaseTime && (!playerInAttackRange || !playerInLineOfSight))
             {
                 animator.SetBool("WindingUp",false);
                 animator.SetBool("IsWalking",false);
                 animator.SetBool("IsRunning",true);
                 jumped = false;
                 timePassed = 0f;
-                if(playerInSightRange)
+                if(playerInSightRange && playerInLineOfSight)
                 {
                     aggroTime = 0f;
                 }
@@ -66,7 +66,7 @@ public class RoboDog : EnemyBase
 
         if(playerInSightRange && playerInAttackRange && playerInLineOfSight)
         {
-            if(playerInSightRange)
+            if(playerInSightRange && playerInLineOfSight)
             {
                 aggroTime = 0f;
             }

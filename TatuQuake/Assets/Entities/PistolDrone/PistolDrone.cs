@@ -24,6 +24,7 @@ public class PistolDrone : EnemyBase
     {
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
 
+        hitBox.attachedRigidbody.isKinematic = true;
         ogPosY = transform.position.y;
         ogHeight = agent.height;
         ogOffset = agent.baseOffset;
@@ -33,7 +34,10 @@ public class PistolDrone : EnemyBase
 
     private new void Update() 
     {
+        aggroTime += Time.deltaTime;
+
         playerPos = player.GetComponent<PlayerMovement>().GetAimLocation();
+
         //hover up and down
         Vector3 pos = transform.position;
         float newY = Mathf.Sin(Time.time * bobSpeed) * bobHeight;
@@ -43,20 +47,39 @@ public class PistolDrone : EnemyBase
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, playerMask);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerMask);
 
-        if(!playerInSightRange && !playerInAttackRange)
+        //Line of sight
+        if(playerInSightRange)
+        {
+            RaycastHit hit;
+
+            if(Physics.Raycast(sightOrigin.position, playerPos - sightOrigin.position, out hit,  Mathf.Infinity, ~entityMask))
+            {
+                playerInLineOfSight = hit.collider.CompareTag("Player");
+            }
+        }
+
+        if(((!playerInSightRange && !playerInAttackRange) || !playerInLineOfSight) && aggroTime >= chaseTime)
         {
             Vibin();
             LowerDown();
         }
 
-        if(playerInSightRange && !playerInAttackRange)
+        if((playerInSightRange && !playerInAttackRange && playerInLineOfSight) || aggroTime <= chaseTime && (!playerInAttackRange || !playerInLineOfSight))
         {
+            if(playerInSightRange && playerInLineOfSight)
+            {
+                aggroTime = 0f;
+            }
             Huntin();
             LowerDown();
         }
 
-        if(playerInSightRange && playerInAttackRange)
+        if(playerInSightRange && playerInAttackRange && playerInLineOfSight)
         {
+            if(playerInSightRange && playerInLineOfSight)
+            {
+                aggroTime = 0f;
+            }
             Killin();
         }
     }
@@ -145,6 +168,20 @@ public class PistolDrone : EnemyBase
             agent.height = ogHeight;
             agent.baseOffset = ogOffset;
         }
+    }
+
+    protected override void Die()
+    {
+        animator.SetBool("IsDead", true);
+        Debug.Log("Enemy "+gameObject.name+" died!");
+        agent.enabled = false;
+        animator.avatar = null;
+        animator.enabled = false;
+        hitBox.attachedRigidbody.isKinematic = false;
+        hitBox.attachedRigidbody.velocity = Vector3.zero;
+        Destroy(gameObject, 5f);
+        gameManager.EnemyKilled();
+        this.enabled = false;
     }
 
     public IEnumerator SpawnTrail(TrailRenderer trail, Vector3 dest)

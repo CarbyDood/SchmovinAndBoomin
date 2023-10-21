@@ -54,13 +54,13 @@ public class KnightBot : EnemyBase
             timePassed = 0f;
         }
 
-        if((playerInSightRange && !playerInAttackRange && !playerInMeleeRange && playerInLineOfSight) || aggroTime <= chaseTime && !playerInAttackRange && !playerInMeleeRange)
+        if((playerInSightRange && !playerInAttackRange && !playerInMeleeRange && playerInLineOfSight) || aggroTime <= chaseTime && ((!playerInAttackRange && !playerInMeleeRange) || !playerInLineOfSight))
         {
             animator.SetBool("IsShooting", false);
             animator.SetBool("IsSlashing", false);
             animator.SetBool("IsWalking", false);
             animator.SetBool("IsRunning", true);
-            if(playerInSightRange)
+            if(playerInSightRange && playerInLineOfSight)
             {
                 aggroTime = 0f;
             }
@@ -72,7 +72,7 @@ public class KnightBot : EnemyBase
         {
             animator.SetBool("IsSlashing", false);
             animator.SetBool("IsWalking", false);
-            if(playerInSightRange)
+            if(playerInSightRange && playerInLineOfSight)
             {
                 aggroTime = 0f;
             }
@@ -84,7 +84,7 @@ public class KnightBot : EnemyBase
             animator.SetBool("IsShooting", false);
             animator.SetBool("IsWalking", false);
             animator.SetBool("IsRunning", false);
-            if(playerInSightRange)
+            if(playerInSightRange && playerInLineOfSight)
             {
                 aggroTime = 0f;
             }

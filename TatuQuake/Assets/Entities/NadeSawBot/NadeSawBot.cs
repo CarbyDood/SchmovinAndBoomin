@@ -28,13 +28,27 @@ public class NadeSawBot : EnemyBase
     // Update is called once per frame
     private new void Update() 
     {
+        aggroTime += Time.deltaTime;
+
         playerPos = player.GetComponent<PlayerMovement>().GetAimLocation();
+
         //Check for sight and attack ranges
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, playerMask);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerMask);
         playerInMeleeRange = Physics.CheckSphere(transform.position, meleeRange, playerMask);
 
-        if(!playerInSightRange && !playerInAttackRange && !playerInMeleeRange)
+        //Line of sight
+        if(playerInSightRange)
+        {
+            RaycastHit hit;
+
+            if(Physics.Raycast(sightOrigin.position, playerPos - sightOrigin.position, out hit,  Mathf.Infinity, ~entityMask))
+            {
+                playerInLineOfSight = hit.collider.CompareTag("Player");
+            }
+        }
+
+        if(((!playerInSightRange && !playerInAttackRange && !playerInMeleeRange) || !playerInLineOfSight) && aggroTime >= chaseTime)
         {
             animator.SetBool("IsAttacking", false);
             animator.SetBool("IsSawing", false);
@@ -45,31 +59,43 @@ public class NadeSawBot : EnemyBase
             hits = 0;
         }
 
-        if(playerInSightRange && !playerInAttackRange && !playerInMeleeRange)
+        if((playerInSightRange && !playerInAttackRange && !playerInMeleeRange && playerInLineOfSight) || aggroTime <= chaseTime && ((!playerInAttackRange && !playerInMeleeRange) || !playerInLineOfSight))
         {
             animator.SetBool("IsAttacking", false);
             animator.SetBool("IsSawing", false);
             animator.SetBool("IsWalking", false);
             animator.SetBool("IsRunning", true);
             justEnteredMeleeRange = true;
+            if(playerInSightRange && playerInLineOfSight)
+            {
+                aggroTime = 0f;
+            }
             Huntin();
             hits = 0;
         }
 
-        if(playerInSightRange && playerInAttackRange && !playerInMeleeRange)
+        if(playerInSightRange && playerInAttackRange && !playerInMeleeRange && playerInLineOfSight)
         {
             animator.SetBool("IsSawing", false);
             animator.SetBool("IsWalking", false);
             justEnteredMeleeRange = true;
+            if(playerInSightRange && playerInLineOfSight)
+            {
+                aggroTime = 0f;
+            }
             Killin();
             hits = 0;
         }
 
-        if(playerInSightRange && playerInAttackRange && playerInMeleeRange)
+        if(playerInSightRange && playerInAttackRange && playerInMeleeRange && playerInLineOfSight)
         {
             animator.SetBool("IsAttacking", false);
             animator.SetBool("IsWalking", false);
             animator.SetBool("IsRunning", false);
+            if(playerInSightRange && playerInLineOfSight)
+            {
+                aggroTime = 0f;
+            }
             Sawin();
         }
     }
@@ -181,9 +207,12 @@ public class NadeSawBot : EnemyBase
         Gizmos.DrawWireSphere(transform.position, attackRange);
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, sightRange);
-        Gizmos.color = Color.cyan;
+        Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, meleeRange);
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(attackSphere.transform.position, attackArea);
+        Gizmos.color = Color.cyan;
+        if(patrolAreaCenter != null)
+            Gizmos.DrawWireSphere(patrolAreaCenter.position, patrolRange);
     }
 }

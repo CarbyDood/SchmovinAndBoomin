@@ -17,12 +17,15 @@ public class SniperBot : EnemyBase
 
     private new void Awake()
     {
+        aggroTime = chaseTime;
         player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
         laserSight.enabled = false;
         laserSight.SetPosition(0, shotOrigin.position);
         SetRagdollParts();
     }
+
+
 
     private new void Update() 
     {
@@ -35,12 +38,27 @@ public class SniperBot : EnemyBase
         if(trackPlayer)
             playerPos = player.GetComponent<PlayerMovement>().GetAimLocation();
         laserSight.SetPosition(0, shotOrigin.position);
+
+        aggroTime += Time.deltaTime;
+
+        playerPos = player.GetComponent<PlayerMovement>().GetAimLocation();
         
         //Check for sight and attack ranges
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, playerMask);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerMask);
 
-        if(!playerInSightRange && !playerInAttackRange)
+        //Line of sight
+        if(playerInSightRange)
+        {
+            RaycastHit hit;
+
+            if(Physics.Raycast(sightOrigin.position, playerPos - sightOrigin.position, out hit,  Mathf.Infinity, ~entityMask))
+            {
+                playerInLineOfSight = hit.collider.CompareTag("Player");
+            }
+        }
+
+        if(((!playerInSightRange && !playerInAttackRange) || !playerInLineOfSight) && aggroTime >= chaseTime)
         {
             animator.SetBool("IsAiming", false);
             animator.SetBool("IsAttacking", false);
@@ -50,18 +68,26 @@ public class SniperBot : EnemyBase
             Vibin();
         }
 
-        if(playerInSightRange && !playerInAttackRange)
+        if((playerInSightRange && !playerInAttackRange && playerInLineOfSight) || aggroTime <= chaseTime && (!playerInAttackRange || !playerInLineOfSight))
         {
             animator.SetBool("IsAiming", false);
             animator.SetBool("IsAttacking", false);
             laserSight.enabled = false;
             trackPlayer = true;
             timePassed = 0f;
+            if(playerInSightRange && playerInLineOfSight)
+            {
+                aggroTime = 0f;
+            }
             Huntin();
         }
 
-        if(playerInSightRange && playerInAttackRange)
+        if(playerInSightRange && playerInAttackRange && playerInLineOfSight)
         {
+            if(playerInSightRange && playerInLineOfSight)
+            {
+                aggroTime = 0f;
+            }
             Killin();
         }
         timePassed += Time.deltaTime;
