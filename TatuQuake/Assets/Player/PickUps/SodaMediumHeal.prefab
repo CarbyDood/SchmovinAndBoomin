@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 8220421427208289543}
   - component: {fileID: 8220421427208289544}
   - component: {fileID: 6192514315515496898}
-  - component: {fileID: 6291230668182365247}
   - component: {fileID: 6957340153532534384}
   m_Layer: 0
   m_Name: SodaMediumHeal
@@ -48,7 +47,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddbece863e08de64d96aa07110d644dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 0}
   recoverAmount: 50
   soundToPlay: 37
   canRespawn: 0
@@ -103,22 +101,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!54 &6291230668182365247
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5688264607601076247}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!64 &6957340153532534384
 MeshCollider:
   m_ObjectHideFlags: 0

@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
     private InputAction slot7;
     private InputAction slot8;
     private InputAction scroll;
-    private InputAction select;
+    public InputAction select;
 
     [SerializeField] private float baseSpeed = 2f;
     [SerializeField] private float gravity = -9.81f;
@@ -81,6 +81,9 @@ public class PlayerMovement : MonoBehaviour
     private float damageMultiplier = 1.0f;
 
     public bool isDed = false;
+    public bool isWon = false;
+    public bool allowContinue = false;
+    [SerializeField] private GameObject EndLevelCamera;
 
     private float timer = 0f;
     private float superShellEnd = 0f;
@@ -185,7 +188,7 @@ public class PlayerMovement : MonoBehaviour
     private void Update() 
     {
         //only run update if we are alive!
-        if(!isDed)
+        if(!isDed && !isWon)
         {
             //Check if we are touching the ground, the ceiling, or some stairs
             isOnStair = Physics.CheckSphere(groundCheck.transform.position, groundDistance, groundMask);
@@ -260,16 +263,14 @@ public class PlayerMovement : MonoBehaviour
             //reset position if we fall off the map
             if(transform.position.y < -50)
             {
-                controller.enabled = false;
-                controller.transform.position = gameManager.spawnPoint.position;
-                controller.enabled = true;
+                MovePosition(gameManager.spawnPoint.position);
             }
         }
 
         //Restart game scene when we press Left Mouse Button
-        else
+        else if(isDed && !isWon)
         {
-            if(select.triggered)
+            if(select.triggered && allowContinue)
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
@@ -756,6 +757,39 @@ public class PlayerMovement : MonoBehaviour
         return playerTarget.transform.position;
     }
 
+    public void MovePosition(Vector3 destPos)
+    {
+        controller.enabled = false;
+        controller.transform.position = destPos;
+        controller.enabled = true;
+    }
+
+    public void LevelWon()
+    {
+        gameManager.SetCountTime(false);
+        isWon = true;
+
+        //Disable CharacterController
+        controller.enabled = false;
+        //Disable UnityModel
+        gameObject.transform.GetChild(0).gameObject.SetActive(false);
+        //Disable GroundChecker
+        gameObject.transform.GetChild(1).gameObject.SetActive(false);
+        //Disable main camera
+        gameObject.transform.GetChild(2).gameObject.SetActive(false);
+        //Disable CeilingChecker
+        gameObject.transform.GetChild(3).gameObject.SetActive(false);
+        //Disable Death Cam
+        gameObject.transform.GetChild(4).gameObject.SetActive(false);
+        //Disable Target for enemies
+        gameObject.transform.GetChild(5).gameObject.SetActive(false);
+
+        //Enable LevelEnd Cam
+        EndLevelCamera.SetActive(true);
+
+        gameManager.ShowScores();
+    }
+
     public void Die()
     {
         int rando = Random.Range(0, 3);
@@ -766,6 +800,7 @@ public class PlayerMovement : MonoBehaviour
         gameManager.ShowScores();
 
         isDed = true;
+        StartCoroutine(LetPlayerContinue());
         //Disable CharacterController
         controller.enabled = false;
         //Disable UnityModel
@@ -778,7 +813,13 @@ public class PlayerMovement : MonoBehaviour
         gameObject.transform.GetChild(3).gameObject.SetActive(false);
         //*Enable* Death Cam
         gameObject.transform.GetChild(4).gameObject.SetActive(true);
-        //Disable Capsule Collider
-        gameObject.transform.GetChild(4).gameObject.SetActive(true);
+        //Disable Target for enemies
+        gameObject.transform.GetChild(5).gameObject.SetActive(false);
+    }
+
+    public IEnumerator LetPlayerContinue()
+    {
+        yield return new WaitForSeconds(2);
+        allowContinue = true;
     }
 }

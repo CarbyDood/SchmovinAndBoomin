@@ -104,6 +104,18 @@ public class Nade : MonoBehaviour
                 target.TakeDamage(damage);
             }
 
+            TargetDummy targetDummy = nearbyObj.GetComponent<TargetDummy>();
+            if(targetDummy != null)
+            {
+                targetDummy.TurnOnRagdoll();
+            }
+
+            TargetTrigger targetTrig = nearbyObj.GetComponent<TargetTrigger>();
+            if(targetTrig != null)
+            {
+                targetTrig.OnHit();
+            }
+
             //Nade Jump!!
             PlayerMovement player = nearbyObj.GetComponent<PlayerMovement>();
             if(player != null)

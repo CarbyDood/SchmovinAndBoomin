@@ -20,6 +20,7 @@ public class ArmorPickUp : MonoBehaviour
     void Start()
     {
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
+        player = GameObject.FindWithTag("Player").GetComponent<PlayerMovement>();
         ogPosY = transform.position.y;
     }
 

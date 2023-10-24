@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class SecretDoorButton : MonoBehaviour
 {
-    [SerializeField] private GameManager gameManager;
     [SerializeField] private GameObject doorToAffect;
     [SerializeField] private Vector3 doorDest;
     bool moveDoor = false;

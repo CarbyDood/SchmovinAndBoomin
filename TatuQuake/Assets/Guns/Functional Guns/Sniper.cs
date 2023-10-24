@@ -104,7 +104,7 @@ public class Sniper : WeaponsBaseClass
             EnemyBase enemy = hit.transform.GetComponentInParent<EnemyBase>();
             if(enemy != null)
             {
-                enemy.TakeDamage(damage);
+                enemy.TakeDamage(damage * player.GetDamageMultiplier());
             }
             
             Target target = hit.transform.GetComponent<Target>();
@@ -113,6 +113,12 @@ public class Sniper : WeaponsBaseClass
                 target.TakeDamage(damage * player.GetDamageMultiplier());
             }
 
+            TargetTrigger targetTrig = hit.transform.GetComponent<TargetTrigger>();
+            if(targetTrig != null)
+            {
+                targetTrig.OnHit();
+            }
+            
             if (hit.rigidbody != null){
                 hit.rigidbody.AddForce(-hit.normal * impactForce);
             }

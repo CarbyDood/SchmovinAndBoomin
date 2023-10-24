@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -73,13 +74,19 @@ public class WeaponsBaseClass : MonoBehaviour
             EnemyBase enemy = hit.transform.GetComponentInParent<EnemyBase>();
             if(enemy != null)
             {
-                enemy.TakeDamage(damage);
+                enemy.TakeDamage(damage * player.GetDamageMultiplier());
             }
 
             Target target = hit.transform.GetComponent<Target>();
             if(target != null)
             {
                 target.TakeDamage(damage * player.GetDamageMultiplier());
+            }
+
+            TargetTrigger targetTrig = hit.transform.GetComponent<TargetTrigger>();
+            if(targetTrig != null)
+            {
+                targetTrig.OnHit();
             }
 
             if (hit.rigidbody != null){

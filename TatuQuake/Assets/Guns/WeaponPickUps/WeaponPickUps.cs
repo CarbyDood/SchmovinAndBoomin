@@ -22,6 +22,7 @@ public class WeaponPickUps : MonoBehaviour
     void Start()
     {
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
+        player = GameObject.FindWithTag("Player").GetComponent<PlayerMovement>();
         ogPosY = transform.position.y;
         pistolRef = player.gunViewModels[0].GetComponent<Pistol>();
         sniperRef = player.gunViewModels[6].GetComponent<Sniper>();

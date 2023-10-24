@@ -4,5 +4,11 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/CastleEntrance.unity
+    guid: 7164b8672ed3cb4449c32ca5675baba1
+  - enabled: 1
+    path: Assets/Scenes/Lobby.unity
+    guid: 1e996902a5967f144983ef49b830a68e
   m_configObjects: {}

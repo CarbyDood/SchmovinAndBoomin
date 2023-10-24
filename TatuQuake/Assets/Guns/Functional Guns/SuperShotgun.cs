@@ -86,7 +86,7 @@ public class SuperShotgun : WeaponsBaseClass
                 EnemyBase enemy = hit.transform.GetComponentInParent<EnemyBase>();
                 if(enemy != null)
                 {
-                    enemy.TakeDamage(damage);
+                    enemy.TakeDamage(damage * player.GetDamageMultiplier());
                 }
 
                 Target target = hit.transform.GetComponent<Target>();
@@ -99,6 +99,12 @@ public class SuperShotgun : WeaponsBaseClass
                 if(targetDummy != null)
                 {
                     targetDummy.TurnOnRagdoll();
+                }
+
+                TargetTrigger targetTrig = hit.transform.GetComponent<TargetTrigger>();
+                if(targetTrig != null)
+                {
+                    targetTrig.OnHit();
                 }
 
                 if (hit.rigidbody != null){

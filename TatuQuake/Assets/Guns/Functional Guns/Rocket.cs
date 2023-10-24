@@ -95,6 +95,12 @@ public class Rocket : MonoBehaviour
                 targetDummy.TurnOnRagdoll();
             }
 
+            TargetTrigger targetTrig = nearbyObj.GetComponent<TargetTrigger>();
+            if(targetTrig != null)
+            {
+                targetTrig.OnHit();
+            }
+
             //Rocket Jump!!!
             PlayerMovement player = nearbyObj.GetComponent<PlayerMovement>();
             if(player != null)

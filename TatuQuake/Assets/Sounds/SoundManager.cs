@@ -59,7 +59,10 @@ public class SoundManager : MonoBehaviour
         LightingAttack,
         SwordBeamAttack,
         HintNotif,
-        SecretFound
+        SecretFound,
+        ButtonClick,
+        Teleport,
+        Boing
     }
 
     public static SoundManager instance

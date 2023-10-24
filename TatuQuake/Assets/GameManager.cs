@@ -27,9 +27,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] public GameObject HUD;
     [SerializeField] public GameObject ScoreBoard;
     [SerializeField] public GameObject DeathMessage;
+    [SerializeField] public GameObject VictoryMessage;
     private InputAction showScoreboard;
     [SerializeField] private Camera playerFpCam;
     [SerializeField] public Transform spawnPoint;
+    private bool countTime = true;
 
     //shared ammo pools
     public int maxAutoAmmo = 200;
@@ -70,7 +72,8 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         //Keep track of time
-        currLevelStats.time = Time.time;
+        if(countTime)
+            currLevelStats.time = Time.time;
 
         //Update UI elements
         int ammo;
@@ -103,6 +106,11 @@ public class GameManager : MonoBehaviour
         {
             ShowDeathMessage();
         }
+        if(player.isWon)
+        {
+            ShowVictoryMessage();
+        }
+
         //Make sure msgList is empty
         if(msgList.Count > 0)
         {
@@ -177,7 +185,7 @@ public class GameManager : MonoBehaviour
     {
         foreach(Transform child in HUD.transform)
         {
-            if(child.gameObject.name != "ScopeReticle" && child.gameObject.name != "Respawn Text")
+            if(child.gameObject.name != "ScopeReticle" && child.gameObject.name != "Respawn Text" && child.gameObject.name != "Victory Text" && child.gameObject.name != "ContinueText")
             {
                 child.gameObject.SetActive(true);
             }
@@ -188,6 +196,11 @@ public class GameManager : MonoBehaviour
     public void ShowDeathMessage()
     {
         DeathMessage.SetActive(true);
+    }
+
+    public void ShowVictoryMessage()
+    {
+        VictoryMessage.SetActive(true);
     }
 
     //method to update Health/power up icon
@@ -293,6 +306,11 @@ public class GameManager : MonoBehaviour
     public void EnemyKilled()
     {
         currLevelStats.enemiesKilled += 1;
+    }
+
+    public void SetCountTime(bool status)
+    {
+        countTime = status;
     }
 
     //helper method to disable all status icons

@@ -59541,6 +59541,18 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 86663419-5485-406d-8b78-04a9055afc3d
     m_ActionName: PlayerControls/LookYNormalize[/Mouse/delta/y]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a6547ec6-c96e-4d1f-a672-a595aa45709f
+    m_ActionName: PlayerControls/Console[/Keyboard/backquote]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: b854a251-d5ea-4e83-824f-3a1f6beacc90
+    m_ActionName: PlayerControls/ScreenshotMode[/Keyboard/p]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0d293b69-e4e4-466b-b0e1-bc0dad087dd2
+    m_ActionName: PlayerControls/ScoreBoard[/Keyboard/tab]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: PlayerControls
@@ -59580,7 +59592,7 @@ MonoBehaviour:
   momentum: {fileID: 7995800647449037953}
   gameManager: {fileID: 0}
   animator: {fileID: 7995800647476497308}
-  baseSpeed: 2
+  baseSpeed: 3
   gravity: -9.81
   baseJumpHeight: 0.75
   groundCheck: {fileID: 7995800647666308963}
@@ -59608,10 +59620,12 @@ MonoBehaviour:
   - {fileID: 7995800647897088657}
   smoothInputSpeed: 0.15
   health: 100
+  isDed: 0
   entityMask:
     serializedVersion: 2
     m_Bits: 2048
   entityCheck: {fileID: 7995800648054525980}
+  hurtSoundCooldownTime: 0
   playerTarget: {fileID: 0}
 --- !u!114 &7995800647449037953
 MonoBehaviour:

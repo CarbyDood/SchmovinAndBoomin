@@ -13,6 +13,9 @@ Plumber Shoes - https://freesound.org/people/Rudmer_Rotteveel/sounds/536235/
 NadeSawBot Saw Attack - https://freesound.org/people/5ound5murf23/sounds/523434/
 Hint Beep - https://freesound.org/people/thisusernameis/sounds/426888/
 Secret Found - Attribution 4.0 International - https://freesound.org/people/InspectorJ/sounds/411460/
+Teleport Sound - Public Domain - https://freesound.org/people/GameAudio/sounds/220163/
+Button Click - Public Domain - https://freesound.org/people/JarredGibb/sounds/219478/
+Boing - Attribution 4.0 International - https://freesound.org/people/InspectorJ/sounds/411492/
 
 ====================Models======================
 Plumber Boots - Attribution 4.0 International (CC BY 4.0) - https://sketchfab.com/3d-models/dirty-boots-aa68d792189b46319157e6607182becc - edits made
@@ -27,3 +30,4 @@ Grass Textures 1 - public domain - https://opengameart.org/content/tileable-gras
 Stone Brick texture - Attribution 3.0 Unported (CC BY 3.0) - https://opengameart.org/content/grey-stone-brick-floor-256px
 Books texture - Attribution 3.0 Unported (CC BY 3.0) - https://opengameart.org/content/books-on-a-shelf-seamless-texture-with-normalmap-4
 Wooden Crate texture - Public Domain - https://opengameart.org/content/3-crate-textures-w-bump-normal
+Portal texture - Public Domain - https://opengameart.org/content/space-background-01
