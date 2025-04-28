@@ -89,8 +89,10 @@ public class GameManager : MonoBehaviour
 
         ScoreBoard.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = currLevelStats.levelName;
         ScoreBoard.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = $"Time: \t{(int)TimeSpan.FromSeconds(currLevelStats.time).TotalMinutes}:{TimeSpan.FromSeconds(currLevelStats.time).Seconds:00}";
-        ScoreBoard.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "Enemies:\t"+currLevelStats.enemiesKilled.ToString()+"/"+currLevelStats.enemies.ToString();
-        ScoreBoard.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = "Secrets:\t"+currLevelStats.secretsFound.ToString()+"/"+currLevelStats.secrets.ToString();
+        ScoreBoard.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = $"Enemies:\t{currLevelStats.enemiesKilled}/{currLevelStats.enemies}";
+        ScoreBoard.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = $"Secrets:\t{currLevelStats.secretsFound}/{currLevelStats.secrets}";
+        if(currLevelStats.fenFound){ScoreBoard.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = "Hidden Fen: [x]";}
+        if(currLevelStats.statueFound){ScoreBoard.transform.GetChild(5).GetComponent<TextMeshProUGUI>().text = "Statue: [x]";}
 
         //See if player is hitting button to make showboard show up
         if(showScoreboard.triggered && !player.isDed)
@@ -306,6 +308,16 @@ public class GameManager : MonoBehaviour
     public void EnemyKilled()
     {
         currLevelStats.enemiesKilled += 1;
+    }
+
+    public void FenFound()
+    {
+        currLevelStats.fenFound = true;
+    }
+
+    public void StatueFound()
+    {
+        currLevelStats.statueFound = true;
     }
 
     public void SetCountTime(bool status)

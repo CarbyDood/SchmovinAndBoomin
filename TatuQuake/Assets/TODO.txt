@@ -4,3 +4,38 @@ Line of Sight system[x]
 Setup Patrol Area [x]
 Aggro on engage [x]
 Aggro enemy on taking damage [x]
+
+========Levels==============
+Water effect[x]
+Loading Screen[]
+Level 1:
+Modeled [x]
+Scripts [x]
+Enemies [x]
+Pickups [x]
+Statue [x]
+Fen [x]
+
+Level 2:
+Modeled []
+Scripts []
+Enemies []
+Pickups []
+
+Level 3:
+Modeled []
+Scripts []
+Enemies []
+Pickups []
+
+Level 4:
+Modeled []
+Scripts []
+Enemies []
+Pickups []
+
+Final Boss:
+Modeled []
+Scripts []
+Enemies []
+Pickups []

@@ -9,6 +9,8 @@ public class LevelData : MonoBehaviour
     public int enemies {get; set;}
     public int enemiesKilled {get; set;}
     public float time {get; set;}
+    public bool fenFound {get; set;} = false;
+    public bool statueFound {get; set;} = false;
     public string levelName;
 
     [SerializeField] private Transform secretsParent;

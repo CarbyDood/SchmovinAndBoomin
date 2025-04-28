@@ -29796,7 +29796,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
+  m_VoxelSize: 0.083333336
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 58f219d8d6daecf4a8376cdbfdbc4a29, type: 2}
   m_BuildHeightMesh: 0
@@ -46110,6 +46110,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PistolDrone
       objectReference: {fileID: 0}
+    - target: {fileID: 8067515719973323923, guid: 445bc96f67d5588448eea6aa9efd970b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 445bc96f67d5588448eea6aa9efd970b, type: 3}
 --- !u!1001 &1733192468461354670
@@ -46255,6 +46259,10 @@ PrefabInstance:
     - target: {fileID: 8752554049478184151, guid: 398a23f6834138f45a31e23082466351, type: 3}
       propertyPath: m_Name
       value: SniperBot
+      objectReference: {fileID: 0}
+    - target: {fileID: 8752554049478184151, guid: 398a23f6834138f45a31e23082466351, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 398a23f6834138f45a31e23082466351, type: 3}
@@ -47378,6 +47386,10 @@ PrefabInstance:
     - target: {fileID: 8194604076904090824, guid: 60cc18666a86bf148bd21cde450afba3, type: 3}
       propertyPath: m_Name
       value: ChaingunBot
+      objectReference: {fileID: 0}
+    - target: {fileID: 8194604076904090824, guid: 60cc18666a86bf148bd21cde450afba3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 60cc18666a86bf148bd21cde450afba3, type: 3}
@@ -49972,6 +49984,7 @@ MonoBehaviour:
   HUD: {fileID: 5432414597141473768}
   ScoreBoard: {fileID: 5432414596837324727}
   DeathMessage: {fileID: 5432414596161077720}
+  VictoryMessage: {fileID: 0}
   playerFpCam: {fileID: 963194227}
   spawnPoint: {fileID: 0}
   maxAutoAmmo: 200
@@ -49979,7 +49992,7 @@ MonoBehaviour:
   maxExplosiveAmmo: 25
   currAutoAmmo: 0
   currShellAmmo: 0
-  currExplosiveAmmo: 0
+  currExplosiveAmmo: 5
 --- !u!1 &5432414597926803474
 GameObject:
   m_ObjectHideFlags: 0
@@ -49994,7 +50007,7 @@ GameObject:
   - component: {fileID: 5432414597926803479}
   m_Layer: 0
   m_Name: Game Manager
-  m_TagString: Untagged
+  m_TagString: GameManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -51206,7 +51219,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6979257520910669211, guid: 8c8e4151de0b1094499f13ec0c12ee25, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.41
+      value: -6.465
       objectReference: {fileID: 0}
     - target: {fileID: 6979257520910669211, guid: 8c8e4151de0b1094499f13ec0c12ee25, type: 3}
       propertyPath: m_LocalPosition.y
@@ -51784,7 +51797,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7535831366394070093, guid: 0e3d7e99e0383504192f280efa67a442, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.516
+      value: -5.571
       objectReference: {fileID: 0}
     - target: {fileID: 7535831366394070093, guid: 0e3d7e99e0383504192f280efa67a442, type: 3}
       propertyPath: m_LocalPosition.y
@@ -52091,15 +52104,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7995800647449037955, guid: 02df77f955d98e549b766969025094d0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.872
+      value: 0.603
       objectReference: {fileID: 0}
     - target: {fileID: 7995800647449037955, guid: 02df77f955d98e549b766969025094d0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.387
+      value: 2.048
       objectReference: {fileID: 0}
     - target: {fileID: 7995800647449037955, guid: 02df77f955d98e549b766969025094d0, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 8.128
+      value: -9.981
       objectReference: {fileID: 0}
     - target: {fileID: 7995800647449037955, guid: 02df77f955d98e549b766969025094d0, type: 3}
       propertyPath: m_LocalRotation.w
@@ -52131,16 +52144,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7995800647449037980, guid: 02df77f955d98e549b766969025094d0, type: 3}
       propertyPath: isInvinc
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7995800647449037980, guid: 02df77f955d98e549b766969025094d0, type: 3}
       propertyPath: gameManager
       value: 
       objectReference: {fileID: 5432414597926803473}
     - target: {fileID: 7995800647449037980, guid: 02df77f955d98e549b766969025094d0, type: 3}
+      propertyPath: select.m_Id
+      value: fd876329-49d3-4b05-b1e6-3fae940cb509
+      objectReference: {fileID: 0}
+    - target: {fileID: 7995800647449037980, guid: 02df77f955d98e549b766969025094d0, type: 3}
       propertyPath: playerTarget
       value: 
       objectReference: {fileID: 853821340}
+    - target: {fileID: 7995800647449037980, guid: 02df77f955d98e549b766969025094d0, type: 3}
+      propertyPath: select.m_Name
+      value: Select
+      objectReference: {fileID: 0}
     - target: {fileID: 7995800647449037980, guid: 02df77f955d98e549b766969025094d0, type: 3}
       propertyPath: hurtSoundCooldownTime
       value: 0.3
@@ -52152,7 +52173,7 @@ PrefabInstance:
     - target: {fileID: 7995800647556390138, guid: 02df77f955d98e549b766969025094d0, type: 3}
       propertyPath: gameManager
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5432414597926803473}
     - target: {fileID: 7995800647706667636, guid: 02df77f955d98e549b766969025094d0, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -52205,7 +52226,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8602129516287695469, guid: 94753167e53441f489eb0435b6a7fa99, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.701
+      value: 2.1910002
       objectReference: {fileID: 0}
     - target: {fileID: 8602129516287695469, guid: 94753167e53441f489eb0435b6a7fa99, type: 3}
       propertyPath: m_LocalPosition.y
@@ -52332,7 +52353,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
+  m_VoxelSize: 0.083333336
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 83d529b38d9de9e44a9061266fdefd85, type: 2}
   m_BuildHeightMesh: 0
@@ -52581,7 +52602,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9111654949100630424, guid: 1b00fb91fe6f2f64395d0e86044a0cb0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.193
+      value: 3.085
       objectReference: {fileID: 0}
     - target: {fileID: 9111654949100630424, guid: 1b00fb91fe6f2f64395d0e86044a0cb0, type: 3}
       propertyPath: m_LocalPosition.y
