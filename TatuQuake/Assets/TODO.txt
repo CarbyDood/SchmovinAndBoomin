@@ -21,18 +21,24 @@ Modeled []
 Scripts []
 Enemies []
 Pickups []
+Statue []
+Fen []
 
 Level 3:
 Modeled []
 Scripts []
 Enemies []
 Pickups []
+Statue []
+Fen []
 
 Level 4:
 Modeled []
 Scripts []
 Enemies []
 Pickups []
+Statue []
+Fen []
 
 Final Boss:
 Modeled []
